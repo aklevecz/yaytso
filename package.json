@@ -1,0 +1,25 @@
+{
+  "name": "silver_raptors",
+  "version": "1.0.0",
+  "description": "",
+  "main": "truffle-config.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@openzeppelin/contracts": "^3.4.0",
+    "@openzeppelin/test-helpers": "^0.5.10",
+    "@truffle/hdwallet-provider": "^1.2.2",
+    "chai": "^4.3.0",
+    "mocha": "^8.3.0"
+  },
+  "dependencies": {
+    "dotenv": "^8.2.0"
+  }
+}
