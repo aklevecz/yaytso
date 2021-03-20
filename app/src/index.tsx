@@ -46,28 +46,30 @@ function ContextProvider({ children }: { children: React.ReactChild }) {
   const clearPattern = () => setPattern(null);
 
   useEffect(() => {
-    const provider = new ethers.providers.Web3Provider(window.ethereum);
-    const signer = provider.getSigner();
-    signer
-      .getAddress()
-      .then((address) => setUser({ address, signer }))
-      .catch((e) => {
-        window.ethereum
-          .request({
-            method: "eth_requestAccounts",
-          })
-          .then((account: any) => {
-            const signer = provider.getSigner();
-            setUser({ signer, address: account[0] });
-          });
-      });
-    const contractAddress = YaytsoInterface.networks[NETWORK_ID].address;
-    const contract = new ethers.Contract(
-      contractAddress,
-      YaytsoInterface.abi,
-      provider
-    );
-    setContract(contract);
+    if (window.ethereum) {
+      const provider = new ethers.providers.Web3Provider(window.ethereum);
+      const signer = provider.getSigner();
+      signer
+        .getAddress()
+        .then((address) => setUser({ address, signer }))
+        .catch((e) => {
+          window.ethereum
+            .request({
+              method: "eth_requestAccounts",
+            })
+            .then((account: any) => {
+              const signer = provider.getSigner();
+              setUser({ signer, address: account[0] });
+            });
+        });
+      const contractAddress = YaytsoInterface.networks[NETWORK_ID].address;
+      const contract = new ethers.Contract(
+        contractAddress,
+        YaytsoInterface.abi,
+        provider
+      );
+      setContract(contract);
+    }
   }, []);
 
   return (

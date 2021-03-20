@@ -10,6 +10,9 @@ export default function Create() {
   const [shipState, setShipState] = useState("");
   const sceneRef = useRef<THREE.Scene>();
   const shipIt = async () => {
+    if (!context.user) {
+      return alert("you are not connected to web3!");
+    }
     console.log(sceneRef);
     if (!sceneRef.current) {
       return;
