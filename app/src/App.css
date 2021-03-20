@@ -1,0 +1,29 @@
+.App {
+  text-align: center;
+}
+
+.header {
+  display: flex;
+  justify-content: center;
+  /* padding: 10px; */
+}
+
+.header > .logo {
+  width: 100px;
+  /* padding: 10px; */
+}
+
+.container-of-containerz {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  /* position: relative; */
+  position: absolute;
+  width: 100%;
+  overflow: auto;
+}
+
+.override-height {
+  height: inherit !important;
+}

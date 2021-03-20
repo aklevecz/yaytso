@@ -1,0 +1,40 @@
+.egg-tainer {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+/* .egg-tainer {
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    height: 85vh;
+    align-items: flex-end;
+} */
+
+.egg-wrapper {
+  flex: 0 0 100%;
+  /* width: 300px;
+  height: 300px; */
+  cursor: grab;
+}
+
+.egg-wrapper > canvas {
+  margin: auto;
+}
+
+.preview-canvas {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  width: 100px;
+  height: 100px;
+  border: 10px solid black;
+  transition: opacity 1s;
+}
+
+@media screen and (min-width: 768px) {
+  .preview-canvas {
+    left: 20%;
+  }
+}
