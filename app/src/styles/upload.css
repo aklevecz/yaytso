@@ -46,10 +46,10 @@
   position: absolute;
   top: 10px;
   right: 2%;
-  color: red;
+  /* color: red; */
   font-size: 20px;
   font-weight: 500;
-  border: 2px solid red;
+  border-bottom: 2px solid black;
   cursor: pointer;
   padding: 10px;
 }
@@ -70,20 +70,24 @@
 }
 
 @media screen and (min-width: 768px) {
+  .upload-container.shipping {
+    margin: auto;
+  }
+
   .smiler-container {
     flex: 0 0 50%;
   }
   .smiler-wrapper {
-    width: 30%;
+    width: 50%;
   }
   .snack {
     position: absolute;
     top: -90px;
-    left: 210px;
+    left: 180px;
     width: 150px;
   }
   .clear {
-    font-size: 30px;
+    /* font-size: 30px; */
     right: 30%;
   }
 }
