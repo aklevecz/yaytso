@@ -1,6 +1,6 @@
 {
-  "name": "Yaytso __NAME__",
-  "description": "Yaytso named __NAME__",
+  "name": "яйцо __NAME__",
+  "description": "яйцо named __NAME__",
   "image": "ipfs://__HASH__?filename=yaytso.svg",
   "animation_url": "ipfs://__HASH__?filename=yaytso.gltf",
   "attributes": [
