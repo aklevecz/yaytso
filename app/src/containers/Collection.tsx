@@ -20,7 +20,6 @@ export default function Collection() {
           const ipfsURI = await contract.tokenURI(i);
           owned.push(ipfsURI);
         }
-        console.log(owned);
         if (owned.length === 0) {
           setFetching(false);
         }
@@ -43,7 +42,9 @@ export default function Collection() {
     }
   };
   useEffect(() => {
-    getCollection();
+    if (context.user) {
+      getCollection();
+    }
   }, [context]);
 
   useEffect(() => {
@@ -58,7 +59,13 @@ export default function Collection() {
   });
   return (
     <div>
-      {fetching ? "fetching..." : ""}
+      {!context.user && (
+        <div className="oops">oops! you aren't connected to web3!</div>
+      )}
+      {context.user && !fetching && eggLTs.length === 0 && (
+        <div className="oops">you don't have any eggs!</div>
+      )}
+      {context.user && fetching ? "fetching..." : ""}
       {eggLTs.map((gltf) => (
         <Egg
           givenGLTF={(gltf as string).replace("ipfs://", PINATA_GATEWAY + "/")}

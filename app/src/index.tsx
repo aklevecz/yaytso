@@ -4,6 +4,7 @@ import "./index.css";
 import "./styles/egg.css";
 import "./styles/upload.css";
 import "./styles/nav.css";
+import "./styles/collection.css";
 import App from "./App";
 import { Texture } from "three";
 import { ethers } from "ethers";

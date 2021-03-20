@@ -5,6 +5,11 @@ import { GLTFExporter } from "three/examples/jsm/exporters/GLTFExporter";
 import Smiler from "../components/Smiler";
 import { Context } from "..";
 
+const PIN_URL =
+  process.env.NODE_ENV === "development"
+    ? "http://localhost:8082"
+    : "https://nft-service-i3w4qwywla-uc.a.run.app";
+
 export default function Create() {
   const context = useContext(Context);
   const [shipState, setShipState] = useState("");
@@ -34,7 +39,7 @@ export default function Create() {
         });
         data.append("svg", svgBlob);
         setShipState("PINNING");
-        fetch("http://localhost:8082", {
+        fetch(PIN_URL, {
           method: "POST",
           body: data,
         })
