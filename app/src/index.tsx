@@ -8,7 +8,7 @@ import "./styles/collection.css";
 import App from "./App";
 import { Texture } from "three";
 import { ethers } from "ethers";
-import YaytsoInterface from "./contracts/contracts/Yaytso.json";
+import YaytsoInterface from "./contracts/Yaytso.json";
 
 declare global {
   interface Window {

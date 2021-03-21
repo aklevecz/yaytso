@@ -11,11 +11,11 @@ app.use(express.json());
 app.use(cors({ origin: "*" }));
 const { NFTStorage, Blob, File, FormData } = require("nft.storage");
 const apiKey = fs.readFileSync(".secret").toString().trim();
-const client = new NFTStorage({ token: apiKey });
-
 const metadataFile = fs.readFileSync("metadataTemplate.json");
 
 (async () => {
+  const client = new NFTStorage({ token: apiKey });
+
   app.post("/", upload.any(), async (req, res) => {
     const gltf = req.files[0];
     const svg = req.files[1];
@@ -41,6 +41,6 @@ const metadataFile = fs.readFileSync("metadataTemplate.json");
 
   const port = process.env.PORT || 8082;
   app.listen(port, () => {
-    console.log("IPFS-Service listening on port", port);
+    console.log("NFT-Service listening on port", port);
   });
 })();

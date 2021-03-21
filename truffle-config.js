@@ -21,8 +21,8 @@
 // const HDWalletProvider = require('@truffle/hdwallet-provider');
 // const infuraKey = "fj4jll3k.....";
 //
-const Web3 = require("web3")
-const web3 = new Web3()
+const Web3 = require("web3");
+const web3 = new Web3();
 const HDWalletProvider = require("@truffle/hdwallet-provider");
 const fs = require("fs");
 const mnemonic = fs.readFileSync(".secret").toString().trim();
@@ -38,6 +38,7 @@ module.exports = {
      *
      * $ truffle test --network <network-name>
      */
+    contracts_build_directory: "./app/src/contracts",
 
     networks: {
         // Useful for testing. The `development` name is special - truffle uses it by default
@@ -80,7 +81,7 @@ module.exports = {
                     mnemonic,
                     `https://mainnet.infura.io/v3/${infuraKey}`
                 ),
-            network_id: "*", 
+            network_id: "*",
             confirmations: 2, // # of confs to wait between deployments. (default: 0)
             gas: 4700000,
             gasPrice: web3.utils.toWei("120", "gwei"),

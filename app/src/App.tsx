@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
-import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import { HashRouter as Router, Switch, Route } from "react-router-dom";
 import "./App.css";
 import Collection from "./containers/Collection";
 import Create from "./containers/Create";
 import Nav from "./containers/Nav";
+import World from "./containers/World";
 import Header from "./Header";
 
 function App() {
@@ -31,6 +32,7 @@ function App() {
       >
         <Router>
           <Switch>
+            <Route path="/world" component={World}/>
             <Route path="/collection" component={Collection} />
             <Route path="/" component={Create} />
           </Switch>

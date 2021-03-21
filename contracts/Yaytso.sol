@@ -13,7 +13,7 @@ contract Yaytso is ERC721 {
 
     event YaytsoMinted(address indexed _recipient, uint256 _tokenId);
 
-    constructor() public ERC721("Yaytso", "YAYEGG") {
+    constructor() public ERC721("yaytso", "яйцо") {
         owner = msg.sender;
         _setBaseURI("ipfs://");
     }

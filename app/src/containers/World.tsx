@@ -1,9 +1,10 @@
 import { useContext, useEffect, useState } from "react";
 import Egg from "../components/Egg";
 import { Context } from "..";
+import WorldScene from "../components/WorldScene";
 
-export const PINATA_GATEWAY = "https://gateway.pinata.cloud/ipfs";
-export default function Collection() {
+const PINATA_GATEWAY = "https://gateway.pinata.cloud/ipfs";
+export default function World() {
   const context = useContext(Context);
   const [fetching, setFetching] = useState(true);
   const [eggLTs, setEggLTFs] = useState([]);
@@ -12,31 +13,28 @@ export default function Collection() {
       const contract = context.contract;
 
       const totalSupply = await contract.totalSupply().catch(console.log);
-      let owned = [];
+      let eggs = []
       for (let i = 1; i < parseInt(totalSupply, 10) + 1; i++) {
         const owner = await contract.ownerOf(i);
         if (owner === context.user.address) {
           const ipfsURI = await contract.tokenURI(i);
-          owned.push(ipfsURI);
+          eggs.push(ipfsURI);
         }
-        if (owned.length === 0) {
-          setFetching(false);
-        }
+
         let eggmises: Array<unknown> = [];
-        owned.forEach((uri) => {
-          console.log(uri);
+        eggs.forEach((uri) => {
           const eggmise = fetch(
             `${PINATA_GATEWAY}/${uri.replace("ipfs://", "")}`
           ).then((r) => r.json());
           eggmises.push(eggmise);
         });
         Promise.all(eggmises).then((eggson) => {
-          console.log(eggson);
           const gltfs = eggson.map((egg: any) => egg.animation_url);
           setEggLTFs(gltfs as any);
           console.log(gltfs);
           setFetching(false);
         });
+
       }
     }
   };
@@ -45,31 +43,8 @@ export default function Collection() {
       getCollection();
     }
   }, [context]);
-
-  useEffect(() => {
-    const c = document.querySelector(
-      ".container-of-containerz"
-    ) as HTMLDivElement;
-    if (c) {
-      c.classList.add("override-height");
-    }
-
-    return () => c.classList.remove("override-height");
-  });
-  return (
-    <div>
-      {!context.user && (
-        <div className="oops">oops! you aren't connected to web3!</div>
-      )}
-      {context.user && !fetching && eggLTs.length === 0 && (
-        <div className="oops">you don't have any eggs!</div>
-      )}
-      {context.user && fetching ? "fetching..." : ""}
-      {eggLTs.map((gltf) => (
-        <Egg
-          givenGLTF={(gltf as string).replace("ipfs://", PINATA_GATEWAY + "/")}
-        />
-      ))}
-    </div>
-  );
+//   const egglts = [
+//         "ipfs://bafkreic4m5sk5arnojp33dezr47juhysiutgveq5fz2af2oo35fzv6ckym?filename=yaytso.gltf",
+//     ]
+    return (<div><WorldScene eggLTs={eggLTs}/></div>)
 }

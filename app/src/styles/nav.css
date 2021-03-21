@@ -8,6 +8,7 @@
   display: block;
   background: black;
   transition: height 1s;
+  overflow: visible !important;
 }
 
 .nav-container > svg {
@@ -24,4 +25,12 @@
   left: 5px;
   transition: all 1s;
   cursor: pointer;
+}
+
+#NAV *{
+  fill: black;
+  transition: fill 1000ms;
+}
+#NAV .active * {
+  fill: red;
 }
