@@ -1,11 +1,8 @@
 const fs = require("fs");
-const fetch = require("isomorphic-fetch");
 const express = require("express");
 const cors = require("cors");
-const IPFS = require("ipfs-core");
 const multer = require("multer");
 const upload = multer();
-const { parse, stringify } = require("svgson");
 const app = express();
 app.use(express.json());
 app.use(cors({ origin: "*" }));
