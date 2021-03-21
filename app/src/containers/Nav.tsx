@@ -1,5 +1,6 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useHistory, withRouter } from "react-router-dom";
+import { Context } from "..";
 import { NAV } from "../NAV";
 
 const eggNav = (): HTMLElement => document.getElementById("EGG-NAV")!
@@ -14,6 +15,7 @@ const clear = () => {
 
 function Nav() {
   const [openNav, setOpenNav] = useState(false);
+  const context = useContext(Context)
   const history = useHistory();
 
   useEffect(() => {
@@ -49,6 +51,7 @@ function Nav() {
         }}
         className="nav-button"
       ></div>
+     {!context.user?.address &&  <button className="web3-connect" style={{bottom: openNav ? 100 : 5}} onClick={() => context.web3Connect()}>connect to web3</button>}
     </div>
   );
 }

@@ -43,6 +43,12 @@ export default function World() {
       getCollection();
     }
   }, [context]);
+
+  useEffect(() => {
+    if (window.innerWidth < window.innerHeight) {
+      alert("warning... only works if you have a keyboard and mouse at the moment!")
+    }
+  },[])
 //   const egglts = [
 //         "ipfs://bafkreic4m5sk5arnojp33dezr47juhysiutgveq5fz2af2oo35fzv6ckym?filename=yaytso.gltf",
 //     ]

@@ -4,6 +4,7 @@ import Upload from "../components/Upload";
 import { GLTFExporter } from "three/examples/jsm/exporters/GLTFExporter";
 import Smiler from "../components/Smiler";
 import { Context } from "..";
+import userEvent from "@testing-library/user-event";
 
 const PIN_URL =
     process.env.NODE_ENV === "development"

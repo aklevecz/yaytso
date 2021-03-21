@@ -27,6 +27,7 @@ export type ContextAttrs = {
   setPattern: Function;
   user: User | null;
   contract: ethers.Contract | null;
+  web3Connect: Function;
 };
 
 const NETWORK_ID = process.env.NODE_ENV === "development" ? 4 : 4;
@@ -37,6 +38,7 @@ export const Context = React.createContext<ContextAttrs>({
   setPattern: () => {},
   user: { address: "", signer: null },
   contract: null,
+  web3Connect: () => {}
 });
 
 function ContextProvider({ children }: { children: React.ReactChild }) {
@@ -45,6 +47,18 @@ function ContextProvider({ children }: { children: React.ReactChild }) {
   const [contract, setContract] = useState<ethers.Contract | null>(null);
 
   const clearPattern = () => setPattern(null);
+
+  const web3Connect = () => {
+    const provider = new ethers.providers.Web3Provider(window.ethereum);
+    window.ethereum
+    .request({
+      method: "eth_requestAccounts",
+    })
+    .then((account: any) => {
+      const signer = provider.getSigner();
+      setUser({ signer, address: account[0] });
+    });
+  }
 
   useEffect(() => {
     if (window.ethereum) {
@@ -75,7 +89,7 @@ function ContextProvider({ children }: { children: React.ReactChild }) {
 
   return (
     <Context.Provider
-      value={{ pattern, clearPattern, setPattern, user, contract }}
+      value={{ pattern, clearPattern, setPattern, user, contract, web3Connect }}
     >
       {children}
     </Context.Provider>

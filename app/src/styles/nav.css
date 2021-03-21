@@ -31,6 +31,17 @@
   fill: black;
   transition: fill 1000ms;
 }
+
 #NAV .active * {
   fill: red;
+}
+
+.web3-connect {
+      position: absolute;
+    bottom: 17px;
+    left: 50%;
+    width: 200px;
+    font-size: 17px;
+    margin-left: -100px;
+    transition: bottom 1000ms;
 }

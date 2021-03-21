@@ -64,7 +64,7 @@ export default function Collection() {
       {context.user && !fetching && eggLTs.length === 0 && (
         <div className="oops">you don't have any eggs!</div>
       )}
-      {context.user && fetching ? "fetching..." : ""}
+      {context.user && fetching && <div className="lds-heart"><div>__fetching...</div></div>}
       {eggLTs.map((gltf) => (
         <Egg
           givenGLTF={(gltf as string).replace("ipfs://", PINATA_GATEWAY + "/")}
