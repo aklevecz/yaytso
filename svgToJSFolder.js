@@ -1,6 +1,4 @@
 const fs = require("fs");
-const { nextTick } = require("process");
-const filePath = process.argv.slice(2)[0];
 const folderPath = process.argv.slice(2)[0];
 (async () => {
   const files = await fs.promises.readdir(folderPath);
