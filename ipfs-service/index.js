@@ -23,9 +23,6 @@ const metadataFile = fs.readFileSync("metadataTemplate.json");
     const gltfCID = await client.storeBlob(gltfBlob);
     const svgBlob = new Blob([svg.buffer]);
     const svgCID = await client.storeBlob(svgBlob);
-
-    const folder = await client.storeDirectory([gltfBlob, svgBlob]);
-    console.log(folder);
     const metadata = JSON.parse(metadataFile);
     metadata.image = metadata.image.replace("__HASH__", svgCID);
     metadata.animation_url = metadata.animation_url.replace(
