@@ -30,7 +30,7 @@ export default function Smiler({ shipState }: { shipState: string }) {
         <SMILER />
         <div className="snack">
           {!shipState && context.pattern && <NICE />}
-          {!shipState && snackState === "CLEARED" && <OOPS />}
+          {/* {!shipState && snackState === "CLEARED" && <OOPS />} */}
           {shipState === "PINNING" && <YES />}
           {shipState === "MINTING" && <EMPHATIC />}
           {shipState === "COMPLETE" && <HEART />}

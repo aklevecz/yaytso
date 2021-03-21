@@ -26,7 +26,6 @@ function Nav() {
   },[]);
 
   useEffect(() => {
-    console.log('gello?')
     clear()
     const path = history.location.pathname;
     if (path === "/") {
@@ -37,9 +36,9 @@ function Nav() {
       worldNav().classList.add("active")
     }
   })
-
+  const openHeight = window.innerWidth > 768 ? "130px" : "100px" 
   return (
-    <div style={{ height: openNav ? "100px" : "0%" }} className="nav-container">
+    <div style={{ height: openNav ?openHeight : "0%" }} className="nav-container">
       <NAV />
       <div
         onClick={() => setOpenNav(!openNav)}

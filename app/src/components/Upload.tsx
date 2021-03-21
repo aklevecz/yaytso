@@ -38,10 +38,8 @@ export default function Upload({
           ctx!.canvas.height = 200;
           ctx!.canvas.width = 200;
           const imgSize = Math.min(img.width, img.height);
-          console.log(imgSize);
           const left = (img.width - imgSize) / 2;
           const top = (img.height - imgSize) / 2;
-          console.log(img);
           ctx!.fillStyle = "white";
           ctx!.fillRect(0, 0, ctx!.canvas.width, ctx!.canvas.height);
           ctx?.drawImage(
@@ -99,9 +97,7 @@ export default function Upload({
             c.toDataURL()
           );
 
-          //@ts-ignore
-          //   rctx.fillStyle = pat;
-          //   rctx.fill();
+
         }
       };
     };

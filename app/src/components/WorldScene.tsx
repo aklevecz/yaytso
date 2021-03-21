@@ -43,7 +43,7 @@ export default function WorldScene({ eggLTs }: { eggLTs: Array<string> }) {
 
         // const controls = new OrbitControls(camera, renderer.domElement);
         const controls = new PointerLockControls(camera, renderer.domElement);
-        document.body.onclick = () => controls.lock();
+        if (wrapperRef.current) wrapperRef.current.onclick = () => controls.lock();
         scene.add(controls.getObject());
         let moveForward = false;
         let moveBackward = false;
@@ -239,7 +239,7 @@ export default function WorldScene({ eggLTs }: { eggLTs: Array<string> }) {
     }, [eggLTs]);
 
     return (
-        <div ref={wrapperRef} className="egg-wrapper">
+        <div ref={wrapperRef} id="world-scene">
             <div
                 id="debug"
                 style={{ position: "absolute", top: 0, left: 0 }}
