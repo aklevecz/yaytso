@@ -119,7 +119,7 @@ export default function WorldScene({ eggLTs }: { eggLTs: Array<string> }) {
         // const ambientLight = new THREE.AmbientLight(0xffffff, 0.1);
         // scene.add(ambientLight);
 
-        const light = new THREE.DirectionalLight(0xffffff, 0.3);
+        const light = new THREE.DirectionalLight(0xffffff, 0.7);
         light.position.set(3, 20, 2);
         light.target.position.set(0, 0, 0);
         light.castShadow = true;
@@ -138,7 +138,7 @@ export default function WorldScene({ eggLTs }: { eggLTs: Array<string> }) {
 
         const floor = new THREE.Mesh(
             new THREE.PlaneGeometry(500, 500),
-            new THREE.MeshStandardMaterial({ color: "blue" })
+            new THREE.MeshStandardMaterial({ color: "white" })
         );
 
         floor.receiveShadow = true;
