@@ -10,7 +10,7 @@ import Skybox from "./skybox.jpg";
 export default function WorldScene({ eggLTs }: { eggLTs: Array<string> }) {
     const context = useContext(Context);
     const wrapperRef = useRef<HTMLDivElement>(null);
-    const eggsRef= useRef<THREE.Group[]>([]);
+    const eggsRef= useRef<string[]>([]);
     const sceneRef = useRef<THREE.Scene>();
     useEffect(() => {
         // if (eggLTs.length === 0) {
@@ -216,16 +216,17 @@ export default function WorldScene({ eggLTs }: { eggLTs: Array<string> }) {
                 eggsRef.current = []
             }
             const loader = new GLTFLoader();
-            eggLTs.forEach((uri, i) => {
+            const newEggs = eggLTs.filter(egg => !eggsRef.current.includes(egg))
+            console.log(newEggs)
+            newEggs.forEach((uri, i) => {
                 console.log(uri);
                 loader.load(
                     uri.replace("ipfs://", PINATA_GATEWAY + "/"),
                     (gltf) => {
                         sceneRef!.current!.add(gltf.scene);
-                        console.log(eggsRef)
-                        eggsRef!.current!.push(gltf.scene)
+                        eggsRef!.current!.push(uri)
                         // const egg = gltf.scene.children[0] as THREE.Mesh;
-                        gltf.scene.position.x = i * 10;
+                        gltf.scene.position.x = (i+eggsRef.current.length) * 10;
                         gltf.scene.position.y = 10;
                         gltf.scene.traverse(function (node) {
                             if ((node as any).isMesh) {
