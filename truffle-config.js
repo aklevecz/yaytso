@@ -21,13 +21,13 @@
 // const HDWalletProvider = require('@truffle/hdwallet-provider');
 // const infuraKey = "fj4jll3k.....";
 //
+require("dotenv").config()
 const Web3 = require("web3");
 const web3 = new Web3();
 const HDWalletProvider = require("@truffle/hdwallet-provider");
-const fs = require("fs");
-const mnemonic = fs.readFileSync(".secret").toString().trim();
-const infuraKey = "e835057bad674697959be47dcac5028e";
-
+const mnemonic = process.env.MNEMONIC
+const infuraKey = process.env.INFURA_KEY
+console.log(process.env.INFURA_KEY, process.env.MNEMONIC)
 module.exports = {
     /**
      * Networks define how you connect to your ethereum client and let you set the

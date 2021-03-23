@@ -18,5 +18,8 @@
     "@truffle/hdwallet-provider": "^1.2.2",
     "chai": "^4.3.0",
     "mocha": "^8.3.0"
+  },
+  "dependencies": {
+    "dotenv": "^8.2.0"
   }
 }
