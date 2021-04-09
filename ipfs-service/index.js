@@ -7,34 +7,57 @@ const app = express();
 app.use(express.json());
 app.use(cors({ origin: "*" }));
 const { NFTStorage, Blob, File, FormData } = require("nft.storage");
+const IPFS = require("ipfs-core");
 const apiKey = fs.readFileSync(".secret").toString().trim();
 const metadataFile = fs.readFileSync("metadataTemplate.json");
 
+const dev = true;
+
 (async () => {
-  const client = new NFTStorage({ token: apiKey });
+    const client = dev
+        ? await IPFS.create()
+        : new NFTStorage({ token: apiKey });
 
-  app.post("/", upload.any(), async (req, res) => {
-    const gltf = req.files[0];
-    const svg = req.files[1];
-    const gltfBlob = new Blob([gltf.buffer]);
-    const gltfCID = await client.storeBlob(gltfBlob);
-    const svgBlob = new Blob([svg.buffer]);
-    const svgCID = await client.storeBlob(svgBlob);
-    const metadata = JSON.parse(metadataFile);
-    metadata.image = metadata.image.replace("__HASH__", svgCID);
-    metadata.animation_url = metadata.animation_url.replace(
-      "__HASH__",
-      gltfCID
-    );
+    const store = async (blob) => {
+        let id;
+        if (dev) {
+            const { cid } = await client.add(blob);
+            id = cid.toString();
+        } else {
+            const b = new Blob([blob]);
+            id = await client.storeBlob([b]);
+        }
+        return id;
+    };
 
-    const metadataBlob = new Blob([JSON.stringify(metadata)]);
-    const metaCID = await client.storeBlob(metadataBlob);
-    console.log(metaCID);
-    return res.send({ metaCID, svgCID });
-  });
+    app.post("/", upload.any(), async (req, res) => {
+        const gltf = req.files[0];
+        const svg = req.files[1];
+        const gltfCID = await store(gltf.buffer);
+        const svgCID = await store(svg.buffer);
+        const metadata = JSON.parse(metadataFile);
+        metadata.image = metadata.image.replace("__HASH__", svgCID);
+        metadata.animation_url = metadata.animation_url.replace(
+            "__HASH__",
+            gltfCID
+        );
 
-  const port = process.env.PORT || 8082;
-  app.listen(port, () => {
-    console.log("NFT-Service listening on port", port);
-  });
+        let meta_id;
+        const metaString = JSON.stringify(metadata);
+        if (dev) {
+            const { cid } = await client.add(metaString);
+            meta_id = cid.toString();
+        } else {
+            const metadataBlob = new Blob([metaString]);
+            meta_id = await store(metadataBlob);
+        }
+        const metaCID = meta_id;
+        console.log(metaCID);
+        return res.send({ metaCID, svgCID });
+    });
+
+    const port = process.env.PORT || 8082;
+    app.listen(port, () => {
+        console.log("NFT-Service listening on port", port);
+    });
 })();

@@ -4,7 +4,7 @@ import Upload from "../components/Upload";
 import { GLTFExporter } from "three/examples/jsm/exporters/GLTFExporter";
 import Smiler from "../components/Smiler";
 import { Context } from "..";
-import userEvent from "@testing-library/user-event";
+import GiftModal from "./modals/GiftModal";
 
 const PIN_URL =
     process.env.NODE_ENV === "development"
@@ -13,8 +13,13 @@ const PIN_URL =
 
 export default function Create() {
     const context = useContext(Context);
+
+    const [giftingState, setGiftingState] = useState("");
     const [shipState, setShipState] = useState("");
+
     const sceneRef = useRef<THREE.Scene>();
+    console.log(context.recipient);
+    // NOTE: This can obviously be broken up
     const shipIt = async () => {
         if (!context.user) {
             return alert("you are not connected to web3!");
@@ -48,6 +53,7 @@ export default function Create() {
                         if (
                             context &&
                             context.user &&
+                            context.recipient &&
                             context.contract &&
                             context.user.signer
                         ) {
@@ -57,18 +63,21 @@ export default function Create() {
                             setShipState("SIGNING");
                             const txt = await contractSigner
                                 .mintEgg(
-                                    context.user.address,
+                                    // context.user.address,
+                                    context.recipient.address,
                                     resp.svgCID,
                                     resp.metaCID
                                 )
                                 .catch((e: any) => {
+                                    setShipState("");
+                                    setGiftingState("");
+                                    console.log(e);
                                     if (
                                         e.error &&
                                         e.error.message ===
                                             "execution reverted: no dupes"
                                     ) {
                                         alert("no dupes sorry");
-                                        setShipState("");
                                     } else {
                                         alert(
                                             "hmm something went wrongggggggggg"
@@ -84,14 +93,22 @@ export default function Create() {
                             for (const event of receipt.events) {
                                 if (
                                     event.event !== "Transfer" &&
-                                    event.event !== "YaysoMinted"
+                                    event.event !== "YaytsoMinted"
                                 ) {
                                     console.log("ignoring event ", event.event);
                                     continue;
                                 }
+                                console.log(event);
                                 setShipState("COMPLETE");
-                                setTimeout(() => setShipState(""), 3000);
-                                console.log(event.args.tokenId.toString());
+                                setTimeout(() => {
+                                    setShipState("");
+                                    setGiftingState("");
+                                }, 3000);
+                                try {
+                                    console.log(event.args._tokenId.toString());
+                                } catch (e) {
+                                    console.log(event.args);
+                                }
                             }
                         }
                     });
@@ -105,11 +122,40 @@ export default function Create() {
             setShipState("");
         }
     }, [context.pattern]);
+
+    // NOTE: State here is a mess
+    // shipState defines what the button is doing basically
+    // giftingState regulates the general state of having picked a recipient
+
+    // NOTE: Upload component has a lot of drliling to change state appropriately
+
+    // STATES ARE:
+    // all === ""
+    // context.pattern !== ""
+    // giftingState === "" shipItState === ""
+    // giftingState === "recipient"
+    // context.recipient.type === user || friend && context.recipient === address
+    // shipItState === "PINNING"
+    // shipItState lifecycle through the blockchain...
     return (
         <div className="egg-tainer">
             <Egg sceneRef={sceneRef} shipState={shipState} />
-            <Upload context={context} shipIt={shipIt} shipState={shipState} />
-            <Smiler shipState={shipState} />
+            <div style={{display:"flex", flexWrap: "wrap", width:"100%", maxWidth:"500px"}}>
+                <Upload
+                    context={context}
+                    shipIt={shipIt}
+                    doneFabbing={() => setGiftingState("recipient")}
+                    setGiftingState={setGiftingState}
+                    shipState={shipState}
+                />
+                <Smiler shipState={shipState} />
+            </div>
+            <GiftModal
+                visible={giftingState === "recipient"}
+                setGiftingState={setGiftingState}
+                readyToShip={() => setShipState("READY_TO_SHIP")}
+                transactionCompleted={shipState === "COMPLETE"}
+            />
         </div>
     );
 }

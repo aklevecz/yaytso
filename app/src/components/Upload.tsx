@@ -1,21 +1,30 @@
 import React, { useRef, useState } from "react";
 import { RepeatWrapping, CanvasTexture } from "three";
 import { ContextAttrs } from "..";
+import StatusButton from "./StatusButton";
 
+
+// This component is more complex than it appears in terms of functionality
+// It is doing a lot of canvas drawing under the hood to prepare for the egg journey
 export default function Upload({
     context,
+    doneFabbing,
     shipIt,
     shipState,
+    setGiftingState
 }: {
     context: ContextAttrs;
     shipIt: Function;
     shipState: string;
+    doneFabbing: Function;
+    setGiftingState: Function
 }) {
     // const context = useContext(Context);
     const imgPreviewRef = useRef<HTMLImageElement>(null);
     const canvasRef = useRef<HTMLCanvasElement>(null);
     const [imgSrc, setImgSrc] = useState("");
 
+    // TODO: Maybe put this into a lib to make some room for readability
     const onChange = (e: React.FormEvent<HTMLInputElement>) => {
         const files = (e.target as HTMLInputElement).files;
         if (files === null || files.length === 0) {
@@ -104,45 +113,23 @@ export default function Upload({
 
         reader.readAsDataURL(file);
     };
+
+    // NOTE: It is hard to rip StatusButton out of here since it is regulating the:
+    //      - Upload buttons look and state
+    //      - Applying patterns to the canvases
+    //      - Upload button being also the ship buttons and status
     return (
         <div
             className={`upload-container ${context.pattern ? "shipping" : ""}`}
         >
-            {!context.pattern && (
-                <div className="input-container">
-                    <label className="upload-label">
-                        <input
-                            onChange={onChange}
-                            type="file"
-                            id="upload-input"
-                        />
-                        upload pattern
-                    </label>
-                </div>
-            )}
-            {context.pattern && (
-                <>
-                    <div
-                        className={`ship-it-container ${
-                            shipState ? "shipping" : ""
-                        }`}
-                    >
-                        <button onClick={() => shipIt()}>
-                            {shipState === "" && "ship it?"}
-                            {shipState === "PINNING" && "pinning..."}
-                            {shipState === "SIGNING" && "plz sign!"}
-                            {shipState === "MINTING" && "INC EGG!!"}
-                            {shipState === "COMPLETE" && "FUCK YES!!"}
-                        </button>
-                    </div>
-                    <div
-                        onClick={() => context.clearPattern()}
-                        className="clear"
-                    >
-                        clean egg
-                    </div>
-                </>
-            )}
+            <StatusButton
+                context={context}
+                onChange={onChange}
+                shipState={shipState}
+                shipIt={shipIt}
+                doneFabbing={doneFabbing}
+                setGiftingState={setGiftingState}
+            />
             <img
                 style={{ display: "none" }}
                 alt="broken"

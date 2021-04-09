@@ -27,7 +27,6 @@ const web3 = new Web3();
 const HDWalletProvider = require("@truffle/hdwallet-provider");
 const mnemonic = process.env.MNEMONIC
 const infuraKey = process.env.INFURA_KEY
-console.log(process.env.INFURA_KEY, process.env.MNEMONIC)
 module.exports = {
     /**
      * Networks define how you connect to your ethereum client and let you set the

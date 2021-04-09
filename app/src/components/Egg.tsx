@@ -12,8 +12,11 @@ export default function Egg({ sceneRef, shipState, givenGLTF }: any) {
   useEffect(() => {
     const wrapper = wrapperRef!.current!;
     // const { width, height } = wrapper.getBoundingClientRect();
-    const width = 300,
-      height = 300;
+    const width = window.innerWidth;
+    const height = window.innerHeight * .5;
+    // const width = 300,
+      // height = 300;
+      console.log(width, height)
     const scene = new THREE.Scene();
     if (sceneRef) {
       sceneRef.current = scene;
