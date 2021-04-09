@@ -1,11 +1,11 @@
 import { useContext, useEffect, useRef, useState } from "react";
 import { Context } from "..";
-import { EMPHATIC } from "../EMPHATIC";
-import { HEART } from "../HEART";
-import { NICE } from "../NICE";
-import { OOPS } from "../OOPS";
-import { SMILER } from "../SMILER";
-import { YES } from "../YES";
+import { EMPHATIC } from "./graphical/EMPHATIC";
+import { HEART } from "./graphical/HEART";
+import { NICE } from "./graphical/NICE";
+import { OOPS } from "./graphical/OOPS";
+import { SMILER } from "./graphical/SMILER";
+import { YES } from "./graphical/YES";
 
 export default function Smiler({ shipState }: { shipState: string }) {
   const context = useContext(Context);

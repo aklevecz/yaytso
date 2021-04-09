@@ -1,7 +1,7 @@
 import { useContext, useEffect, useState } from "react";
 import { useHistory, withRouter } from "react-router-dom";
 import { Context } from "..";
-import { NAV } from "../NAV";
+import { NAV } from "../components/graphical/NAV";
 
 const eggNav = (): HTMLElement => document.getElementById("EGG-NAV")!
 const collectionNav = ():HTMLElement => document.getElementById("COLLECTION")!

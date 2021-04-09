@@ -1,11 +1,10 @@
 import { useContext, useEffect, useRef } from "react";
 import * as THREE from "three";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
-import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 import { PointerLockControls } from "three/examples/jsm/controls/PointerLockControls";
 import { Context } from "..";
 import { PINATA_GATEWAY } from "../containers/Collection";
-import Skybox from "./skybox.jpg";
+import Skybox from "../assets/skybox.jpg";
 
 export default function WorldScene({ eggLTs }: { eggLTs: Array<string> }) {
     const context = useContext(Context);

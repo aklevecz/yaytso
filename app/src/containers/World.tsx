@@ -1,5 +1,4 @@
 import { useContext, useEffect, useState } from "react";
-import Egg from "../components/Egg";
 import { Context } from "..";
 import WorldScene from "../components/WorldScene";
 
