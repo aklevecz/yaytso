@@ -22,6 +22,7 @@
   font-family: Arial;
   font-weight: bold;
   cursor: pointer;
+  border-radius:30px;
 }
 
 .smiler-container {
@@ -86,7 +87,7 @@
   .snack {
     position: absolute;
     top: -90px;
-    left: 180px;
+    left: 210px;
     width: 150px;
   }
   .clear {

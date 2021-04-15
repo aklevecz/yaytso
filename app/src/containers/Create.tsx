@@ -4,6 +4,7 @@ import Upload from "../components/Upload";
 import { GLTFExporter } from "three/examples/jsm/exporters/GLTFExporter";
 import Smiler from "../components/Smiler";
 import { Context } from "..";
+import GiftModal from "./modals/GiftModal";
 
 const PIN_URL =
     process.env.NODE_ENV === "development"
@@ -12,8 +13,13 @@ const PIN_URL =
 
 export default function Create() {
     const context = useContext(Context);
+
+    const [giftingState, setGiftingState] = useState("");
     const [shipState, setShipState] = useState("");
+
     const sceneRef = useRef<THREE.Scene>();
+
+    // NOTE: This can obviously be broken up
     const shipIt = async () => {
         if (!context.user) {
             return alert("you are not connected to web3!");
@@ -83,14 +89,19 @@ export default function Create() {
                             for (const event of receipt.events) {
                                 if (
                                     event.event !== "Transfer" &&
-                                    event.event !== "YaysoMinted"
+                                    event.event !== "YaytsoMinted"
                                 ) {
                                     console.log("ignoring event ", event.event);
                                     continue;
                                 }
+                                console.log(event);
                                 setShipState("COMPLETE");
                                 setTimeout(() => setShipState(""), 3000);
-                                console.log(event.args.tokenId.toString());
+                                try {
+                                    console.log(event.args._tokenId.toString());
+                                } catch (e) {
+                                    console.log(event.args);
+                                }
                             }
                         }
                     });
@@ -104,11 +115,24 @@ export default function Create() {
             setShipState("");
         }
     }, [context.pattern]);
+
+    // NOTE: State here is a mess
+    // shipState defines what the button is doing basically
+    // giftingState regulates the general state of having picked a recipient
+
+    // NOTE: Upload component has a lot of drliling to change state appropriately
+
     return (
         <div className="egg-tainer">
             <Egg sceneRef={sceneRef} shipState={shipState} />
-            <Upload context={context} shipIt={shipIt} shipState={shipState} />
+            <Upload
+                context={context}
+                shipIt={shipIt}
+                findRecipient={() => setGiftingState("recipient")}
+                shipState={shipState}
+            />
             <Smiler shipState={shipState} />
+            <GiftModal visible={giftingState === "recipient"} readyToShip={() => setShipState("READY_TO_SHIP")} />
         </div>
     );
 }

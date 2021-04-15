@@ -18,7 +18,7 @@
     "cids": "^1.1.6",
     "cors": "^2.8.5",
     "express": "^4.17.1",
-    "ipfs-core": "^0.5.2",
+    "ipfs-core": "^0.5.4",
     "isomorphic-fetch": "^3.0.0",
     "multer": "^1.4.2",
     "nft.storage": "^0.3.8",

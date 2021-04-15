@@ -5,6 +5,7 @@ import "./styles/egg.css";
 import "./styles/upload.css";
 import "./styles/nav.css";
 import "./styles/collection.css";
+import "./styles/modal.css"
 import App from "./App";
 import { Texture } from "three";
 import { ethers } from "ethers";
@@ -21,6 +22,16 @@ type User = {
   signer: ethers.providers.JsonRpcSigner | null;
 };
 
+enum Who {
+  ME = "me",
+  FRIEND = "friend"
+}
+
+type Recipient = {
+  address: string;
+  type: Who
+}
+
 export type ContextAttrs = {
   pattern: Texture | null;
   clearPattern: Function;
@@ -28,22 +39,26 @@ export type ContextAttrs = {
   user: User | null;
   contract: ethers.Contract | null;
   web3Connect: Function;
+  recipient: Recipient | null;
+  setRecipient: Function;
 };
 
-const NETWORK_ID = process.env.NODE_ENV === "development" ? 4 : 4;
-
+const NETWORK_ID = process.env.NODE_ENV === "development" ? 1618275435541 : 4;
 export const Context = React.createContext<ContextAttrs>({
   pattern: null,
   clearPattern: () => {},
   setPattern: () => {},
   user: { address: "", signer: null },
   contract: null,
-  web3Connect: () => {}
+  web3Connect: () => {},
+  recipient: null,
+setRecipient: () => {}
 });
 
 function ContextProvider({ children }: { children: React.ReactChild }) {
   const [pattern, setPattern] = useState(null);
   const [user, setUser] = useState<User | null>(null);
+  const [recipient, setRecipient] = useState<Recipient | null>(null);
   const [contract, setContract] = useState<ethers.Contract | null>(null);
 
   const clearPattern = () => setPattern(null);
@@ -89,7 +104,7 @@ function ContextProvider({ children }: { children: React.ReactChild }) {
 
   return (
     <Context.Provider
-      value={{ pattern, clearPattern, setPattern, user, contract, web3Connect }}
+      value={{ pattern, clearPattern, setPattern, user, contract, web3Connect, recipient, setRecipient }}
     >
       {children}
     </Context.Provider>
