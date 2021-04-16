@@ -27,7 +27,7 @@
     /* height: 70%; */
     background-color: white;
     max-width: 500px;
-    max-height: 400px;
+    /* max-height: 400px; */
     border-radius: 20px;
     display: flex;
     justify-content: center;
@@ -38,9 +38,18 @@
     box-sizing: border-box;
 }
 
+@media (min-width: 768px) {
+    .modal-content {
+        padding:40px;
+    }
+}
+
 .modal-inner-content {
-    word-break: break-all;
     width: 100%;
+}
+
+.address {
+    word-break: break-all;
 }
 
 .modal-bg {
@@ -55,4 +64,5 @@
 
 .modal-paragraph {
     /* padding:20px; */
+    margin: 10px 0px;
 }

@@ -3,9 +3,10 @@ export default function StatusButton({
     onChange,
     shipState,
     shipIt,
-    findRecipient,
+    doneFabbing,
+    setGiftingState,
 }: any) {
-    console.log(shipState)
+    console.log(shipState);
     return (
         <>
             {" "}
@@ -25,13 +26,14 @@ export default function StatusButton({
                 <>
                     <div
                         className={`ship-it-container ${
-                            shipState ? "shipping" : ""
+                            shipState === "PINNING" ? "shipping" : ""
                         }`}
                     >
                         <button
                             onClick={() => {
+                                console.log(shipState);
                                 if (shipState === "") {
-                                    findRecipient();
+                                    doneFabbing();
                                 } else {
                                     shipIt();
                                 }
@@ -45,11 +47,16 @@ export default function StatusButton({
                             {shipState === "COMPLETE" && "FUCK YES!!"}
                         </button>
                     </div>
-                    <div
-                        onClick={() => context.clearPattern()}
-                        className="clear"
-                    >
-                        clean egg
+                    <div>
+                        <button
+                            onClick={() => {
+                                context.clearPattern();
+                                setGiftingState("");
+                            }}
+                            className="sm clear"
+                        >
+                            clean egg
+                        </button>
                     </div>
                 </>
             )}

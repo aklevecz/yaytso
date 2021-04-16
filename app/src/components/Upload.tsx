@@ -8,14 +8,16 @@ import StatusButton from "./StatusButton";
 // It is doing a lot of canvas drawing under the hood to prepare for the egg journey
 export default function Upload({
     context,
-    findRecipient,
+    doneFabbing,
     shipIt,
     shipState,
+    setGiftingState
 }: {
     context: ContextAttrs;
     shipIt: Function;
     shipState: string;
-    findRecipient: Function;
+    doneFabbing: Function;
+    setGiftingState: Function
 }) {
     // const context = useContext(Context);
     const imgPreviewRef = useRef<HTMLImageElement>(null);
@@ -111,6 +113,11 @@ export default function Upload({
 
         reader.readAsDataURL(file);
     };
+
+    // NOTE: It is hard to rip StatusButton out of here since it is regulating the:
+    //      - Upload buttons look and state
+    //      - Applying patterns to the canvases
+    //      - Upload button being also the ship buttons and status
     return (
         <div
             className={`upload-container ${context.pattern ? "shipping" : ""}`}
@@ -120,7 +127,8 @@ export default function Upload({
                 onChange={onChange}
                 shipState={shipState}
                 shipIt={shipIt}
-                findRecipient={findRecipient}
+                doneFabbing={doneFabbing}
+                setGiftingState={setGiftingState}
             />
             <img
                 style={{ display: "none" }}

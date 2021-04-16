@@ -1,27 +1,26 @@
-import { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
+import { ModalInnerContent, ModalParagraph, SmallButton } from ".";
 import { Context } from "../..";
-import Modal from "../Modal";
+import Modal, { withModal } from "../Modal";
 
 const SendToFriend = ({ setAddress, setCornfirmation }: any) => (
     <>
-        <div className="modal-paragraph">ok! what is their address?</div>
-        <input onChange={(e) => setAddress(e.target.value)} type="text"></input>
+        <label>ok! what is their address?
+        <input onChange={(e) => setAddress(e.target.value)} type="text"></input></label>
         <div>
-            <button
-                className="sm"
-                onClick={() => {
+            <SmallButton
+                click={() => {
                     setCornfirmation(true);
                 }}
-            >
-                corntinue
-            </button>
+                title="corntinue"
+            />
         </div>
     </>
 );
 
 const FriendOfYourself = ({ setForMe }: any) => (
     <>
-        <div className="modal-paragraph">is this egg for your or a friend?</div>
+        <div className="modal-paragraph" style={{textAlign:"center"}}>is this egg for your or a friend?</div>
         <div className="button-wrapper">
             <button className="sm" onClick={() => setForMe("me")}>
                 me!
@@ -37,7 +36,7 @@ const Cornfirm = ({
     close,
     forWho,
     address,
-    setCornfirm,
+    reset,
     giftingSetup,
 }: any) => (
     <>
@@ -45,14 +44,14 @@ const Cornfirm = ({
             you are sending an egg to{" "}
             {forWho === "me" ? "yourself" : `a ${forWho}`}
         </div>
-        <div className="modal-paragraph">
+        <div className="modal-paragraph address">
             & {forWho === "me" ? "your" : "their"} address is {address}
         </div>
         <div className="button-wrapper">
             <button className="sm" onClick={() => giftingSetup(close)}>
                 yep!
             </button>
-            <button className="sm" onClick={() => setCornfirm(false)}>
+            <button className="sm" onClick={reset}>
                 um no, go back
             </button>
         </div>
@@ -61,70 +60,91 @@ const Cornfirm = ({
 
 // TODO: Sanitize inputs
 
-export default function GiftModal({readyToShip, visible }: any) {
+function GiftModal({ readyToShip, visible, modalProps, setGiftingState, transactionCompleted }: any) {
     const context = useContext(Context);
     const [forWho, setForWho] = useState<string | null>(null);
     const [address, setAddress] = useState("");
     const [cornfirmation, setCornfirmation] = useState(false);
 
     const giftingSetup = (close: any) => {
-        context.setRecipient({ address, recipient: forWho });
-        readyToShip()
+        context.setRecipient({ address, ty: forWho });
+        readyToShip();
         close();
     };
 
+    const reset = () => {
+        setAddress("")
+        setForWho(null)
+        setCornfirmation(false)
+        setGiftingState("")
+    }
+
     useEffect(() => {
-        if (forWho === "me") {
+        if (forWho === "me" && context.user) {
             setCornfirmation(true);
+            setAddress(context.user.address)
         }
     }, [forWho]);
 
-    // NOTE: There is more render proping here than necessary
-    // Need to decide where exactly to put Modal open state
-    // Maybe it should be passed into this compnent instead of using 
-    // render props to pass it into the content
-    return (
-        <Modal
-            visible={visible}
-            render={(props: any) => (
-                <div className="modal-inner-content">
-                    {!cornfirmation && (
-                        <>
-                            {forWho && <div>egg for: {forWho}</div>}
-                            {(address || forWho === "me") && (
-                                <div>
-                                    address:{" "}
-                                    {forWho === "me" && context.user
-                                        ? context.user.address
-                                        : address}
-                                </div>
-                            )}
-                            {forWho === null && (
-                                <FriendOfYourself setForMe={setForWho} />
-                            )}
-                            {forWho === "friend" && (
-                                <SendToFriend
-                                    setAddress={setAddress}
-                                    setCornfirmation={setCornfirmation}
-                                />
-                            )}
-                        </>
-                    )}
+    useEffect(() => {
+        if (transactionCompleted) {
+            reset()
+        }
+    },[transactionCompleted])
 
-                    {cornfirmation && (
-                        <Cornfirm
-                            forWho={forWho}
-                            address={
-                                forWho === "me" && context.user
+    useEffect(() => {
+        if (visible) {
+            modalProps.setOpen(true);
+        } else {
+            modalProps.setOpen(false);
+        }
+        return () => {
+            modalProps.setOpen(false);
+        };
+    }, [visible]);
+
+    return (
+        <ModalInnerContent>
+            <div>
+                {!cornfirmation && (
+                    <>
+                        {forWho && <div>egg for: {forWho}</div>}
+                        {(address || forWho === "me") && (
+                            <div className="address">
+                                address:{" "}
+                                {forWho === "me" && context.user
                                     ? context.user.address
-                                    : address
-                            }
-                            close={() => props.setOpen(false)}
-                            giftingSetup={giftingSetup}
-                        />
-                    )}
-                </div>
-            )}
-        ></Modal>
+                                    : address}
+                            </div>
+                        )}
+                        {forWho === null && (
+                            <FriendOfYourself setForMe={setForWho} />
+                        )}
+                        {forWho === "friend" && (
+                            <SendToFriend
+                                setAddress={setAddress}
+                                setCornfirmation={setCornfirmation}
+                            />
+                        )}
+                    </>
+                )}
+
+                {cornfirmation && (
+                    <Cornfirm
+                        forWho={forWho}
+                        address={
+                            forWho === "me" && context.user
+                                ? context.user.address
+                                : address
+                        }
+                        close={() => modalProps.setOpen(false)}
+                        giftingSetup={giftingSetup}
+                        reset={reset}
+                    />
+                )}
+            </div>
+        </ModalInnerContent>
     );
 }
+
+export default withModal(GiftModal);

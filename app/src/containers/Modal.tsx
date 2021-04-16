@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import ReactDOM from "react-dom";
 
 export default function Modal(props: any) {
-    const [open, setOpen] = useState(true);
+    const [open, setOpen] = useState(false);
 
     useEffect(() => {
         const appContainer = document.querySelector(
@@ -27,18 +27,6 @@ export default function Modal(props: any) {
         return () => unBlurContainer();
     }, [open]);
 
-    useEffect(() => {
-        if (props.visible) {
-            setOpen(true)
-        } else {
-            setOpen(false)
-        }
-
-        return () => {
-            setOpen(false)
-        }
-    },[props.visible])
-console.log(open, props.visible)
     return ReactDOM.createPortal(
         <div className={`modal-container ${open && "open"}`}>
             <div className="modal-bg"></div>
@@ -52,3 +40,11 @@ console.log(open, props.visible)
         document.querySelector("#modal-root") as HTMLDivElement
     );
 }
+
+export const withModal = (Component: any) => (props: any) => (
+    <Modal
+        render={(modalProps: any) => (
+            <Component {...props} modalProps={modalProps} />
+        )}
+    />
+);
