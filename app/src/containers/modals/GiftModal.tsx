@@ -3,6 +3,8 @@ import { ModalInnerContent, ModalParagraph, SmallButton } from ".";
 import { Context } from "../..";
 import Modal, { withModal } from "../Modal";
 
+const Red = ({children}:{children:JSX.Element | string}) => <span style={{color:"red"}}>{children}</span>
+
 const SendToFriend = ({ setAddress, setCornfirmation }: any) => (
     <>
         <label>ok! what is their address?
@@ -20,7 +22,7 @@ const SendToFriend = ({ setAddress, setCornfirmation }: any) => (
 
 const FriendOfYourself = ({ setForMe }: any) => (
     <>
-        <div className="modal-paragraph" style={{textAlign:"center"}}>is this egg for your or a friend?</div>
+        <div className="modal-paragraph" style={{textAlign:"center"}}>is this egg for you or a friend?</div>
         <div className="button-wrapper">
             <button className="sm" onClick={() => setForMe("me")}>
                 me!
@@ -42,10 +44,10 @@ const Cornfirm = ({
     <>
         <div className="modal-paragraph">
             you are sending an egg to{" "}
-            {forWho === "me" ? "yourself" : `a ${forWho}`}
+            <Red>{forWho === "me" ? "your beautiful self" : `a great ${forWho}`}</Red>
         </div>
         <div className="modal-paragraph address">
-            & {forWho === "me" ? "your" : "their"} address is {address}
+            & {forWho === "me" ? "your" : "their"} address is <Red>{address}</Red>
         </div>
         <div className="button-wrapper">
             <button className="sm" onClick={() => giftingSetup(close)}>

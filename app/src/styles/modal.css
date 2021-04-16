@@ -40,7 +40,7 @@
 
 @media (min-width: 768px) {
     .modal-content {
-        padding:40px;
+        padding: 40px;
     }
 }
 
@@ -56,10 +56,11 @@
     position: absolute;
     top: 0px;
     width: 100%;
-    height: 100%;
-    /* background: grey; */
+    height: 95vh;
+    background: #c5c5c5;
     opacity: 0.3;
     z-index: 0;
+    overflow: hidden;
 }
 
 .modal-paragraph {

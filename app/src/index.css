@@ -49,19 +49,33 @@ input[type="text"] {
     padding: 0px;
 }
 
-button {
+/* button {
     border-radius: 40px;
-    font-size: 30px;
+    font-size: 24px;
     background: white;
     border: 3px solid black;
     padding: 20px;
     cursor: pointer;
     letter-spacing: 2px;
     transition: background 0.5s;
+    font-weight: 600;
+} */
+
+button{
+    border-radius: 40px;
+    font-size: 24px;
+    background: white;
+    border: none;
+    padding: 20px;
+    cursor: pointer;
+    letter-spacing: 2px;
+    transition: background 0.5s;
+    font-weight: 600;
+    background: #ececec;
 }
 
 button.sm {
-    border-radius: 16px;
+    border-radius: 26px;
     font-size: 14px;
     font-weight: 600;
     width: 110px;
