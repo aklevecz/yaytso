@@ -6,7 +6,7 @@
   height: 0%;
   margin: auto;
   display: block;
-  background: black;
+  background: linear-gradient(0deg, white, grey);
   transition: height 1s;
   overflow: visible !important;
 }
@@ -23,11 +23,11 @@
   bottom: 5px;
   border-radius: 40px;
   left: 5px;
-  transition: all 1s;
+  transition: background 1s, bottom 1.05s, left 1s, border-radius 0.1s;
   cursor: pointer;
 }
 
-#NAV *{
+#NAV * {
   fill: black;
   transition: fill 1000ms;
 }
@@ -37,11 +37,14 @@
 }
 
 .web3-connect {
-      position: absolute;
-    bottom: 17px;
-    left: 50%;
-    width: 200px;
-    font-size: 17px;
-    margin-left: -100px;
-    transition: bottom 1000ms;
+  position: absolute;
+  bottom: 17px;
+  right: 1%;
+  width: 200px;
+  font-size: 17px;
+  margin-left: -100px;
+  transition: bottom 1000ms;
+  height: 50px;
+  width: 250px;
+  padding: 0px;
 }

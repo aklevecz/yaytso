@@ -2,49 +2,52 @@ import React, { useEffect, useState } from "react";
 import ReactDOM from "react-dom";
 
 export default function Modal(props: any) {
-    const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(false);
+  const [forceClearNonce, setForceClearNonce] = useState(0);
 
-    useEffect(() => {
-        const appContainer = document.querySelector(
-            ".container-of-containerz"
-        ) as HTMLDivElement;
+  const forceClear = () => setForceClearNonce(forceClearNonce + 1);
 
-        const blurContainer = () => {
-            appContainer.style.filter = "blur(3px)";
-            appContainer.style.overflow = "hidden"
-        };
-        const unBlurContainer = () => {
-            appContainer.style.filter = "";
-            appContainer.style.overflow = "auto";
-        };
+  useEffect(() => {
+    const appContainer = document.querySelector(
+      ".container-of-containerz"
+    ) as HTMLDivElement;
 
-        if (open) {
-            blurContainer();
-        } else {
-            unBlurContainer();
-        }
+    const blurContainer = () => {
+      appContainer.style.filter = "blur(3px)";
+      appContainer.style.overflow = "hidden";
+    };
+    const unBlurContainer = () => {
+      appContainer.style.filter = "";
+      appContainer.style.overflow = "auto";
+    };
 
-        return () => unBlurContainer();
-    }, [open]);
+    if (open) {
+      blurContainer();
+    } else {
+      unBlurContainer();
+    }
 
-    return ReactDOM.createPortal(
-        <div className={`modal-container ${open && "open"}`}>
-            <div className="modal-bg"></div>
-            <div className="modal-wrapper">
-                <div className="modal-content">
-                    {/* {React.cloneElement(children, { setOpen })} */}
-                    {props.render({ open, setOpen })}
-                </div>
-            </div>
-        </div>,
-        document.querySelector("#modal-root") as HTMLDivElement
-    );
+    return () => unBlurContainer();
+  }, [open]);
+  console.log(forceClearNonce);
+  return ReactDOM.createPortal(
+    <div className={`modal-container ${open && "open"}`}>
+      <div onClick={forceClear} className="modal-bg"></div>
+      <div className="modal-wrapper">
+        <div className="modal-content">
+          {/* {React.cloneElement(children, { setOpen })} */}
+          {props.render({ open, setOpen, forceClearNonce })}
+        </div>
+      </div>
+    </div>,
+    document.querySelector("#modal-root") as HTMLDivElement
+  );
 }
 
 export const withModal = (Component: any) => (props: any) => (
-    <Modal
-        render={(modalProps: any) => (
-            <Component {...props} modalProps={modalProps} />
-        )}
-    />
+  <Modal
+    render={(modalProps: any) => (
+      <Component {...props} modalProps={modalProps} />
+    )}
+  />
 );

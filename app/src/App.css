@@ -17,6 +17,7 @@
   display: flex;
   flex-direction: column;
   justify-content: center;
+  /* margin-top: 10%; */
   align-items: center;
   /* position: relative; */
   position: absolute;
@@ -28,7 +29,6 @@
   height: inherit !important;
 }
 
-
 .lds-heart {
   display: inline-block;
   position: relative;
@@ -36,11 +36,11 @@
   height: 80px;
   transform: rotate(45deg);
   transform-origin: 40px 40px;
-  color:red;
+  color: red;
   font-size: 40px;
-  overflow:visible !important;
-  width:350px;
-  height:250px;
+  overflow: visible !important;
+  width: 350px;
+  height: 250px;
 }
 .lds-heart div {
   top: 32px;

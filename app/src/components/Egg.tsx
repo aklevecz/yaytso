@@ -4,6 +4,7 @@ import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 import yaytso from "../assets/yaytso.gltf";
 import { Context } from "..";
+import { SmallButton } from "../containers/modals";
 
 export default function Egg({ sceneRef, shipState, givenGLTF }: any) {
   const context = useContext(Context);
@@ -13,10 +14,10 @@ export default function Egg({ sceneRef, shipState, givenGLTF }: any) {
     const wrapper = wrapperRef!.current!;
     // const { width, height } = wrapper.getBoundingClientRect();
     const width = window.innerWidth;
-    const height = window.innerHeight * .5;
+    const height = window.innerHeight * 0.4;
     // const width = 300,
-      // height = 300;
-      console.log(width, height)
+    // height = 300;
+    console.log(width, height);
     const scene = new THREE.Scene();
     if (sceneRef) {
       sceneRef.current = scene;
@@ -29,45 +30,21 @@ export default function Egg({ sceneRef, shipState, givenGLTF }: any) {
     renderer.setPixelRatio(window.devicePixelRatio);
     renderer.outputEncoding = THREE.sRGBEncoding;
 
-    // renderer.shadowMap.enabled = true;
     if (sceneRef) {
       const controls = new OrbitControls(camera, renderer.domElement);
     }
     // controls.enableZoom = false;
     wrapper.appendChild(renderer.domElement);
 
-    const hemiLight = new THREE.HemisphereLight(0xffffbb, 0x080820, 1);
+    const hemiLight = new THREE.HemisphereLight(0xffffff, 0x080820, 1);
     scene.add(hemiLight);
 
     const ambientLight = new THREE.AmbientLight(0xffffff, 0.1);
     scene.add(ambientLight);
 
-    const light = new THREE.DirectionalLight(0xffffff, 0.3);
+    const light = new THREE.DirectionalLight(0xffffff, 0.7);
     light.position.set(10, 10, 10);
     light.target.position.set(0, 0, 0);
-    // light.castShadow = true;
-    // light.shadow.bias = -0.001;
-    // light.shadow.mapSize.width = 2048;
-    // light.shadow.mapSize.height = 2048;
-    // light.shadow.camera.near = 0.1;
-    // light.shadow.camera.far = 500.0;
-    // light.shadow.camera.near = 0.5;
-    // light.shadow.camera.far = 500.0;
-    // light.shadow.camera.left = 100;
-    // light.shadow.camera.right = -100;
-    // light.shadow.camera.top = 100;
-    // light.shadow.camera.bottom = -100;
-    scene.add(light);
-
-    // const floor = new THREE.Mesh(
-    //   new THREE.PlaneGeometry(100, 100),
-    //   new THREE.MeshStandardMaterial({ color: 0xffffff })
-    // );
-
-    // floor.receiveShadow = true;
-    // floor.rotation.x = -Math.PI / 2;
-    // floor.position.y = -2;
-    // scene.add(floor);
 
     const loader = new GLTFLoader();
     loader.load(givenGLTF ? givenGLTF : yaytso, (gltf) => {
@@ -105,8 +82,6 @@ export default function Egg({ sceneRef, shipState, givenGLTF }: any) {
 
   useEffect(() => {
     if (eggRef.current) {
-      console.log(context.pattern);
-      console.log(eggRef.current);
       (eggRef.current.material as any).map = context.pattern;
       (eggRef.current.material as any).color = new THREE.Color(1, 1, 1);
       (eggRef.current.material as THREE.Material).needsUpdate = true;
@@ -116,13 +91,31 @@ export default function Egg({ sceneRef, shipState, givenGLTF }: any) {
   useEffect(() => {
     if (shipState) {
       (eggRef.current as any).minting = true;
-      console.log(eggRef.current);
     }
   }, [shipState]);
 
   return (
     <div ref={wrapperRef} className="egg-wrapper">
       <div id="debug" style={{ position: "absolute", top: 0, left: 0 }}></div>
+      {context.pattern && (
+        <SmallButton
+          addedClass="clear2"
+          title="clean egg"
+          click={() => context.clearPattern()}
+        />
+      )}
+      {/* <input
+        type="range"
+        min="1"
+        max="10"
+        defaultValue="50"
+        onChange={(e) => {
+          const v = parseInt(e.target.value);
+          context.pattern?.repeat.set(v, v);
+        }}
+        className="slider"
+        id="myRange"
+      /> */}
     </div>
   );
 }

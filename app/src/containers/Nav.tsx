@@ -3,55 +3,68 @@ import { useHistory, withRouter } from "react-router-dom";
 import { Context } from "..";
 import { NAV } from "../components/graphical/NAV";
 
-const eggNav = (): HTMLElement => document.getElementById("EGG-NAV")!
-const collectionNav = ():HTMLElement => document.getElementById("COLLECTION")!
-const worldNav = ():HTMLElement => document.getElementById("WORLD")!
+const eggNav = (): HTMLElement => document.getElementById("EGG-NAV")!;
+const collectionNav = (): HTMLElement => document.getElementById("COLLECTION")!;
+const worldNav = (): HTMLElement => document.getElementById("WORLD")!;
 
 const clear = () => {
-  eggNav().classList.remove("active")
-  collectionNav().classList.remove("active")
-  worldNav().classList.remove("active")
-}
+  eggNav().classList.remove("active");
+  collectionNav().classList.remove("active");
+  worldNav().classList.remove("active");
+};
 
 function Nav() {
   const [openNav, setOpenNav] = useState(false);
-  const context = useContext(Context)
+  const context = useContext(Context);
   const history = useHistory();
 
   useEffect(() => {
     eggNav().onclick = () => {
       history.push("/");
     };
-    collectionNav().onclick = () =>
-      history.push("/collection");
-      worldNav().onclick = () => history.push("/world")
-  },[]);
+    collectionNav().onclick = () => history.push("/collection");
+    worldNav().onclick = () => history.push("/world");
+  }, []);
 
   useEffect(() => {
-    clear()
+    clear();
     const path = history.location.pathname;
     if (path === "/") {
-      eggNav().classList.add("active")
+      eggNav().classList.add("active");
     } else if (path === "/collection") {
-      collectionNav().classList.add("active")
+      collectionNav().classList.add("active");
     } else if (path === "/world") {
-      worldNav().classList.add("active")
+      worldNav().classList.add("active");
     }
-  })
-  const openHeight = window.innerWidth > 768 ? "130px" : "100px" 
+  });
+  const openHeight = window.innerWidth > 768 ? "130px" : "100px";
   return (
-    <div style={{ height: openNav ?openHeight : "0%" }} className="nav-container">
+    <div
+      style={{ height: openNav ? openHeight : "0%" }}
+      className="nav-container"
+    >
       <NAV />
       <div
         onClick={() => setOpenNav(!openNav)}
         style={{
           bottom: openNav ? 100 : 5,
-          background: openNav ? "red" : "black",
+          left: openNav ? 0 : 5,
+          background: openNav
+            ? "linear-gradient(180deg, white, grey)"
+            : "black",
           borderRadius: openNav ? 0 : 40,
         }}
         className="nav-button"
       ></div>
-     {!context.user?.address &&  <button className="web3-connect" style={{bottom: openNav ? 100 : 5}} onClick={() => context.web3Connect()}>connect to web3</button>}
+      {!context.user?.address && (
+        <button
+          className="web3-connect"
+          style={{ bottom: openNav ? 100 : 5 }}
+          onClick={() => context.web3Connect()}
+        >
+          connect to web3
+        </button>
+      )}
     </div>
   );
 }

@@ -4,7 +4,7 @@ export function NAV() {
       <g id="Layer_2" data-name="Layer 2">
         <g id="INIT">
           <g id="NAV">
-            <rect width="375" height="100" />
+            {/* <rect width="375" height="100" /> */}
             <g>
               <g id="EGG-NAV">
                 <path
