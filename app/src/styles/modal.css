@@ -23,7 +23,7 @@
 
 .modal-content {
     width: 90%;
-    border: 2px solid;
+    /* border: 2px solid; */
     /* height: 70%; */
     background-color: white;
     max-width: 500px;

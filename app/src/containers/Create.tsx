@@ -18,7 +18,7 @@ export default function Create() {
     const [shipState, setShipState] = useState("");
 
     const sceneRef = useRef<THREE.Scene>();
-console.log(context.recipient)
+    console.log(context.recipient);
     // NOTE: This can obviously be broken up
     const shipIt = async () => {
         if (!context.user) {
@@ -140,19 +140,21 @@ console.log(context.recipient)
     return (
         <div className="egg-tainer">
             <Egg sceneRef={sceneRef} shipState={shipState} />
-            <Upload
-                context={context}
-                shipIt={shipIt}
-                doneFabbing={() => setGiftingState("recipient")}
-                setGiftingState={setGiftingState}
-                shipState={shipState}
-            />
-            <Smiler shipState={shipState} />
+            <div style={{display:"flex", flexWrap: "wrap", width:"100%", maxWidth:"500px"}}>
+                <Upload
+                    context={context}
+                    shipIt={shipIt}
+                    doneFabbing={() => setGiftingState("recipient")}
+                    setGiftingState={setGiftingState}
+                    shipState={shipState}
+                />
+                <Smiler shipState={shipState} />
+            </div>
             <GiftModal
                 visible={giftingState === "recipient"}
                 setGiftingState={setGiftingState}
                 readyToShip={() => setShipState("READY_TO_SHIP")}
-                transactionCompleted={shipState==="COMPLETE"}
+                transactionCompleted={shipState === "COMPLETE"}
             />
         </div>
     );

@@ -10,6 +10,7 @@ const folderPath = process.argv.slice(2)[0];
       const svgFile = fs
 
         .readFileSync(filePath, "utf-8")
+        .replace(/clip-path/g, "clipPath")
         .replace(/stroke-miterlimit/g, "strokeMiterlimit")
         .replace(/stroke-width/g, "strokeWidth")
         .replace(/enable-background/g, "enableBackground")
