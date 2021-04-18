@@ -3,11 +3,13 @@ import Egg from "../components/Egg";
 import Upload from "../components/Upload";
 import { GLTFExporter } from "three/examples/jsm/exporters/GLTFExporter";
 import Smiler from "../components/Smiler";
-import { Context, Who } from "..";
+import { Context } from "..";
 import GiftModal from "./modals/GiftModal";
 import { createBlobs } from "../libs/create";
 import { pinBlobs } from "../libs/services";
 import { mintEgg } from "../libs/contract";
+import Recipient from "../components/Recipient";
+import { ethers } from "ethers";
 
 export const shipStates = {
   READY_TO_SHIP: "READY_TO_SHIP",
@@ -118,6 +120,7 @@ export default function Create() {
     }
   }, [context.pattern]);
 
+  // Side effect to shrink egg and show recipient when they are about to send it
   useEffect(() => {
     const egg = document.getElementById("the-egg") as HTMLCanvasElement;
     if (!egg) {
@@ -132,15 +135,16 @@ export default function Create() {
     }
   }, [shipState]);
 
-  useEffect(() => {
-    return () => context.clearPattern();
-  }, []);
-
   const clean = () => {
     context.clearPattern();
     setShipState("");
     setGiftingState("");
   };
+
+  // Clear pattern on dismount
+  useEffect(() => {
+    return () => clean();
+  }, []);
 
   // NOTE: State here is a mess
   // shipState defines what the button is doing basically
@@ -162,15 +166,8 @@ export default function Create() {
         <div>
           <Egg sceneRef={sceneRef} shipState={shipState} clean={clean} />
         </div>
-        {shipState === shipStates.READY_TO_SHIP && (
-          <>
-            <div className="to-who">
-              {context.recipient && context.recipient.type === Who.FRIEND
-                ? "FRIENDO"
-                : "YOU"}
-            </div>
-            <div className="to-arrow">{`->`}</div>
-          </>
+        {shipState === shipStates.READY_TO_SHIP && context.recipient && (
+          <Recipient recipient={context.recipient} />
         )}
       </div>
       <div className="create-bottom-container">
@@ -178,7 +175,6 @@ export default function Create() {
           context={context}
           shipIt={shipIt}
           doneFabbing={() => setGiftingState(giftingStates.RECIPIENT)}
-          setGiftingState={setGiftingState}
           shipState={shipState}
         />
         <Smiler shipState={shipState} />

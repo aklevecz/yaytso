@@ -1,5 +1,6 @@
 import { useContext, useEffect, useRef, useState } from "react";
 import { Context } from "..";
+import { shipStates } from "../containers/Create";
 import { EMPHATIC } from "./graphical/EMPHATIC";
 import { HEART } from "./graphical/HEART";
 import { NICE } from "./graphical/NICE";
@@ -9,20 +10,21 @@ import { YES } from "./graphical/YES";
 
 export default function Smiler({ shipState }: { shipState: string }) {
   const context = useContext(Context);
-  const [snackState, setSnackState] = useState<string | null>(null);
-  const patternRef = useRef(null) as any;
-  useEffect(() => {
-    if (!patternRef.current && context.pattern) {
-      patternRef.current = context.pattern;
-      setSnackState("NICE");
-    }
+  // const [snackState, setSnackState] = useState<string | null>(null);
+  // const patternRef = useRef(null) as any;
 
-    if (patternRef.current && !context.pattern) {
-      setSnackState("CLEARED");
-    }
+  // useEffect(() => {
+  //   if (!patternRef.current && context.pattern) {
+  //     patternRef.current = context.pattern;
+  //     setSnackState("NICE");
+  //   }
 
-    patternRef.current = context.pattern;
-  }, [context.pattern]);
+  //   if (patternRef.current && !context.pattern) {
+  //     setSnackState("CLEARED");
+  //   }
+
+  //   patternRef.current = context.pattern;
+  // }, [context.pattern]);
 
   return (
     <div className="smiler-container">
@@ -31,9 +33,9 @@ export default function Smiler({ shipState }: { shipState: string }) {
         <div className="snack">
           {!shipState && context.pattern && <NICE />}
           {/* {!shipState && snackState === "CLEARED" && <OOPS />} */}
-          {shipState === "PINNING" && <YES />}
-          {shipState === "MINTING" && <EMPHATIC />}
-          {shipState === "COMPLETE" && <HEART />}
+          {shipState === shipStates.PINNING && <YES />}
+          {shipState === shipStates.MINTING && <EMPHATIC />}
+          {shipState === shipStates.COMPLETE && <HEART />}
         </div>
       </div>
     </div>

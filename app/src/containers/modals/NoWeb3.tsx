@@ -9,7 +9,7 @@ import { withModal } from "../Modal";
 
 // This is a component that takes a reset prop
 // May want to generalize this stuff...
-export default function NoWeb3({ reset }: any) {
+export default function NoWeb3({ reset }: { reset: () => void }) {
   // This is also pretty dumb
   //   const reset = () => {
   //     setGiftingState("");

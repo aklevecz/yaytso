@@ -91,9 +91,15 @@
   /* border-bottom: 2px solid black; */
   cursor: pointer;
   padding: 10px;
-  color: #ababab;
-  background: #f5f5f5;
+  /* color: #ababab; */
+  /* background: #f5f5f5; */
   width: 80px !important;
+}
+
+@media (min-width: 768px) {
+  .clear2 {
+    left: 30%;
+  }
 }
 
 .ship-it-container.shipping button {

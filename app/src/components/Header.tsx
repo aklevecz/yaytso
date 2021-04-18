@@ -1,4 +1,4 @@
-import { LOGO } from "./components/graphical/LOGO";
+import { LOGO } from "./graphical/LOGO";
 
 export default function Header() {
   return (

@@ -1,16 +1,22 @@
+import { FormEvent } from "react";
 import { shipStates } from "../containers/Create";
 
 export default function StatusButton({
-  context,
+  isPattern,
   onChange,
   shipState,
   shipIt,
   doneFabbing,
-}: any) {
+}: {
+  isPattern: boolean;
+  onChange: (e: FormEvent<HTMLInputElement>) => void;
+  shipState: string;
+  shipIt: () => void;
+  doneFabbing: () => void;
+}) {
   return (
     <>
-      {" "}
-      {!context.pattern && (
+      {!isPattern && (
         <div className="input-container">
           <label className="upload-label">
             <input onChange={onChange} type="file" id="upload-input" />
@@ -18,7 +24,7 @@ export default function StatusButton({
           </label>
         </div>
       )}
-      {context.pattern && (
+      {isPattern && (
         <>
           <div
             className={`ship-it-container ${
@@ -42,17 +48,6 @@ export default function StatusButton({
               {shipState === shipStates.COMPLETE && "FUCK YES!!"}
             </button>
           </div>
-          {/* <div>
-                        <button
-                            onClick={() => {
-                                context.clearPattern();
-                                setGiftingState("");
-                            }}
-                            className="sm clear"
-                        >
-                            clean egg
-                        </button>
-                    </div> */}
         </>
       )}
     </>

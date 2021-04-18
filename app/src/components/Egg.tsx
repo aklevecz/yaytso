@@ -7,7 +7,23 @@ import { Context } from "..";
 import { SmallButton } from "../containers/modals";
 import EggLoader from "./EggLoader";
 
-export default function Egg({ sceneRef, shipState, givenGLTF, clean }: any) {
+type EggProps = {
+  sceneRef?: React.MutableRefObject<THREE.Scene | undefined>;
+  shipState?: string;
+  givenGLTF?: string;
+  clean?: () => void | undefined;
+};
+
+interface EggRef extends THREE.Mesh {
+  minting: boolean;
+}
+
+export default function Egg({
+  sceneRef,
+  shipState,
+  givenGLTF,
+  clean,
+}: EggProps) {
   const context = useContext(Context);
   const wrapperRef = useRef<HTMLDivElement>(null);
   const eggRef = useRef<THREE.Mesh>();
@@ -38,7 +54,7 @@ export default function Egg({ sceneRef, shipState, givenGLTF, clean }: any) {
     //   console.log("yamtrols");
     const controls = new OrbitControls(camera, renderer.domElement);
     // }
-    // controls.enableZoom = false;
+    controls.enableZoom = false;
     wrapper.appendChild(renderer.domElement);
 
     const hemiLight = new THREE.HemisphereLight(0xffffff, 0x080820, 0.6);
@@ -54,7 +70,6 @@ export default function Egg({ sceneRef, shipState, givenGLTF, clean }: any) {
     const loader = new GLTFLoader();
     setTimeout(() => {
       loader.load(givenGLTF ? givenGLTF : yaytso, (gltf) => {
-        console.log("loading", givenGLTF);
         scene.add(gltf.scene);
         let egg = gltf.scene.children[0] as THREE.Mesh;
 
@@ -86,7 +101,7 @@ export default function Egg({ sceneRef, shipState, givenGLTF, clean }: any) {
         // console.log(eggRef.current.scale);
         eggRef.current.scale.set(scalar, scalar, scalar);
       }
-      if (eggRef.current && (eggRef.current as any).minting) {
+      if (eggRef.current && (eggRef.current as EggRef).minting) {
         eggRef.current!.rotation.z += 0.01;
       }
 
@@ -105,15 +120,17 @@ export default function Egg({ sceneRef, shipState, givenGLTF, clean }: any) {
 
   useEffect(() => {
     if (eggRef.current) {
-      (eggRef.current.material as any).map = context.pattern;
-      (eggRef.current.material as any).color = new THREE.Color(1, 1, 1);
-      (eggRef.current.material as THREE.Material).needsUpdate = true;
+      (eggRef.current.material as THREE.MeshBasicMaterial).map =
+        context.pattern;
+      (eggRef.current
+        .material as THREE.MeshBasicMaterial).color = new THREE.Color(1, 1, 1);
+      (eggRef.current.material as THREE.MeshBasicMaterial).needsUpdate = true;
     }
   }, [context.pattern]);
 
   useEffect(() => {
     if (shipState) {
-      (eggRef.current as any).minting = true;
+      (eggRef.current as EggRef).minting = true;
     }
   }, [shipState]);
 
@@ -128,7 +145,7 @@ export default function Egg({ sceneRef, shipState, givenGLTF, clean }: any) {
           <EggLoader centered={!givenGLTF} />
         </div>
       )}
-      {context.pattern && !givenGLTF && (
+      {context.pattern && !givenGLTF && clean && (
         <SmallButton
           addedClass="clear2"
           title="clean"

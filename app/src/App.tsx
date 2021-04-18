@@ -5,7 +5,7 @@ import Collection from "./containers/Collection";
 import Create from "./containers/Create";
 import Nav from "./containers/Nav";
 import World from "./containers/World";
-import Header from "./Header";
+import Header from "./components/Header";
 
 function App() {
   const [bodyHeight, setBodyHeight] = useState(0);

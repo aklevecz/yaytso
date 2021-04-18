@@ -2,6 +2,7 @@ import { useContext, useEffect, useState } from "react";
 import { Context } from "..";
 import WorldScene from "../components/WorldScene";
 
+// CURRENTLY NOT MAINTAINING
 const PINATA_GATEWAY = "https://gateway.pinata.cloud/ipfs";
 export default function World() {
   const context = useContext(Context);
@@ -12,7 +13,7 @@ export default function World() {
       const contract = context.contract;
 
       const totalSupply = await contract.totalSupply().catch(console.log);
-      let eggs = []
+      let eggs = [];
       for (let i = 1; i < parseInt(totalSupply, 10) + 1; i++) {
         const owner = await contract.ownerOf(i);
         if (owner === context.user.address) {
@@ -33,7 +34,6 @@ export default function World() {
           console.log(gltfs);
           setFetching(false);
         });
-
       }
     }
   };
@@ -45,11 +45,17 @@ export default function World() {
 
   useEffect(() => {
     if (window.innerWidth < window.innerHeight) {
-      alert("warning... only works if you have a keyboard and mouse at the moment!")
+      alert(
+        "warning... only works if you have a keyboard and mouse at the moment!"
+      );
     }
-  },[])
-//   const egglts = [
-//         "ipfs://bafkreic4m5sk5arnojp33dezr47juhysiutgveq5fz2af2oo35fzv6ckym?filename=yaytso.gltf",
-//     ]
-    return (<div><WorldScene eggLTs={eggLTs}/></div>)
+  }, []);
+  //   const egglts = [
+  //         "ipfs://bafkreic4m5sk5arnojp33dezr47juhysiutgveq5fz2af2oo35fzv6ckym?filename=yaytso.gltf",
+  //     ]
+  return (
+    <div>
+      <WorldScene eggLTs={eggLTs} />
+    </div>
+  );
 }

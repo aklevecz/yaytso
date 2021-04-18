@@ -61,9 +61,15 @@ export default function Modal(props: any) {
   );
 }
 
+export type ModalProps = {
+  open: boolean;
+  setOpen: (e: boolean) => void;
+  forceClearNonce: number;
+};
+
 export const withModal = (Component: any) => (props: any) => (
   <Modal
-    render={(modalProps: any) => (
+    render={(modalProps: ModalProps) => (
       <Component {...props} modalProps={modalProps} />
     )}
   />

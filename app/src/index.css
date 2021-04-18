@@ -99,8 +99,8 @@ button.sm {
 }
 
 button:hover {
-  background: black;
-  color: white;
+  background: rgb(255, 119, 119);
+  /* color: rgb(180, 180, 180); */
 }
 
 /* width */

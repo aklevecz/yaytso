@@ -1,8 +1,8 @@
 import { ethers } from "ethers";
-import { useContext, useEffect, useState } from "react";
+import { ChangeEvent, useContext, useEffect, useState } from "react";
 import { ModalInnerContent, SmallButton } from ".";
 import { Context } from "../..";
-import { withModal } from "../Modal";
+import { ModalProps, withModal } from "../Modal";
 import NoWeb3 from "./NoWeb3";
 
 const Red = ({ children }: { children: JSX.Element | string }) => (
@@ -16,7 +16,14 @@ const SendToFriend = ({
   validFriendAddress,
   invalidFriendAddress,
   error,
-}: any) => (
+}: {
+  onAddressChange: (e: ChangeEvent<HTMLInputElement>) => void;
+  setCornfirmation: (e: boolean) => void;
+  goBack: () => void;
+  validFriendAddress: boolean;
+  invalidFriendAddress: () => void;
+  error: string;
+}) => (
   <>
     <label>
       ok! what is their address?
@@ -38,7 +45,13 @@ const SendToFriend = ({
   </>
 );
 
-const FriendOfYourself = ({ forMe, forFriend }: any) => (
+const FriendOfYourself = ({
+  forMe,
+  forFriend,
+}: {
+  forMe: () => void;
+  forFriend: () => void;
+}) => (
   <>
     <div className="modal-paragraph" style={{ textAlign: "center" }}>
       is this egg for you or a friend?
@@ -54,7 +67,19 @@ const FriendOfYourself = ({ forMe, forFriend }: any) => (
   </>
 );
 
-const Cornfirm = ({ close, forWho, address, giftingSetup, goBack }: any) => (
+const Cornfirm = ({
+  close,
+  forWho,
+  address,
+  giftingSetup,
+  goBack,
+}: {
+  close: () => void;
+  forWho: string | null;
+  address: string;
+  giftingSetup: (callback: () => void) => void;
+  goBack: () => void;
+}) => (
   <>
     <div className="modal-paragraph">
       you are sending an egg to{" "}
@@ -82,6 +107,14 @@ const forWhos = {
   ME: "ME",
 };
 
+type Props = {
+  readyToShip: () => void;
+  visible: boolean;
+  modalProps: ModalProps;
+  setGiftingState: (e: string) => void;
+  transactionCompleted: boolean;
+};
+
 // TODO: Sanitize inputs
 function GiftModal({
   readyToShip,
@@ -89,7 +122,7 @@ function GiftModal({
   modalProps,
   setGiftingState,
   transactionCompleted,
-}: any) {
+}: Props) {
   const context = useContext(Context);
   const [forWho, setForWho] = useState<string | null>(null);
   const [address, setAddress] = useState("");
@@ -97,7 +130,7 @@ function GiftModal({
   const [validFriendAddress, setValidFriendAddress] = useState(false);
   const [errors, setErrors] = useState({ friend: "" });
 
-  const giftingSetup = (close: any) => {
+  const giftingSetup = (close: () => void) => {
     context.setRecipient({ address, type: forWho });
     readyToShip();
     close();
@@ -110,7 +143,7 @@ function GiftModal({
     });
   };
 
-  const onAddressChange = (e: any) => {
+  const onAddressChange = (e: ChangeEvent<HTMLInputElement>) => {
     const isValid = ethers.utils.isAddress(e.target.value);
     if (isValid) {
       setValidFriendAddress(true);
@@ -218,7 +251,6 @@ function GiftModal({
               setForWho(null);
               setAddress("");
             }}
-            reset={reset}
           />
         )}
       </div>

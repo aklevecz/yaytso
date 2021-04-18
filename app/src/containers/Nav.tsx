@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from "react";
+import React, { SyntheticEvent, useContext, useEffect, useState } from "react";
 import { useHistory, withRouter } from "react-router-dom";
 import { Context } from "..";
 import { NAV } from "../components/graphical/NAV";
