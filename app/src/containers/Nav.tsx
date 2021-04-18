@@ -18,6 +18,8 @@ function Nav() {
   const context = useContext(Context);
   const history = useHistory();
 
+  const isDesk = window.innerWidth > 768;
+
   useEffect(() => {
     eggNav().onclick = () => {
       history.push("/");
@@ -25,7 +27,14 @@ function Nav() {
     collectionNav().onclick = () => history.push("/collection");
     worldNav().onclick = () => history.push("/world");
 
+    if (isDesk) {
+      setOpenNav(true);
+    }
+
     window.onclick = (e: any) => {
+      if (isDesk) {
+        return;
+      }
       if (e.target.className === "nav-container") {
         return;
       }
@@ -57,16 +66,20 @@ function Nav() {
       className="nav-container"
     >
       <NAV />
-      <div
-        onClick={() => setOpenNav(!openNav)}
-        style={{
-          bottom: openNav ? 100 : 5,
-          left: openNav ? 0 : 5,
-          background: openNav ? "linear-gradient(#e488ff, lightgrey)" : "black",
-          borderRadius: openNav ? "0px 10px 0px 0" : 40,
-        }}
-        className="nav-button"
-      ></div>
+      {!isDesk && (
+        <div
+          onClick={() => setOpenNav(!openNav)}
+          style={{
+            bottom: openNav ? 100 : 5,
+            left: openNav ? 0 : 5,
+            background: openNav
+              ? "linear-gradient(#e488ff, lightgrey)"
+              : "black",
+            borderRadius: openNav ? "0px 10px 0px 0" : 40,
+          }}
+          className="nav-button"
+        ></div>
+      )}
       {!context.user?.address && (
         <button
           className="web3-connect"
