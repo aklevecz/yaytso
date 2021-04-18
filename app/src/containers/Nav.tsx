@@ -1,4 +1,4 @@
-import React, { SyntheticEvent, useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useHistory, withRouter } from "react-router-dom";
 import { Context } from "..";
 import { NAV } from "../components/graphical/NAV";
@@ -26,6 +26,9 @@ function Nav() {
     worldNav().onclick = () => history.push("/world");
 
     window.onclick = (e: any) => {
+      if (e.target.className === "nav-container") {
+        return;
+      }
       if (
         e.target.parentElement === null ||
         (e.target.parentElement &&
@@ -34,7 +37,7 @@ function Nav() {
         setOpenNav(false);
       }
     };
-  }, []);
+  }, [history]);
 
   useEffect(() => {
     clear();

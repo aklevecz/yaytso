@@ -1,9 +1,9 @@
 import { useContext, useEffect, useState } from "react";
 import { Context } from "..";
 import WorldScene from "../components/WorldScene";
-
-// CURRENTLY NOT MAINTAINING
 const PINATA_GATEWAY = "https://gateway.pinata.cloud/ipfs";
+/* eslint-disable */
+// NOT MAINTAINED AT THE MOMENT
 export default function World() {
   const context = useContext(Context);
   const [fetching, setFetching] = useState(true);

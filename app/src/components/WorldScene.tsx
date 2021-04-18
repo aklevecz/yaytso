@@ -5,7 +5,8 @@ import { PointerLockControls } from "three/examples/jsm/controls/PointerLockCont
 import { Context } from "..";
 import Skybox from "../assets/skybox.jpg";
 import { PINATA_GATEWAY } from "../libs/services";
-
+/* eslint-disable */
+// NOT MAINTAINED AT THE MOMENT
 export default function WorldScene({ eggLTs }: { eggLTs: Array<string> }) {
   const context = useContext(Context);
   const wrapperRef = useRef<HTMLDivElement>(null);

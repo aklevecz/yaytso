@@ -110,13 +110,14 @@ export default function Egg({
     };
     animate();
 
+    const w = wrapperRef.current;
     return () => {
       cancelAnimationFrame(frame);
-      if (wrapperRef.current) {
-        wrapperRef.current.innerHTML = "";
+      if (w) {
+        w.innerHTML = "";
       }
     };
-  }, []);
+  }, [givenGLTF, sceneRef]);
 
   useEffect(() => {
     if (eggRef.current) {

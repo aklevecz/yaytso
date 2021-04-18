@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import ReactDOM from "react-dom";
 
 export default function Modal(props: any) {
@@ -10,16 +10,16 @@ export default function Modal(props: any) {
   };
 
   useEffect(() => {
-    const appContainer = document.querySelector(
-      ".container-of-containerz"
-    ) as HTMLDivElement;
+    // const appContainer = document.querySelector(
+    //   ".container-of-containerz"
+    // ) as HTMLDivElement;
 
     const bottomContainer = document.querySelector(
       ".smiler-container"
     ) as HTMLDivElement;
-    const navContainer = document.querySelector(
-      ".nav-container"
-    ) as HTMLDivElement;
+    // const navContainer = document.querySelector(
+    //   ".nav-container"
+    // ) as HTMLDivElement;
     const previewCanvas = document.querySelector(
       ".preview-canvas"
     ) as HTMLDivElement;

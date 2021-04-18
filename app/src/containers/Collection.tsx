@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from "react";
+import { useCallback, useContext, useEffect, useState } from "react";
 import Egg from "../components/Egg";
 import { Context } from "..";
 import { getOwnersEggs } from "../libs/contract";
@@ -15,7 +15,7 @@ export default function Collection() {
   const [fetching, setFetching] = useState(true);
   const [eggSons, setEggSons] = useState<EggMetaData[]>([]);
 
-  const getCollection = async () => {
+  const getCollection = useCallback(async () => {
     if (context.contract && context.user && context.user.address) {
       const contract = context.contract;
 
@@ -40,13 +40,13 @@ export default function Collection() {
         setFetching(false);
       });
     }
-  };
+  }, [context.contract, context.user]);
 
   useEffect(() => {
     if (context.user) {
       getCollection();
     }
-  }, [context]);
+  }, [context, getCollection]);
 
   useEffect(() => {
     const c = document.querySelector(

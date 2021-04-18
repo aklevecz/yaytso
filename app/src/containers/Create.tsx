@@ -9,7 +9,6 @@ import { createBlobs } from "../libs/create";
 import { pinBlobs } from "../libs/services";
 import { mintEgg } from "../libs/contract";
 import Recipient from "../components/Recipient";
-import { ethers } from "ethers";
 
 export const shipStates = {
   READY_TO_SHIP: "READY_TO_SHIP",
@@ -144,6 +143,7 @@ export default function Create() {
   // Clear pattern on dismount
   useEffect(() => {
     return () => clean();
+    // eslint-disable-next-line
   }, []);
 
   // NOTE: State here is a mess
@@ -177,7 +177,7 @@ export default function Create() {
           doneFabbing={() => setGiftingState(giftingStates.RECIPIENT)}
           shipState={shipState}
         />
-        <Smiler shipState={shipState} />
+        <Smiler shipState={shipState} isPattern={!!context.pattern} />
       </div>
       <GiftModal
         visible={giftingState === giftingStates.RECIPIENT}

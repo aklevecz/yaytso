@@ -1,5 +1,11 @@
 import { ethers } from "ethers";
-import { ChangeEvent, useContext, useEffect, useState } from "react";
+import {
+  ChangeEvent,
+  useCallback,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
 import { ModalInnerContent, SmallButton } from ".";
 import { Context } from "../..";
 import { ModalProps, withModal } from "../Modal";
@@ -115,7 +121,6 @@ type Props = {
   transactionCompleted: boolean;
 };
 
-// TODO: Sanitize inputs
 function GiftModal({
   readyToShip,
   visible,
@@ -157,36 +162,36 @@ function GiftModal({
   const forMe = () => setForWho(forWhos.ME);
   const forFriend = () => setForWho(forWhos.FRIEND);
 
-  const reset = () => {
+  const reset = useCallback(() => {
     setAddress("");
     setForWho(null);
     setCornfirmation(false);
     setGiftingState("");
-  };
+  }, [setGiftingState]);
 
   useEffect(() => {
-    console.log(forWho);
     if (forWho === forWhos.ME && context.user) {
-      console.log("WHAT");
       setCornfirmation(true);
       setAddress(context.user.address);
     }
-  }, [forWho]);
+  }, [forWho, context.user]);
 
+  // ANIT PATTERN LAND :D
+  /**** */
   // Anti pattern, but whatever for now
   // it allows the modal bg to close and clear the state
   useEffect(() => {
     reset();
-  }, [modalProps.forceClearNonce]);
+  }, [modalProps.forceClearNonce, reset]);
 
   // Also pretty fucking janky
-  // Maybe I should just make a fucking modal context
   useEffect(() => {
     if (transactionCompleted) {
       reset();
     }
-  }, [transactionCompleted]);
+  }, [transactionCompleted, reset]);
 
+  // modalProps is side effect heavy
   useEffect(() => {
     if (visible) {
       modalProps.setOpen(true);
@@ -196,7 +201,10 @@ function GiftModal({
     return () => {
       modalProps.setOpen(false);
     };
+    // eslint-disable-next-line
   }, [visible]);
+  // END OF LITTLE ANTI PATTERN LAND :D
+  // **********************************
 
   if (!context.user) {
     return <NoWeb3 reset={reset} />;
