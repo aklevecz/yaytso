@@ -3,6 +3,7 @@ import { RepeatWrapping, CanvasTexture } from "three";
 
 import ReactDOM from "react-dom";
 import "./index.css";
+import "./styles/create.css";
 import "./styles/egg.css";
 import "./styles/upload.css";
 import "./styles/nav.css";
@@ -24,9 +25,9 @@ type User = {
   signer: ethers.providers.JsonRpcSigner | null;
 };
 
-enum Who {
-  ME = "me",
-  FRIEND = "friend",
+export enum Who {
+  ME = "ME",
+  FRIEND = "FRIEND",
 }
 
 type Recipient = {
@@ -46,7 +47,7 @@ export type ContextAttrs = {
   uploadPattern: (e: React.FormEvent<HTMLInputElement>) => void;
 };
 
-const NETWORK_ID = process.env.NODE_ENV === "development" ? 1618544051137 : 4;
+const NETWORK_ID = process.env.NODE_ENV === "development" ? 1618674508819 : 4;
 export const Context = React.createContext<ContextAttrs>({
   pattern: null,
   clearPattern: () => {},

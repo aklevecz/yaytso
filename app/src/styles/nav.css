@@ -6,7 +6,7 @@
   height: 0%;
   margin: auto;
   display: block;
-  background: linear-gradient(0deg, white, grey);
+  background: linear-gradient(0deg, white, lightgrey);
   transition: height 1s;
   overflow: visible !important;
 }
@@ -29,11 +29,13 @@
 
 #NAV * {
   fill: black;
+  stroke: black;
   transition: fill 1000ms;
 }
 
 #NAV .active * {
-  fill: red;
+  fill: white;
+  stroke: white;
 }
 
 .web3-connect {

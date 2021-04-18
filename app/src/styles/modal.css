@@ -69,3 +69,9 @@
   /* padding:20px; */
   margin: 10px 0px;
 }
+
+.modal-error {
+  font-size: 14px;
+  color: red;
+  padding: 10px;
+}

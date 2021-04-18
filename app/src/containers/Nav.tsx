@@ -24,6 +24,16 @@ function Nav() {
     };
     collectionNav().onclick = () => history.push("/collection");
     worldNav().onclick = () => history.push("/world");
+
+    window.onclick = (e: any) => {
+      if (
+        e.target.parentElement === null ||
+        (e.target.parentElement &&
+          e.target.parentElement.className !== "nav-container")
+      ) {
+        setOpenNav(false);
+      }
+    };
   }, []);
 
   useEffect(() => {
@@ -49,10 +59,8 @@ function Nav() {
         style={{
           bottom: openNav ? 100 : 5,
           left: openNav ? 0 : 5,
-          background: openNav
-            ? "linear-gradient(180deg, white, grey)"
-            : "black",
-          borderRadius: openNav ? 0 : 40,
+          background: openNav ? "linear-gradient(#e488ff, lightgrey)" : "black",
+          borderRadius: openNav ? "0px 10px 0px 0" : 40,
         }}
         className="nav-button"
       ></div>

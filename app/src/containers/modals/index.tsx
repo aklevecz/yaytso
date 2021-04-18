@@ -12,16 +12,24 @@ export const ModalParagraph = ({
   children: React.ReactChildren | string;
 }) => <div className="modal-paragaph">{children}</div>;
 
+export const ModalButtonWrapper = ({
+  children,
+}: {
+  children: JSX.Element | JSX.Element[];
+}) => <div className="button-wrapper">{children}</div>;
+
 export const SmallButton = ({
   title,
   click,
   addedClass,
+  styles,
 }: {
   title: string;
   click: () => void;
   addedClass?: string;
+  styles?: object;
 }) => (
-  <button className={`sm ${addedClass}`} onClick={click}>
+  <button className={`sm ${addedClass}`} style={styles} onClick={click}>
     {title}
   </button>
 );

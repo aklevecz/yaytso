@@ -1,3 +1,10 @@
+.create-bottom-container {
+  display: flex;
+  flex-wrap: wrap;
+  width: 100%;
+  max-width: 500px;
+}
+
 .upload-container {
   margin: 20px auto 0px;
   display: flex;
@@ -23,8 +30,10 @@
   font-weight: bold;
   cursor: pointer;
   border-radius: 30px;
-  background: #ececec;
+  background: #f7f7f7;
   transition: all 0.5s;
+  background: black;
+  color: #f7f7f7;
 }
 
 .upload-label:hover {
@@ -37,6 +46,7 @@
   flex: 0 0 100%;
   position: relative;
   margin-top: 10px;
+  transition: opacity 1s, 1s filter linear, 1s -webkit-filter linear;
 }
 
 .smiler-wrapper {
@@ -52,7 +62,7 @@
     width: 110px; */
 
   position: absolute;
-  top: -30px;
+  top: -40px;
   left: 61%;
   width: 70px;
 }
@@ -73,8 +83,8 @@
 
 .clear2 {
   position: absolute;
-  bottom: 10px;
-  left: 8px;
+  bottom: 0px;
+  left: 24px;
   /* color: red; */
   font-size: 20px;
   font-weight: 500;
@@ -83,6 +93,7 @@
   padding: 10px;
   color: #ababab;
   background: #f5f5f5;
+  width: 80px !important;
 }
 
 .ship-it-container.shipping button {

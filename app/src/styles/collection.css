@@ -1,3 +1,29 @@
+.collection-container {
+  display: flex;
+  flex-wrap: wrap;
+  overflow-x: hidden;
+}
+
+.collection-item-container {
+  position: relative;
+  width: 50%;
+}
+
+.collection-item-name {
+  font-family: monospace;
+  font-weight: bold;
+  position: absolute;
+  right: 25px;
+  z-index: 1;
+  font-size: 20px;
+  top: 18px;
+  color: black;
+}
+/* 
+.egg-wrapper.collection {
+  flex: 0 0 50%;
+} */
+
 .oops {
   font-size: 30px;
   padding: 10px;

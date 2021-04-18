@@ -1,3 +1,5 @@
+import { shipStates } from "../containers/Create";
+
 export default function StatusButton({
   context,
   onChange,
@@ -20,7 +22,7 @@ export default function StatusButton({
         <>
           <div
             className={`ship-it-container ${
-              shipState === "PINNING" ? "shipping" : ""
+              shipState === shipStates.PINNING ? "shipping" : ""
             }`}
           >
             <button
@@ -32,12 +34,12 @@ export default function StatusButton({
                 }
               }}
             >
-              {shipState === "" && "done fabbing?"}
-              {shipState === "READY_TO_SHIP" && "ship it?"}
-              {shipState === "PINNING" && "pinning..."}
-              {shipState === "SIGNING" && "plz sign!"}
-              {shipState === "MINTING" && "INC EGG!!"}
-              {shipState === "COMPLETE" && "FUCK YES!!"}
+              {shipState === "" && "done?"}
+              {shipState === shipStates.READY_TO_SHIP && "ship it?"}
+              {shipState === shipStates.PINNING && "pinning..."}
+              {shipState === shipStates.SIGNING && "plz sign!"}
+              {shipState === shipStates.MINTING && "INC EGG!!"}
+              {shipState === shipStates.COMPLETE && "FUCK YES!!"}
             </button>
           </div>
           {/* <div>
