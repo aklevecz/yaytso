@@ -3,7 +3,14 @@ import { ModalInnerContent, ModalParagraph, ModalProps, withModal } from ".";
 import { createPinataURL } from "../../libs/services";
 import { Receipt } from "../Create";
 
-const EggGrid = ({ recipient, txHash, tokenId, metadata, svgCID }: Receipt) => (
+const EggGrid = ({
+  recipient,
+  txHash,
+  tokenId,
+  metadata,
+  svgCID,
+  contractAddress,
+}: Receipt) => (
   <div className="receipt-grid">
     <div className="receipt-img">
       <img alt="" src={createPinataURL(`ipfs://${svgCID}`)}></img>
@@ -25,10 +32,12 @@ const EggGrid = ({ recipient, txHash, tokenId, metadata, svgCID }: Receipt) => (
       <div>ipfs://{metadata}</div>
     </div>
     <div className="receipt-link">
-      <a href="https://opensea.com">view on opensea</a>
+      <a href={`https://opensea.io/assets/${contractAddress}/${tokenId}`}>
+        view on opensea
+      </a>
     </div>
     <div className="receipt-link">
-      <a href="http://yaytso.art/egg/7">view on yaytso viewer</a>
+      <a href={`http://yaytso.art/#/egg/${tokenId}`}>view on yaytso viewer</a>
     </div>
   </div>
 );
@@ -70,6 +79,7 @@ const ReceiptModal = ({
             tokenId={receipt.tokenId}
             metadata={receipt.metadata}
             svgCID={receipt.svgCID}
+            contractAddress={receipt.contractAddress}
           />
         )}
       </ModalParagraph>

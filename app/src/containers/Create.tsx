@@ -29,6 +29,7 @@ export type Receipt = {
   tokenId: string | number;
   metadata: string;
   svgCID: string;
+  contractAddress: string;
 };
 
 export default function Create() {
@@ -79,6 +80,7 @@ export default function Create() {
           recipient: context.recipient && context.recipient.address,
           metadata,
           svgCID,
+          contractAddress: context.contract && context.contract.address,
         });
         console.log(event.args._tokenId.toString());
       } catch (e) {
