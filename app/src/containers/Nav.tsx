@@ -46,7 +46,7 @@ function Nav() {
         setOpenNav(false);
       }
     };
-  }, [history]);
+  }, [isDesk, history]);
 
   useEffect(() => {
     clear();
@@ -59,7 +59,9 @@ function Nav() {
       worldNav().classList.add("active");
     }
   });
+
   const openHeight = window.innerWidth > 768 ? "130px" : "100px";
+
   return (
     <div
       style={{ height: openNav ? openHeight : "0%" }}

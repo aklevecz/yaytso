@@ -6,9 +6,8 @@ import {
   useEffect,
   useState,
 } from "react";
-import { ModalInnerContent, SmallButton } from ".";
+import { ModalInnerContent, SmallButton, ModalProps, withModal } from ".";
 import { Context } from "../..";
-import { ModalProps, withModal } from "../Modal";
 import NoWeb3 from "./NoWeb3";
 
 const Red = ({ children }: { children: JSX.Element | string }) => (

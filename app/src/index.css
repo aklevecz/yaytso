@@ -91,6 +91,10 @@ button.sm {
   padding: 10px;
 }
 
+a {
+  color: rgb(253, 87, 87);
+}
+
 @media (min-width: 768px) {
   button.sm {
     font-size: 18px;

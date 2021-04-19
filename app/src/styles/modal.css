@@ -75,3 +75,57 @@
   color: red;
   padding: 10px;
 }
+
+.receipt-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  word-break: break-all;
+  /* justify-content: center;
+  align-items: center; */
+  row-gap: 10px;
+}
+
+.receipt-img {
+  grid-column: 1 / span 2;
+  border: 6px solid;
+  border-radius: 100px;
+  margin-bottom: 0px;
+}
+
+.token-id {
+  justify-self: center;
+  align-self: center;
+  grid-column: 3 / span 2;
+  font-size: 70px;
+  padding-bottom: 7px;
+}
+
+.line {
+  background-color: black;
+  height: 10px;
+  grid-column: 1 / span 4;
+}
+.receipt-row {
+  display: grid;
+  grid-template-columns: 120px 1fr;
+  grid-column: 1 / span 4;
+  font-size: 14px;
+}
+
+.receipt-row > div:first-child {
+  font-family: monospace;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.receipt-row > div:nth-child(2) {
+  font-family: monospace;
+  /* color: red;
+  grid-column: 2 / span 2; */
+}
+
+.receipt-link {
+  grid-column: 1 / span 3;
+  font-size: 14px;
+  text-align: left;
+}

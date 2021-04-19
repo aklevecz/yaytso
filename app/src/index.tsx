@@ -9,7 +9,7 @@ import "./styles/nav.css";
 import "./styles/collection.css";
 import "./styles/modal.css";
 import App from "./App";
-import { Texture } from "three";
+import { CanvasTexture, Texture } from "three";
 import { ethers } from "ethers";
 import YaytsoInterface from "./contracts/Yaytso.json";
 import { readFile } from "./libs/services";
@@ -61,7 +61,7 @@ export const Context = React.createContext<ContextAttrs>({
 });
 
 function ContextProvider({ children }: { children: React.ReactChild }) {
-  const [pattern, setPattern] = useState(null);
+  const [pattern, setPattern] = useState<CanvasTexture | null>(null);
   const [user, setUser] = useState<User | null>(null);
   const [recipient, setRecipient] = useState<Recipient | null>(null);
   const [contract, setContract] = useState<ethers.Contract | null>(null);

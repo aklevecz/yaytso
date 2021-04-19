@@ -4,6 +4,7 @@
   justify-content: center;
   align-items: center;
   position: relative;
+  min-height: 250px;
 }
 
 .to-who {
@@ -11,7 +12,7 @@
   flex: 0 0 50%;
   justify-content: center;
   align-items: center;
-  font-size: 30px;
+  font-size: 50px;
   font-weight: 600;
 }
 
@@ -23,4 +24,22 @@
   width: 50px;
   margin-top: -25px;
   font-weight: bold;
+}
+
+@media (min-width: 768px) {
+  .upper-container {
+    min-height: 350px;
+  }
+
+  .to-arrow {
+    height: 100px;
+    width: 100px;
+    margin-top: -50px;
+  }
+
+  .to-who {
+    /* height: unset; */
+    text-align: left;
+    font-size: 70px;
+  }
 }

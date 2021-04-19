@@ -9,6 +9,7 @@ import { createBlobs } from "../libs/create";
 import { pinBlobs } from "../libs/services";
 import { mintEgg } from "../libs/contract";
 import Recipient from "../components/Recipient";
+import ReceiptModal from "./modals/Receipt";
 
 export const shipStates = {
   READY_TO_SHIP: "READY_TO_SHIP",
@@ -22,11 +23,21 @@ const giftingStates = {
   RECIPIENT: "RECIPIENT",
 };
 
+export type Receipt = {
+  recipient: string | null;
+  txHash: string | null;
+  tokenId: string | number;
+  metadata: string;
+  svgCID: string;
+};
+
 export default function Create() {
   const context = useContext(Context);
 
   const [giftingState, setGiftingState] = useState("");
   const [shipState, setShipState] = useState("");
+
+  const [receipt, setReceipt] = useState<Receipt | null>(null);
 
   const sceneRef = useRef<THREE.Scene>();
 
@@ -43,7 +54,7 @@ export default function Create() {
     }
   };
 
-  const txResolution = async (tx: any) => {
+  const txResolution = async (tx: any, metadata: string, svgCID: string) => {
     const receipt = await tx.wait();
     for (const event of receipt.events) {
       if (event.event !== "Transfer" && event.event !== "YaytsoMinted") {
@@ -52,11 +63,23 @@ export default function Create() {
       }
       console.log(event);
       setShipState(shipStates.COMPLETE);
-      setTimeout(() => {
-        setShipState("");
-        setGiftingState("");
-      }, 3000);
+
+      // setTimeout(() => {
+      //   setShipState("");
+      //   setGiftingState("");
+      // }, 3000);
+
       try {
+        const tokenId = event.args._tokenId.toString();
+        const txHash = event.transactionHash;
+        setReceipt({
+          ...receipt,
+          tokenId,
+          txHash,
+          recipient: context.recipient && context.recipient.address,
+          metadata,
+          svgCID,
+        });
         console.log(event.args._tokenId.toString());
       } catch (e) {
         console.log(event.args);
@@ -107,7 +130,7 @@ export default function Create() {
           return;
         }
         setShipState(shipStates.MINTING);
-        txResolution(tx);
+        txResolution(tx, resp.metaCID, resp.svgCID);
       },
       { onlyVisible: true }
     );
@@ -125,8 +148,9 @@ export default function Create() {
     if (!egg) {
       return;
     }
-    if (shipState === shipStates.READY_TO_SHIP) {
-      egg.style.width = parseFloat(egg.style.width) * 0.5 + "px";
+    if (shipState === shipStates.READY_TO_SHIP && window.innerWidth < 768) {
+      const halfWidth = parseFloat(egg.style.width) * 0.5;
+      egg.style.width = halfWidth + "px";
       egg.style.height = parseFloat(egg.style.height) * 0.5 + "px";
     } else {
       egg.style.width = window.innerWidth + "px";
@@ -184,6 +208,10 @@ export default function Create() {
         setGiftingState={setGiftingState}
         readyToShip={() => setShipState(shipStates.READY_TO_SHIP)}
         transactionCompleted={shipState === shipStates.COMPLETE}
+      />
+      <ReceiptModal
+        visible={shipState === shipStates.COMPLETE && receipt}
+        receipt={receipt}
       />
     </div>
   );

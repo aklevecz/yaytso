@@ -35,7 +35,7 @@ export const fetchEggApplyId = (
 
 export const readFile = (
   e: ProgressEvent<FileReader>,
-  setPattern: Dispatch<SetStateAction<null>>
+  setPattern: Dispatch<SetStateAction<CanvasTexture | null>>
 ) => {
   if (e.target === null) {
     return alert("I can't read this shit");
@@ -45,23 +45,17 @@ export const readFile = (
     return alert("I'm confused by this upload... a single img please!");
   }
   // wtf LOL
-  const imgPreviewRef: any = { current: null };
-  imgPreviewRef.current = document.getElementById(
-    "img-preview"
-  ) as HTMLImageElement;
-  imgPreviewRef!.current!.src = img;
-  console.log(imgPreviewRef);
+  const imgPreview = document.getElementById("img-preview") as HTMLImageElement;
+  imgPreview.src = img;
   (document.getElementById("tiny") as HTMLImageElement).src = img;
 
-  imgPreviewRef!.current!.onload = (e: any) => {
-    const canvasRef: any = { current: null };
-    canvasRef.current = document.getElementById(
+  imgPreview.onload = (e: any) => {
+    const canvas = document.getElementById(
       "preview-canvas"
     ) as HTMLCanvasElement;
-    console.log(canvasRef);
     const img = e.target as any;
-    if (canvasRef.current !== null) {
-      const ctx = canvasRef.current.getContext("2d");
+    if (canvas !== null) {
+      const ctx = canvas.getContext("2d");
       const height = 200;
       const width = 200;
       ctx!.canvas.height = height;
@@ -72,7 +66,7 @@ export const readFile = (
       ctx!.fillStyle = "white";
       ctx!.fillRect(0, 0, ctx!.canvas.width, ctx!.canvas.height);
       ctx?.drawImage(
-        imgPreviewRef!.current!,
+        imgPreview,
         left,
         top,
         imgSize,
@@ -90,21 +84,11 @@ export const readFile = (
 
       const reptitions = 7;
       texture.repeat.set(reptitions, reptitions);
-      setPattern(texture as any);
+      setPattern(texture as CanvasTexture);
 
       const tinyCanvas = document.getElementById("tiny") as HTMLCanvasElement;
       const tinyContext = tinyCanvas!.getContext("2d");
-      tinyContext!.drawImage(
-        canvasRef.current,
-        0,
-        0,
-        width,
-        height,
-        0,
-        0,
-        40,
-        40
-      );
+      tinyContext!.drawImage(canvas, 0, 0, width, height, 0, 0, 40, 40);
 
       var c = document.getElementById("repeater") as HTMLCanvasElement;
       if (!c) {
