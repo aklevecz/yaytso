@@ -1,50 +1,52 @@
-import { useContext, useEffect, useState } from "react";
+import { useCallback, useContext, useEffect, useState } from "react";
 import Egg from "../components/Egg";
 import { Context } from "..";
+import { getOwnersEggs } from "../libs/contract";
+import { createPinataURL, fetchEggApplyId } from "../libs/services";
 
-export const PINATA_GATEWAY = "https://gateway.pinata.cloud/ipfs";
+type EggMetaData = {
+  animation_url: string;
+  name: string;
+  tokenId: number;
+};
+
 export default function Collection() {
   const context = useContext(Context);
   const [fetching, setFetching] = useState(true);
-  const [eggLTs, setEggLTFs] = useState([]);
-  const getCollection = async () => {
+  const [eggSons, setEggSons] = useState<EggMetaData[]>([]);
+
+  const getCollection = useCallback(async () => {
     if (context.contract && context.user && context.user.address) {
       const contract = context.contract;
 
       const totalSupply = await contract.totalSupply().catch(console.log);
-      let owned = [];
-      for (let i = 1; i < parseInt(totalSupply, 10) + 1; i++) {
-        const owner = await contract.ownerOf(i);
-        if (owner === context.user.address) {
-          const ipfsURI = await contract.tokenURI(i);
-          owned.push(ipfsURI);
-        }
-        if (owned.length === 0) {
-          setFetching(false);
-        }
-        let eggmises: Array<unknown> = [];
-        owned.forEach((uri) => {
-          console.log(uri);
-          const eggmise = fetch(
-            `${PINATA_GATEWAY}/${uri.replace("ipfs://", "")}`
-          ).then((r) => r.json());
-          eggmises.push(eggmise);
-        });
-        Promise.all(eggmises).then((eggson) => {
-          console.log(eggson);
-          const gltfs = eggson.map((egg: any) => egg.animation_url);
-          setEggLTFs(gltfs as any);
-          console.log(gltfs);
-          setFetching(false);
-        });
+
+      const { owned, uriToTokenId } = await getOwnersEggs(
+        parseInt(totalSupply, 10),
+        contract,
+        context.user.address
+      );
+
+      if (owned.length === 0) {
+        setFetching(false);
       }
+
+      const eggmises = owned.map((uri) => {
+        return fetchEggApplyId(uri, uriToTokenId);
+      });
+
+      Promise.all(eggmises).then((eggson) => {
+        setEggSons(eggson);
+        setFetching(false);
+      });
     }
-  };
+  }, [context.contract, context.user]);
+
   useEffect(() => {
     if (context.user) {
       getCollection();
     }
-  }, [context]);
+  }, [context, getCollection]);
 
   useEffect(() => {
     const c = document.querySelector(
@@ -56,20 +58,33 @@ export default function Collection() {
 
     return () => c.classList.remove("override-height");
   });
+
   return (
-    <div>
+    <div
+      className="collection-container"
+      style={{ overflow: fetching ? "hidden" : "auto" }}
+    >
       {!context.user && (
         <div className="oops">oops! you aren't connected to web3!</div>
       )}
-      {context.user && !fetching && eggLTs.length === 0 && (
+      {context.user && !fetching && eggSons.length === 0 && (
         <div className="oops">you don't have any eggs!</div>
       )}
-      {context.user && fetching && <div className="lds-heart"><div>__fetching...</div></div>}
-      {eggLTs.map((gltf) => (
-        <Egg
-          givenGLTF={(gltf as string).replace("ipfs://", PINATA_GATEWAY + "/")}
-        />
-      ))}
+      {context.user && fetching && (
+        <div className="lds-heart">
+          <div>__fetching...</div>
+        </div>
+      )}
+      {eggSons.map((eggson, i) => {
+        return (
+          <div className="collection-item-container" key={`egg${i}`}>
+            <div className="collection-item-name">
+              {eggson.name} {eggson.tokenId}
+            </div>
+            <Egg givenGLTF={createPinataURL(eggson.animation_url as string)} />
+          </div>
+        );
+      })}
     </div>
   );
 }

@@ -1,0 +1,45 @@
+.upper-container {
+  display: flex;
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  min-height: 250px;
+}
+
+.to-who {
+  height: 37%;
+  flex: 0 0 50%;
+  justify-content: center;
+  align-items: center;
+  font-size: 50px;
+  font-weight: 600;
+}
+
+.to-arrow {
+  position: absolute;
+  font-size: 30px;
+  top: 50%;
+  height: 50px;
+  width: 50px;
+  margin-top: -25px;
+  font-weight: bold;
+}
+
+@media (min-width: 768px) {
+  .upper-container {
+    min-height: 350px;
+  }
+
+  .to-arrow {
+    height: 100px;
+    width: 100px;
+    margin-top: -50px;
+  }
+
+  .to-who {
+    /* height: unset; */
+    text-align: left;
+    font-size: 70px;
+  }
+}

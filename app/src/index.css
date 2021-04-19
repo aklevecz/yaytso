@@ -1,52 +1,58 @@
 @import url("https://fonts.googleapis.com/css2?family=Amatic+SC&family=Fredoka+One&family=Great+Vibes&family=Pacifico&family=Righteous&family=Sen:wght@400;700&display=swap");
 
 null {
-    font-family: "Amatic SC", cursive;
-    font-family: "Fredoka One", cursive;
-    font-family: "Great Vibes", cursive;
-    font-family: "Pacifico", cursive;
-    font-family: "Righteous", cursive;
-    font-family: "Sen", sans-serif;
+  font-family: "Amatic SC", cursive;
+  font-family: "Fredoka One", cursive;
+  font-family: "Great Vibes", cursive;
+  font-family: "Pacifico", cursive;
+  font-family: "Righteous", cursive;
+  font-family: "Sen", sans-serif;
+}
+
+html,
+body,
+.container-of-containerz {
+  background: #ebebeb;
 }
 
 body {
-    margin: 0;
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto",
-        "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans",
-        "Helvetica Neue", sans-serif;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
+    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 code {
-    font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
-        monospace;
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
+    monospace;
 }
 
 input[type="file"] {
-    display: none;
+  display: none;
 }
 
 label {
-    font-size: 14px;
+  font-size: 14px;
 }
 
 input[type="text"] {
-    width: 90%;
-    height: 40px;
-    display: block;
-    border: 2px solid;
-    border-radius: 10px;
-    font-size: 18px;
-    padding: 0px 10px;
-    margin: 0px 0px 18px;
+  width: 90%;
+  height: 40px;
+  display: block;
+  border: 2px solid;
+  border-radius: 10px;
+  font-size: 18px;
+  padding: 0px 10px;
+  margin: 0px 0px 18px;
 }
 
 .button-wrapper {
-    display: flex;
-    justify-content: space-around;
-    margin: 30px 0px 3px;
-    padding: 0px;
+  display: flex;
+  justify-content: space-around;
+  margin: 30px 0px 3px;
+  padding: 0px;
 }
 
 /* button {
@@ -61,55 +67,62 @@ input[type="text"] {
     font-weight: 600;
 } */
 
-button{
-    border-radius: 40px;
-    font-size: 24px;
-    background: white;
-    border: none;
-    padding: 20px;
-    cursor: pointer;
-    letter-spacing: 2px;
-    transition: background 0.5s;
-    font-weight: 600;
-    background: #ececec;
+button {
+  border-radius: 40px;
+  font-size: 18px;
+  background: white;
+  border: none;
+  padding: 20px;
+  cursor: pointer;
+  letter-spacing: 2px;
+  transition: background 0.5s;
+  font-weight: 600;
+  background: #f7f7f7;
+  font-family: Sen;
+  background: black;
+  color: #f7f7f7;
 }
 
 button.sm {
-    border-radius: 26px;
-    font-size: 14px;
-    font-weight: 600;
-    width: 110px;
-    padding: 10px;
+  border-radius: 26px;
+  font-size: 14px;
+  font-weight: 600;
+  width: 110px;
+  padding: 10px;
+}
+
+a {
+  color: rgb(253, 87, 87);
 }
 
 @media (min-width: 768px) {
-    button.sm {
-        font-size: 18px;
-        width: 135px;
-    }
+  button.sm {
+    font-size: 18px;
+    width: 135px;
+  }
 }
 
 button:hover {
-    background: black;
-    color: white;
+  background: rgb(255, 119, 119);
+  /* color: rgb(180, 180, 180); */
 }
 
 /* width */
 ::-webkit-scrollbar {
-    width: 10px;
+  width: 10px;
 }
 
 /* Track */
 ::-webkit-scrollbar-track {
-    background: white;
+  background: white;
 }
 
 /* Handle */
 ::-webkit-scrollbar-thumb {
-    background: black;
+  background: black;
 }
 
 /* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
-    background: red;
+  background: red;
 }
