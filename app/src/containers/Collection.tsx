@@ -60,7 +60,10 @@ export default function Collection() {
   });
 
   return (
-    <div className="collection-container">
+    <div
+      className="collection-container"
+      style={{ overflow: fetching ? "hidden" : "auto" }}
+    >
       {!context.user && (
         <div className="oops">oops! you aren't connected to web3!</div>
       )}
