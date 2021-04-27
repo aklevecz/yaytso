@@ -1,15 +1,17 @@
 import { useContext, useEffect, useRef, useState } from "react";
-import Egg from "../components/Egg";
+import Egg from "./Egg";
 import Upload from "../components/Upload";
 import { GLTFExporter } from "three/examples/jsm/exporters/GLTFExporter";
 import Smiler from "../components/Smiler";
-import { Context } from "..";
+import { connector, Context, WalletTypes } from "..";
 import GiftModal from "./modals/GiftModal";
 import { createBlobs } from "../libs/create";
 import { pinBlobs } from "../libs/services";
 import { mintEgg } from "../libs/contract";
 import Recipient from "../components/Recipient";
 import ReceiptModal from "./modals/Receipt";
+import { ethers } from "ethers";
+import { CanvasContext } from "../contexts/CanvasContext";
 
 export const shipStates = {
   READY_TO_SHIP: "READY_TO_SHIP",
@@ -34,6 +36,7 @@ export type Receipt = {
 
 export default function Create() {
   const context = useContext(Context);
+  const canvasContext = useContext(CanvasContext);
 
   const [giftingState, setGiftingState] = useState("");
   const [shipState, setShipState] = useState("");
@@ -42,9 +45,14 @@ export default function Create() {
 
   const sceneRef = useRef<THREE.Scene>();
 
-  const errorCallback = (e: Error) => {
+  const clean = () => {
     setShipState("");
     setGiftingState("");
+    canvasContext.clearPattern();
+  };
+
+  const errorCallback = (e: Error) => {
+    clean();
     console.log(e);
     if (e && e.message.includes("no dupes")) {
       alert("no dupes sorry");
@@ -55,10 +63,17 @@ export default function Create() {
     }
   };
 
+  const OLD_MINTED_EVENT = "YaytsoMinted";
+  const MINTED_EVENT = "YaytsoLaid";
+
   const txResolution = async (tx: any, metadata: string, svgCID: string) => {
     const receipt = await tx.wait();
     for (const event of receipt.events) {
-      if (event.event !== "Transfer" && event.event !== "YaytsoMinted") {
+      if (
+        event.event !== "Transfer" &&
+        event.event !== MINTED_EVENT &&
+        event.event !== OLD_MINTED_EVENT
+      ) {
         console.log("ignoring event ", event.event);
         continue;
       }
@@ -105,8 +120,8 @@ export default function Create() {
         if (
           !context.recipient ||
           !context.contract ||
-          !context.user ||
-          !context.user.signer
+          !context.user
+          // ||!context.user.signer
         ) {
           return alert("not authed");
         }
@@ -114,25 +129,110 @@ export default function Create() {
           return alert("no contract");
         }
 
-        const data = createBlobs(result);
+        const data = createBlobs(
+          result,
+          context.recipient.desc,
+          context.recipient.eggName
+        );
 
         setShipState(shipStates.PINNING);
 
         const resp = await pinBlobs(data);
+        var arr: any = [];
+        for (var p in Object.getOwnPropertyNames(resp.byteArray)) {
+          arr[p] = resp.byteArray[p];
+        }
 
-        const contractSigner = context.contract.connect(context.user.signer);
+        const patternHash = ethers.utils.hexlify(arr);
 
         setShipState(shipStates.SIGNING);
 
-        const tx = await mintEgg(contractSigner, context, resp, errorCallback);
+        if (context.user.type === WalletTypes.WALLET_CONNECT) {
+          // const bytesArray = ethers.utils.base58.decode(resp.svgCID).slice(2);
+          // const hex = ethers.utils.hexlify(bytesArray);
+          const raw = await context.contract.populateTransaction.layYaytso(
+            context.recipient!.address,
+            patternHash,
+            resp.metaCID
+          );
+          const tx = {
+            from: context.user.address,
+            to: raw.to,
+            data: raw.data,
+            // gasPrice: ethers.utils.hexlify(80000000000), // Optional
+          };
 
-        console.log(tx);
+          // This event could be else where but it is contained here at least
+          connector
+            .sendTransaction(tx)
+            .then((txHash) => {
+              setShipState(shipStates.MINTING);
+              const filter = context.contract!.filters.Transfer(
+                null,
+                context.recipient!.address
+              );
+              context.contract!.on(filter, (from, to, amount, event) => {
+                console.log(from, to, amount, event);
+                const recipient = to;
+                const tokenId = amount.toString();
+                setShipState(shipStates.COMPLETE);
+                setReceipt({
+                  ...receipt,
+                  tokenId,
+                  txHash,
+                  recipient,
+                  metadata: resp.metaCID,
+                  svgCID: resp.svgCID,
+                  contractAddress: context.contract!.address!,
+                });
+                context.contract!.off(filter, () => {
+                  console.log("stop listening");
+                });
+              });
+              // -----
 
-        if (!tx) {
-          return;
+              // Maybe not necessary
+              let intervalId = setInterval(getTx, 2000);
+              function getTx() {
+                context.provider
+                  ?.getTransactionReceipt(txHash)
+                  .then((t) => {
+                    console.log("beep");
+                    if (t && t.blockNumber) {
+                      console.log("complete");
+                      clearInterval(intervalId);
+                    }
+                  })
+                  .catch(console.log);
+              }
+              // ------
+            })
+            .catch((e) => {
+              alert(e);
+              //Error: User rejected the transaction
+            });
+        } else if (
+          context.user.type === WalletTypes.METAMASK &&
+          context.user.signer
+        ) {
+          const contractSigner = context.contract.connect(context.user.signer);
+
+          const tx = await mintEgg(
+            contractSigner,
+            context,
+            resp,
+            patternHash,
+            errorCallback
+          );
+
+          console.log(tx);
+
+          if (!tx) {
+            return;
+          }
+          setShipState(shipStates.MINTING);
+          txResolution(tx, resp.metaCID, resp.svgCID);
         }
-        setShipState(shipStates.MINTING);
-        txResolution(tx, resp.metaCID, resp.svgCID);
       },
       { onlyVisible: true }
     );
@@ -144,27 +244,33 @@ export default function Create() {
     }
   }, [context.pattern]);
 
+  // Shitty reducers
+  const showRecipient =
+    shipState === shipStates.READY_TO_SHIP ||
+    shipState === shipStates.PINNING ||
+    shipState === shipStates.MINTING ||
+    shipState === shipStates.SIGNING ||
+    shipState === shipStates.COMPLETE;
+
+  const isSending =
+    shipState === shipStates.PINNING ||
+    shipState === shipStates.MINTING ||
+    shipState === shipStates.SIGNING;
   // Side effect to shrink egg and show recipient when they are about to send it
   useEffect(() => {
     const egg = document.getElementById("the-egg") as HTMLCanvasElement;
     if (!egg) {
       return;
     }
-    if (shipState === shipStates.READY_TO_SHIP && window.innerWidth < 768) {
-      const halfWidth = parseFloat(egg.style.width) * 0.5;
+    if (showRecipient && window.innerWidth < 768) {
+      const halfWidth = window.innerWidth * 0.5;
       egg.style.width = halfWidth + "px";
-      egg.style.height = parseFloat(egg.style.height) * 0.5 + "px";
+      egg.style.height = window.innerHeight * 0.4 * 0.5 + "px";
     } else {
       egg.style.width = window.innerWidth + "px";
       egg.style.height = window.innerHeight * 0.4 + "px";
     }
-  }, [shipState]);
-
-  const clean = () => {
-    context.clearPattern();
-    setShipState("");
-    setGiftingState("");
-  };
+  }, [shipState, showRecipient]);
 
   // Clear pattern on dismount
   useEffect(() => {
@@ -176,6 +282,8 @@ export default function Create() {
   // shipState defines what the button is doing basically
   // giftingState regulates the general state of having picked a recipient
 
+  // Probably should have a context for all of the ship interactions since they will cause lots of rendering anyway
+
   // NOTE: Upload component has a lot of drliling to change state appropriately
 
   // STATES ARE:
@@ -186,24 +294,26 @@ export default function Create() {
   // context.recipient.type === user || friend && context.recipient === address
   // shipItState === "PINNING"
   // shipItState lifecycle through the blockchain...
+
   return (
     <div className="egg-tainer">
       <div className="upper-container">
         <div>
           <Egg sceneRef={sceneRef} shipState={shipState} clean={clean} />
         </div>
-        {shipState === shipStates.READY_TO_SHIP && context.recipient && (
-          <Recipient recipient={context.recipient} />
+        {showRecipient && context.recipient && (
+          <Recipient recipient={context.recipient} isSending={isSending} />
         )}
       </div>
       <div className="create-bottom-container">
         <Upload
-          context={context}
+          canvas={canvasContext}
           shipIt={shipIt}
           doneFabbing={() => setGiftingState(giftingStates.RECIPIENT)}
           shipState={shipState}
+          isSending={isSending}
         />
-        <Smiler shipState={shipState} isPattern={!!context.pattern} />
+        <Smiler shipState={shipState} isPattern={!!canvasContext.pattern} />
       </div>
       <GiftModal
         visible={giftingState === giftingStates.RECIPIENT}

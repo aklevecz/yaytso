@@ -1,8 +1,10 @@
 import { useCallback, useContext, useEffect, useState } from "react";
-import Egg from "../components/Egg";
+import EggKolletiv from "./EggKolletiv";
 import { Context } from "..";
-import { getOwnersEggs } from "../libs/contract";
+import { yaytsoOfOwner } from "../libs/contract";
 import { createPinataURL, fetchEggApplyId } from "../libs/services";
+import { EYE } from "../components/graphical/EYE";
+import { Link } from "react-router-dom";
 
 type EggMetaData = {
   animation_url: string;
@@ -17,22 +19,15 @@ export default function Collection() {
 
   const getCollection = useCallback(async () => {
     if (context.contract && context.user && context.user.address) {
-      const contract = context.contract;
-
-      const totalSupply = await contract.totalSupply().catch(console.log);
-
-      const { owned, uriToTokenId } = await getOwnersEggs(
-        parseInt(totalSupply, 10),
-        contract,
-        context.user.address
-      );
+      console.log(context.user.address);
+      const owned = await yaytsoOfOwner(context.user.address, context.contract);
 
       if (owned.length === 0) {
         setFetching(false);
       }
 
       const eggmises = owned.map((uri) => {
-        return fetchEggApplyId(uri, uriToTokenId);
+        return fetchEggApplyId(uri.uri, { deprecated: 420 }, uri.id);
       });
 
       Promise.all(eggmises).then((eggson) => {
@@ -43,11 +38,15 @@ export default function Collection() {
   }, [context.contract, context.user]);
 
   useEffect(() => {
-    if (context.user) {
+    if (context.user && context.user.address) {
       getCollection();
+    } else {
+      setFetching(false);
     }
-  }, [context, getCollection]);
+  }, [context.user, getCollection]);
 
+  // Yikes
+  // Maybe I should make a context for all of these UI antipatterns to keep track of them
   useEffect(() => {
     const c = document.querySelector(
       ".container-of-containerz"
@@ -56,20 +55,27 @@ export default function Collection() {
       c.classList.add("override-height");
     }
 
-    return () => c.classList.remove("override-height");
-  });
+    return () => {
+      if (c) {
+        c.classList.remove("override-height");
+      }
+    };
+  }, []);
 
   return (
     <div
       className="collection-container"
       style={{ overflow: fetching ? "hidden" : "auto" }}
     >
-      {!context.user && (
+      {context.user && !context.user.address && (
         <div className="oops">oops! you aren't connected to web3!</div>
       )}
-      {context.user && !fetching && eggSons.length === 0 && (
-        <div className="oops">you don't have any eggs!</div>
-      )}
+      {context.user &&
+        context.user.address &&
+        !fetching &&
+        eggSons.length === 0 && (
+          <div className="oops">you don't have any eggs!</div>
+        )}
       {context.user && fetching && (
         <div className="lds-heart">
           <div>__fetching...</div>
@@ -78,10 +84,15 @@ export default function Collection() {
       {eggSons.map((eggson, i) => {
         return (
           <div className="collection-item-container" key={`egg${i}`}>
-            <div className="collection-item-name">
-              {eggson.name} {eggson.tokenId}
-            </div>
-            <Egg givenGLTF={createPinataURL(eggson.animation_url as string)} />
+            <div className="collection-item-name">#{eggson.tokenId}</div>
+            <Link to={`/egg/${eggson.tokenId}`}>
+              <div className="collection-eye">
+                <EYE />
+              </div>
+            </Link>
+            <EggKolletiv
+              gltfUrl={createPinataURL(eggson.animation_url as string)}
+            />
           </div>
         );
       })}

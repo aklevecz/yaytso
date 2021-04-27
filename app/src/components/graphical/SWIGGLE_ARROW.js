@@ -10,7 +10,7 @@ export function SWIGGLE_ARROW() {
             strokeMiterlimit="10"
             strokeWidth="20"
           />
-          <line
+          {/* <line
             x1="413.01"
             y1="108.59"
             x2="393.11"
@@ -19,7 +19,7 @@ export function SWIGGLE_ARROW() {
             stroke="#000"
             strokeMiterlimit="10"
             strokeWidth="20"
-          />
+          /> */}
         </g>
       </g>
     </svg>

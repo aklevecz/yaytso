@@ -16,8 +16,32 @@
   right: 25px;
   z-index: 1;
   font-size: 20px;
-  top: 18px;
+  top: 20%;
+  right: 20%;
   color: black;
+}
+
+.collection-eye {
+  position: absolute;
+  width: 15%;
+  height: 15%;
+  z-index: 1;
+  bottom: 25%;
+  left: 17%;
+}
+
+.collection-eye:hover * {
+  transition: all 500ms;
+  fill: var(--red);
+  stroke: white;
+}
+
+@media (min-width: 768px) {
+  .collection-item-name {
+    font-size: 4rem;
+    top: 20%;
+    right: 20%;
+  }
 }
 /* 
 .egg-wrapper.collection {

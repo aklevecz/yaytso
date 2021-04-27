@@ -9,6 +9,7 @@
   background: linear-gradient(0deg, white, lightgrey);
   transition: height 1s;
   overflow: visible !important;
+  z-index: 9;
 }
 
 .nav-container > svg {

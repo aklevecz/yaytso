@@ -24,30 +24,70 @@
   margin: auto;
 }
 
-.preview-canvas {
+.preview-canvas-container {
   position: absolute;
   top: 0px;
   left: 5px;
-  width: 100px;
-  height: 100px;
+}
+.preview-canvas {
+  /* position: absolute;
+  top: 0px;
+  left: 5px;
+  width: 200px;
+  height: 200px; */
   border: 4px solid #d8d8d8;
+  cursor: crosshair;
   transition: opacity 1s, 1s filter linear, 1s -webkit-filter linear;
   border-radius: 23px;
   filter: blur(0px);
 }
 
+.draw-button {
+  position: absolute;
+  left: 50px;
+  top: 40px;
+  width: 70px;
+  height: 70px;
+  z-index: 9;
+  cursor: pointer;
+  border: 2px solid black;
+  border-radius: 40px;
+  padding: 14px;
+  box-sizing: border-box;
+  background: black;
+  transition: background 500ms, border 500ms;
+}
+
+.draw-button * {
+  stroke: white;
+}
+
+.draw-button:hover {
+  background-color: var(--red);
+  border: 2px solid var(--red);
+}
+
 @media screen and (min-width: 768px) {
-  .preview-canvas {
+  .preview-canvas-container {
     left: 20%;
+  }
+  .draw-button {
+    left: 240px;
   }
 }
 
 .egg-loader {
   position: absolute;
   width: 200px;
+  height: 200px;
   left: 50%;
   margin-left: -100px;
   animation: egg-pulse 1.2s infinite cubic-bezier(0.215, 0.61, 0.355, 1);
+}
+
+.egg-loader.centered {
+  top: 50%;
+  margin-top: -100px;
 }
 
 @keyframes egg-pulse {

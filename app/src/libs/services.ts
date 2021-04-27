@@ -1,10 +1,13 @@
 import { Dispatch, SetStateAction } from "react";
 import { RepeatWrapping, CanvasTexture } from "three";
 
-export const PINATA_GATEWAY = "https://gateway.pinata.cloud/ipfs";
+export const GATEWAY_URL =
+  process.env.NODE_ENV === "development"
+    ? "http://localhost:8080/ipfs"
+    : "https://gateway.pinata.cloud/ipfs";
 
 export const createPinataURL = (uri: string) =>
-  uri.replace("ipfs://", PINATA_GATEWAY + "/");
+  uri.replace("ipfs://", GATEWAY_URL + "/");
 
 const PIN_URL =
   process.env.NODE_ENV === "development"
@@ -21,14 +24,19 @@ export const pinBlobs = (data: FormData) =>
 
 export const fetchEggApplyId = (
   uri: string,
-  uriToTokenId: { [key: string]: number }
+  uriToTokenId: { [key: string]: number },
+  id?: string
 ) => {
-  return fetch(`${PINATA_GATEWAY}/${uri.replace("ipfs://", "")}`)
+  return fetch(`${GATEWAY_URL}/${uri.replace("ipfs://", "")}`)
     .then((r) => {
       return r.json();
     })
     .then((d) => {
-      d.tokenId = uriToTokenId[uri];
+      if (id) {
+        d.tokenId = id;
+      } else {
+        d.tokenId = uriToTokenId[uri];
+      }
       return d;
     });
 };
@@ -44,7 +52,7 @@ export const readFile = (
   if (typeof img !== "string") {
     return alert("I'm confused by this upload... a single img please!");
   }
-  // wtf LOL
+
   const imgPreview = document.getElementById("img-preview") as HTMLImageElement;
   imgPreview.src = img;
   (document.getElementById("tiny") as HTMLImageElement).src = img;

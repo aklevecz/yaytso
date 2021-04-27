@@ -1,16 +1,63 @@
+import { PEN_ICON } from "../components/graphical/PEN_ICON";
+import { useDraw } from "../contexts/CanvasContext";
 const height = 200;
 const width = 200;
 export default function PreviewImgs({ showPreview }: { showPreview: boolean }) {
+  const {
+    increaseDims,
+    decreaseDims,
+    changeColor,
+    showCanvas,
+    canvasDims,
+    drawColor,
+    setShowCanvas,
+  } = useDraw();
+
   return (
     <>
       <img style={{ display: "none" }} alt="broken" id="img-preview" />
-      <canvas
-        className="preview-canvas"
-        id="preview-canvas"
-        height={height}
-        width={width}
-        style={{ opacity: showPreview ? 1 : 0 }}
-      />
+      {!showCanvas && !showPreview && (
+        <div onClick={() => setShowCanvas(true)} className="draw-button">
+          <PEN_ICON />
+        </div>
+      )}
+      <div
+        className="preview-canvas-container"
+        style={{
+          opacity: showPreview || showCanvas ? 1 : 0,
+          transition: "opacity 1s",
+        }}
+      >
+        <canvas
+          className="preview-canvas"
+          id="preview-canvas"
+          height={height}
+          width={width}
+          style={{
+            width: canvasDims.width,
+            height: canvasDims.height,
+          }}
+        />
+        <div style={{ display: "flex", justifyContent: "space-evenly" }}>
+          <button className="round" onClick={decreaseDims}>
+            -
+          </button>
+          <button className="round" onClick={increaseDims}>
+            +
+          </button>
+        </div>
+        <div>
+          <input
+            style={{
+              width: 60,
+              margin: 6,
+              fontSize: 10,
+              color: drawColor,
+            }}
+            onChange={changeColor}
+          ></input>
+        </div>
+      </div>
       <canvas style={{ display: "none" }} id="tiny" width="40" height="40" />
       <canvas
         style={{ display: "none" }}

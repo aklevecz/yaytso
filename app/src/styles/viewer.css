@@ -1,0 +1,88 @@
+.viewer-tainer {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+
+.viewer-metadata {
+  position: absolute;
+  left: 0px;
+  z-index: 1;
+  text-align: left;
+  font-size: 20px;
+  padding: 30px;
+  background: white;
+  border-radius: 0px 20px 20px 0px;
+  transition: left 0.5s;
+  width: 250px;
+  box-sizing: border-box;
+}
+
+.viewer-metadata.closed {
+  left: -300px;
+}
+
+.viewer-metadata.open {
+  left: 0px;
+}
+
+.viewer-metadata > img {
+  width: 200px;
+  height: 200px;
+}
+
+.viewer-metadata-id {
+  font-size: 50px;
+}
+
+.viewer-metadata-owner {
+  word-break: break-all;
+  width: 100%;
+  padding: 5px 2px;
+}
+
+.viewer-metadata-desc {
+  border: 1px solid;
+  padding: 10px;
+  border-radius: 15px;
+  margin: 10px 0px;
+}
+
+.eggtail-toggle {
+  position: absolute;
+  width: 70px;
+  height: 70px;
+  z-index: 1;
+  left: 6%;
+  cursor: pointer;
+  transition: left 0.5s;
+}
+
+.eggtail-toggle:hover circle {
+  fill: #ff6d6d;
+}
+
+.eggtail-toggle.open {
+  left: 76%;
+}
+
+.eggtail-toggle #Grid > g > line {
+  transition: transform 0.5s;
+}
+
+.eggtail-toggle.open #Grid > g > line:nth-child(1) {
+  transform: rotate(35deg) translate(0px, 20px);
+  transform-origin: center;
+}
+
+.eggtail-toggle.open #Grid > g > line:nth-child(2) {
+  transform: rotate(-55deg) translate(6px, 0px);
+  transform-origin: center;
+}
+
+.eggtail-toggle.open #Grid > g > line:nth-child(3) {
+  transform: rotate(45deg);
+}

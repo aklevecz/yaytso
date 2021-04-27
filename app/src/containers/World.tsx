@@ -1,4 +1,5 @@
 import { useContext, useEffect, useState } from "react";
+import { useHistory } from "react-router";
 import { Context } from "..";
 import WorldScene from "../components/WorldScene";
 const PINATA_GATEWAY = "https://gateway.pinata.cloud/ipfs";
@@ -6,8 +7,10 @@ const PINATA_GATEWAY = "https://gateway.pinata.cloud/ipfs";
 // NOT MAINTAINED AT THE MOMENT
 export default function World() {
   const context = useContext(Context);
+  const history = useHistory();
   const [fetching, setFetching] = useState(true);
   const [eggLTs, setEggLTFs] = useState([]);
+
   const getCollection = async () => {
     if (context.contract && context.user && context.user.address) {
       const contract = context.contract;
@@ -39,16 +42,18 @@ export default function World() {
   };
   useEffect(() => {
     if (context.user) {
-      getCollection();
+      // getCollection();
     }
   }, [context]);
 
   useEffect(() => {
     if (window.innerWidth < window.innerHeight) {
-      alert(
-        "warning... only works if you have a keyboard and mouse at the moment!"
-      );
+      // alert(
+      //   "warning... only works if you have a keyboard and mouse at the moment!"
+      // );
     }
+    alert("currently closed");
+    history.push("/");
   }, []);
   //   const egglts = [
   //         "ipfs://bafkreic4m5sk5arnojp33dezr47juhysiutgveq5fz2af2oo35fzv6ckym?filename=yaytso.gltf",

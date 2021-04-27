@@ -1,5 +1,7 @@
 @import url("https://fonts.googleapis.com/css2?family=Amatic+SC&family=Fredoka+One&family=Great+Vibes&family=Pacifico&family=Righteous&family=Sen:wght@400;700&display=swap");
-
+:root {
+  --red: rgb(253, 87, 87);
+}
 null {
   font-family: "Amatic SC", cursive;
   font-family: "Fredoka One", cursive;
@@ -33,6 +35,10 @@ input[type="file"] {
   display: none;
 }
 
+button {
+  user-select: none;
+}
+
 label {
   font-size: 14px;
 }
@@ -53,6 +59,28 @@ input[type="text"] {
   justify-content: space-around;
   margin: 30px 0px 3px;
   padding: 0px;
+  flex-wrap: wrap;
+}
+
+.inner-icon-button {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 0px 50px;
+  box-sizing: border-box;
+  display: grid;
+  grid-template-columns: 30% 1fr;
+}
+
+@media (max-width: 768px) {
+  .inner-icon-button {
+    padding: 0px 0px 0px 20px;
+  }
+}
+
+.inner-icon-button > div:first-of-type {
+  margin-right: 25px;
 }
 
 /* button {
@@ -74,7 +102,7 @@ button {
   border: none;
   padding: 20px;
   cursor: pointer;
-  letter-spacing: 2px;
+  /* letter-spacing: 2px; */
   transition: background 0.5s;
   font-weight: 600;
   background: #f7f7f7;
@@ -89,6 +117,23 @@ button.sm {
   font-weight: 600;
   width: 110px;
   padding: 10px;
+}
+
+button.round {
+  border-radius: 50px;
+  /* font-size: 1rem; */
+  background: white;
+  border: none;
+  cursor: pointer;
+  transition: background 0.5s;
+  font-weight: 600;
+  background: #f7f7f7;
+  font-family: Sen;
+  background: black;
+  color: #f7f7f7;
+  width: 25px;
+  height: 25px;
+  padding: 0px;
 }
 
 a {

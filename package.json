@@ -1,6 +1,6 @@
 {
   "name": "yaytso",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "",
   "main": "truffle-config.js",
   "directories": {
@@ -20,6 +20,7 @@
     "mocha": "^8.3.0"
   },
   "dependencies": {
+    "cids": "^1.1.6",
     "dotenv": "^8.2.0"
   }
 }

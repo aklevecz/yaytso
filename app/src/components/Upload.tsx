@@ -1,28 +1,31 @@
-import { ContextAttrs } from "..";
-import PreviewImgs from "./PreviewImgs";
+import { Canvas } from "../contexts/CanvasContext";
+import PreviewImgs from "../containers/PreviewImgs";
 import StatusButton from "./StatusButton";
 
 export default function Upload({
-  context,
+  canvas,
   doneFabbing,
   shipIt,
   shipState,
+  isSending,
 }: {
-  context: ContextAttrs;
+  canvas: Canvas;
   shipIt: () => void;
   shipState: string;
   doneFabbing: () => void;
+  isSending: boolean;
 }) {
   return (
-    <div className={`upload-container ${context.pattern ? "shipping" : ""}`}>
+    <div className={`upload-container ${canvas.pattern ? "shipping" : ""}`}>
       <StatusButton
-        isPattern={!!context.pattern}
-        onChange={context.uploadPattern}
+        isPattern={!!canvas.pattern}
+        onChange={canvas.uploadPattern}
         shipState={shipState}
         shipIt={shipIt}
         doneFabbing={doneFabbing}
+        isSending={isSending}
       />
-      <PreviewImgs showPreview={!!context.pattern} />
+      <PreviewImgs showPreview={!!canvas.pattern} />
     </div>
   );
 }

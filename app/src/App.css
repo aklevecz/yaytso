@@ -8,6 +8,45 @@
   /* padding: 10px; */
 }
 
+.header-address {
+  position: absolute;
+  right: 10px;
+  top: 7px;
+  width: 250px;
+  font-size: 20px;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
+}
+
+.address-address {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-family: monospace;
+  grid-column: 2;
+  grid-row: 1;
+}
+
+.disconnect-button {
+  grid-column: 2;
+}
+
+.header-address-metamask {
+  grid-row: 2;
+  grid-column: 2;
+  width: 30%;
+  justify-self: flex-end;
+}
+
+.header-address-metamask * {
+  stroke: white !important;
+  fill: black !important;
+}
+
 .header > .logo {
   width: 100px;
   /* padding: 10px; */
@@ -24,6 +63,7 @@
   width: 100%;
   overflow: auto;
   overflow-x: hidden;
+  z-index: -1;
 }
 
 .override-height {

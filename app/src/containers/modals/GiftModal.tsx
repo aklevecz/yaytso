@@ -6,7 +6,13 @@ import {
   useEffect,
   useState,
 } from "react";
-import { ModalInnerContent, SmallButton, ModalProps, withModal } from ".";
+import {
+  ModalInnerContent,
+  SmallButton,
+  ModalProps,
+  withModal,
+  ModalButtonWrapper,
+} from ".";
 import { Context } from "../..";
 import NoWeb3 from "./NoWeb3";
 
@@ -72,36 +78,100 @@ const FriendOfYourself = ({
   </>
 );
 
+const NameEgg = ({
+  corntinue,
+  goBack,
+  onChangeName,
+}: {
+  corntinue: () => void;
+  goBack: () => void;
+  onChangeName: (e: any) => void;
+}) => (
+  <>
+    <div className="modal-paragraph" style={{ textAlign: "center" }}>
+      please name your beautiful egg
+    </div>
+    <div>
+      <input onChange={onChangeName} type="text"></input>
+    </div>
+    <ModalButtonWrapper>
+      <button className="sm" onClick={goBack}>
+        go back
+      </button>
+      <button className="sm" onClick={corntinue}>
+        corntinue
+      </button>
+    </ModalButtonWrapper>
+  </>
+);
+
+const DescribeEgg = ({
+  corntinue,
+  goBack,
+  onChangeDesc,
+  name,
+}: {
+  corntinue: () => void;
+  goBack: () => void;
+  onChangeDesc: (e: any) => void;
+  name: string;
+}) => (
+  <>
+    <div className="modal-paragraph" style={{ textAlign: "center" }}>
+      lastly <strong>describe</strong> your {name}
+    </div>
+    <div>
+      <input onChange={onChangeDesc} type="text"></input>
+    </div>
+    <ModalButtonWrapper>
+      <button className="sm" onClick={goBack}>
+        go back
+      </button>
+      <button className="sm" onClick={corntinue}>
+        corntinue
+      </button>
+    </ModalButtonWrapper>
+  </>
+);
+
 const Cornfirm = ({
   close,
   forWho,
   address,
   giftingSetup,
   goBack,
+  name,
+  desc,
 }: {
   close: () => void;
   forWho: string | null;
   address: string;
   giftingSetup: (callback: () => void) => void;
   goBack: () => void;
+  name: string;
+  desc: string;
 }) => (
   <>
     <div className="modal-paragraph">
-      you are sending an egg to{" "}
+      you are sending an {name} to{" "}
       <Red>
         {forWho === forWhos.ME ? "your beautiful self" : `a great friend`}
       </Red>
+    </div>
+    <div className="modal-paragraph">
+      <div>{desc}</div>
     </div>
     <div className="modal-paragraph address">
       & {forWho === forWhos.ME ? "your" : "their"} address is{" "}
       <Red>{address}</Red>
     </div>
+
     <div className="button-wrapper">
-      <button className="sm" onClick={() => giftingSetup(close)}>
-        yep!
-      </button>
       <button className="sm" onClick={goBack}>
         go back
+      </button>
+      <button className="sm" onClick={() => giftingSetup(close)}>
+        yep!
       </button>
     </div>
   </>
@@ -130,12 +200,16 @@ function GiftModal({
   const context = useContext(Context);
   const [forWho, setForWho] = useState<string | null>(null);
   const [address, setAddress] = useState("");
+  const [nameStep, setNameStep] = useState(false);
+  const [name, setName] = useState("");
+  const [descStep, setDescStep] = useState(false);
+  const [desc, setDesc] = useState("");
   const [cornfirmation, setCornfirmation] = useState(false);
   const [validFriendAddress, setValidFriendAddress] = useState(false);
   const [errors, setErrors] = useState({ friend: "" });
 
   const giftingSetup = (close: () => void) => {
-    context.setRecipient({ address, type: forWho });
+    context.setRecipient({ address, type: forWho, desc, eggName: name });
     readyToShip();
     close();
   };
@@ -161,6 +235,10 @@ function GiftModal({
   const forMe = () => setForWho(forWhos.ME);
   const forFriend = () => setForWho(forWhos.FRIEND);
 
+  const onChangeName = (e: any) => setName(e.target.value);
+
+  const onChangeDesc = (e: any) => setDesc(e.target.value);
+
   const reset = useCallback(() => {
     setAddress("");
     setForWho(null);
@@ -170,7 +248,8 @@ function GiftModal({
 
   useEffect(() => {
     if (forWho === forWhos.ME && context.user) {
-      setCornfirmation(true);
+      // setCornfirmation(true);
+      setNameStep(true);
       setAddress(context.user.address);
     }
   }, [forWho, context.user]);
@@ -205,10 +284,9 @@ function GiftModal({
   // END OF LITTLE ANTI PATTERN LAND :D
   // **********************************
 
-  if (!context.user) {
+  if (!context.user || !context.user.address) {
     return <NoWeb3 reset={reset} />;
   }
-
   return (
     <ModalInnerContent>
       <div>
@@ -223,6 +301,7 @@ function GiftModal({
                   : address}
               </div>
             )}
+            {descStep && name && <div>named: {name}</div>}
             {forWho === null && (
               <FriendOfYourself forMe={forMe} forFriend={forFriend} />
             )}
@@ -230,7 +309,7 @@ function GiftModal({
               <SendToFriend
                 onAddressChange={onAddressChange}
                 validFriendAddress={validFriendAddress}
-                setCornfirmation={setCornfirmation}
+                setCornfirmation={setNameStep}
                 invalidFriendAddress={invalidFriendAddress}
                 goBack={() => {
                   setForWho(null);
@@ -242,7 +321,29 @@ function GiftModal({
             )}
           </>
         )}
-
+        {nameStep && !descStep && !cornfirmation && (
+          <NameEgg
+            corntinue={() => setDescStep(true)}
+            onChangeName={onChangeName}
+            goBack={() => {
+              setForWho(null);
+              setAddress("");
+              setNameStep(false);
+            }}
+          />
+        )}
+        {descStep && !cornfirmation && (
+          <DescribeEgg
+            corntinue={() => setCornfirmation(true)}
+            onChangeDesc={onChangeDesc}
+            name={name}
+            goBack={() => {
+              // setForWho(null);
+              // setAddress("");
+              setDescStep(false);
+            }}
+          />
+        )}
         {cornfirmation && (
           <Cornfirm
             forWho={forWho}
@@ -251,6 +352,8 @@ function GiftModal({
                 ? context.user.address
                 : address
             }
+            name={name}
+            desc={desc}
             close={() => modalProps.setOpen(false)}
             giftingSetup={giftingSetup}
             goBack={() => {

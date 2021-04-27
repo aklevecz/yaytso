@@ -16,9 +16,11 @@ export const ModalParagraph = ({
 
 export const ModalButtonWrapper = ({
   children,
+  cols = 2,
 }: {
   children: JSX.Element | JSX.Element[];
-}) => <div className="button-wrapper">{children}</div>;
+  cols?: number;
+}) => <div className={`button-wrapper`}>{children}</div>;
 
 export const SmallButton = ({
   title,
@@ -56,12 +58,16 @@ export default function Modal(props: any) {
 
     const blurDef = "blur(3px)";
     const blurContainer = () => {
-      bottomContainer.style.filter = blurDef;
-      previewCanvas.style.filter = blurDef;
+      if (bottomContainer && previewCanvas) {
+        bottomContainer.style.filter = blurDef;
+        previewCanvas.style.filter = blurDef;
+      }
     };
     const unBlurContainer = () => {
-      bottomContainer.style.filter = "blur(0px)";
-      previewCanvas.style.filter = "blur(0px)";
+      if (bottomContainer && previewCanvas) {
+        bottomContainer.style.filter = "blur(0px)";
+        previewCanvas.style.filter = "blur(0px)";
+      }
     };
 
     if (open) {

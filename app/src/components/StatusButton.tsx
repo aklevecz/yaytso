@@ -7,12 +7,14 @@ export default function StatusButton({
   shipState,
   shipIt,
   doneFabbing,
+  isSending,
 }: {
   isPattern: boolean;
   onChange: (e: FormEvent<HTMLInputElement>) => void;
   shipState: string;
   shipIt: () => void;
   doneFabbing: () => void;
+  isSending: boolean;
 }) {
   return (
     <>
@@ -32,6 +34,7 @@ export default function StatusButton({
             }`}
           >
             <button
+              disabled={isSending}
               onClick={() => {
                 if (shipState === "") {
                   doneFabbing();

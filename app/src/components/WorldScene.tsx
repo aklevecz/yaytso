@@ -4,7 +4,7 @@ import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
 import { PointerLockControls } from "three/examples/jsm/controls/PointerLockControls";
 import { Context } from "..";
 import Skybox from "../assets/skybox.jpg";
-import { PINATA_GATEWAY } from "../libs/services";
+import { GATEWAY_URL } from "../libs/services";
 /* eslint-disable */
 // NOT MAINTAINED AT THE MOMENT
 export default function WorldScene({ eggLTs }: { eggLTs: Array<string> }) {
@@ -214,7 +214,7 @@ export default function WorldScene({ eggLTs }: { eggLTs: Array<string> }) {
       console.log(newEggs);
       newEggs.forEach((uri, i) => {
         console.log(uri);
-        loader.load(uri.replace("ipfs://", PINATA_GATEWAY + "/"), (gltf) => {
+        loader.load(uri.replace("ipfs://", GATEWAY_URL + "/"), (gltf) => {
           sceneRef!.current!.add(gltf.scene);
           eggsRef!.current!.push(uri);
           // const egg = gltf.scene.children[0] as THREE.Mesh;

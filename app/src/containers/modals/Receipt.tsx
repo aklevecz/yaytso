@@ -32,7 +32,9 @@ const EggGrid = ({
       <div>ipfs://{metadata}</div>
     </div>
     <div className="receipt-link">
-      <a href={`https://opensea.io/assets/${contractAddress}/${tokenId}`}>
+      <a
+        href={`https://testnets.opensea.io/assets/${contractAddress}/${tokenId}`}
+      >
         view on opensea
       </a>
     </div>

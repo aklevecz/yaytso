@@ -3,38 +3,34 @@ import * as THREE from "three";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 import yaytso from "../assets/yaytso.gltf";
-import { Context } from "..";
-import { SmallButton } from "../containers/modals";
-import EggLoader from "./EggLoader";
+import { SmallButton } from "./modals";
+import EggLoader from "../components/EggLoader";
+import { shipStates } from "./Create";
+import { CanvasContext } from "../contexts/CanvasContext";
 
+// sceneRef, shipState, clean -> mainpage
+// givenGLTD => collection
 type EggProps = {
   sceneRef?: React.MutableRefObject<THREE.Scene | undefined>;
   shipState?: string;
-  givenGLTF?: string;
   clean?: () => void | undefined;
 };
 
 interface EggRef extends THREE.Mesh {
   minting: boolean;
+  sending: boolean;
 }
 
-export default function Egg({
-  sceneRef,
-  shipState,
-  givenGLTF,
-  clean,
-}: EggProps) {
-  const context = useContext(Context);
+export default function Egg({ sceneRef, shipState, clean }: EggProps) {
+  const context = useContext(CanvasContext);
   const wrapperRef = useRef<HTMLDivElement>(null);
   const eggRef = useRef<THREE.Mesh>();
   const [loading, setLoading] = useState(true);
   useEffect(() => {
     const wrapper = wrapperRef!.current!;
     // const { width, height } = wrapper.getBoundingClientRect();
-    const width = givenGLTF ? window.innerWidth * 0.5 : window.innerWidth;
-    const height = givenGLTF
-      ? window.innerWidth * 0.5
-      : window.innerHeight * 0.4;
+    const width = window.innerWidth;
+    const height = window.innerHeight * 0.4;
     // const width = 300,
     // height = 300;
     const scene = new THREE.Scene();
@@ -51,10 +47,9 @@ export default function Egg({
     // renderer.outputEncoding = THREE.sRGBEncoding;
     // console.log(sceneRef);
     // if (sceneRef) {
-    //   console.log("yamtrols");
     const controls = new OrbitControls(camera, renderer.domElement);
-    // }
     controls.enableZoom = false;
+    // }
     wrapper.appendChild(renderer.domElement);
 
     const hemiLight = new THREE.HemisphereLight(0xffffff, 0x080820, 0.6);
@@ -67,20 +62,62 @@ export default function Egg({
     light.position.set(-10, 10, -190);
     light.target.position.set(0, 0, 0);
 
+    // const vShader = `
+    //   varying vec2 vUv;
+
+    //   void main() {
+    //     vUv = uv;
+    //     gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+    //   }
+    // `;
+
+    // const fShader = `
+    //   // Fragment shader
+
+    //   varying vec2 vUv;
+    //   uniform sampler2D t0; // 512x512 texture
+
+    //   void main() {
+    //     vec4 color0 = texture2D(t0, fract(vUv * 5.0));   // tiles the image in a 2x2 grid
+    //     gl_FragColor = color0;
+    //   }
+    // `;
+
+    // const lexture = new THREE.TextureLoader().load("r.png");
+    // lexture.wrapS = THREE.RepeatWrapping;
+    // lexture.wrapT = THREE.RepeatWrapping;
+    // lexture.repeat.set(4, 4);
+    // const uniforms = {
+    //   u_resolution: { value: new THREE.Vector2(width, height) },
+    //   u_mouse: { value: new THREE.Vector2() },
+    //   t0: { value: lexture },
+    // };
+
+    // (uniforms.t0 as any).texture.wrapS = THREE.RepeatWrapping;
+    // (uniforms.t0 as any).texture.wrapT = THREE.RepeatWrapping;
+
+    // document.addEventListener("mousemove", (e) => {
+    //   //  window.addEventListener( 'resize', onWindowResize, false );
+    //   uniforms.u_mouse.value.x = e.clientX;
+    //   uniforms.u_mouse.value.y = e.clientY;
+    // });
+
     const loader = new GLTFLoader();
     setTimeout(() => {
-      loader.load(givenGLTF ? givenGLTF : yaytso, (gltf) => {
+      loader.load(yaytso, (gltf) => {
         scene.add(gltf.scene);
         let egg = gltf.scene.children[0] as THREE.Mesh;
 
-        // If they do not have a name then it is coming from collections
-        // Maybe just make these eggs explicitly different modules with some shared functions extended
-        if (egg.name !== "EGG") {
-          egg = gltf.scene.children[2] as THREE.Mesh;
-        }
-        // console.log(egg.scale);
+        // (egg.material as any).map = lexture;
+        // (egg.material as any).needsUpdate = true;
+        // egg.material = new THREE.ShaderMaterial({
+        //   vertexShader: vShader,
+        //   fragmentShader: fShader,
+        //   uniforms,
+        // });
         eggRef.current = egg;
         eggRef.current.scale.set(0.1, 0.1, 0.1);
+
         // egg.geometry.attributes.scale.needsUpdate = true;
         setLoading(false);
       });
@@ -88,9 +125,9 @@ export default function Egg({
 
     let frame: number;
 
-    const endScale = givenGLTF ? 0.5 : 1;
+    const endScale = 1;
 
-    const animate = () => {
+    const animate = (t: any) => {
       // if (document.getElementById("debug")) {
       //   document.getElementById(
       //     "debug"
@@ -101,14 +138,20 @@ export default function Egg({
         // console.log(eggRef.current.scale);
         eggRef.current.scale.set(scalar, scalar, scalar);
       }
+
       if (eggRef.current && (eggRef.current as EggRef).minting) {
         eggRef.current!.rotation.z += 0.01;
+      }
+
+      if (eggRef.current && (eggRef.current as EggRef).minting) {
+        const w = 0.7 + 0.3 * 0.5 + Math.sin(t * 0.005) * 0.3 * 0.5;
+        eggRef.current.scale.set(w, w, w);
       }
 
       renderer.render(scene, camera);
       frame = requestAnimationFrame(animate);
     };
-    animate();
+    animate(0);
 
     const w = wrapperRef.current;
     return () => {
@@ -117,7 +160,7 @@ export default function Egg({
         w.innerHTML = "";
       }
     };
-  }, [givenGLTF, sceneRef]);
+  }, [sceneRef]);
 
   useEffect(() => {
     if (eggRef.current) {
@@ -132,26 +175,37 @@ export default function Egg({
   useEffect(() => {
     if (shipState) {
       (eggRef.current as EggRef).minting = true;
+      if (
+        shipState === shipStates.PINNING ||
+        shipState === shipStates.MINTING ||
+        shipState === shipStates.SIGNING
+      ) {
+        (eggRef.current as EggRef).sending = true;
+      }
+    } else if (eggRef.current) {
+      (eggRef.current as EggRef).minting = false;
+      (eggRef.current as EggRef).sending = false;
     }
   }, [shipState]);
 
   return (
-    <div
-      ref={wrapperRef}
-      className={`egg-wrapper ${givenGLTF && "collection"}`}
-    >
+    <div ref={wrapperRef} className={`egg-wrapper`}>
       <div id="debug" style={{ position: "absolute", top: 0, left: 0 }}></div>
       {loading && (
         <div>
-          <EggLoader centered={!givenGLTF} />
+          <EggLoader centered={true} />
         </div>
       )}
-      {context.pattern && !givenGLTF && clean && (
+      {context.pattern && clean && !(eggRef.current as EggRef).sending && (
         <SmallButton
           addedClass="clear2"
           title="clean"
           styles={{ bottom: shipState === "READY_TO_SHIP" ? -50 : 0 }}
-          click={clean}
+          click={() => {
+            clean();
+            (eggRef.current as EggRef).sending = false;
+            (eggRef.current as EggRef).minting = false;
+          }}
         />
       )}
       {/* <input

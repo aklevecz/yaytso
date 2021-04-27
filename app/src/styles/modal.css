@@ -129,3 +129,31 @@
   font-size: 14px;
   text-align: left;
 }
+
+#METAMASK_LOGO polygon {
+  animation: red-glow 2000ms infinite alternate;
+  stroke: black;
+}
+
+@keyframes red-glow {
+  0% {
+    fill: black;
+  }
+  100% {
+    fill: rgb(255, 0, 0);
+  }
+}
+
+#WALLETCONNECT_LOGO * {
+  animation: blue-glow 2000ms infinite alternate;
+}
+
+@keyframes blue-glow {
+  0% {
+    fill: black;
+  }
+
+  100% {
+    fill: blue;
+  }
+}
