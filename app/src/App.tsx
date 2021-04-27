@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { HashRouter as Router, Switch, Route } from "react-router-dom";
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import "./App.css";
 import Collection from "./containers/Collection";
 import Create from "./containers/Create";
@@ -10,7 +10,6 @@ import EggViewer from "./containers/EggViewer";
 
 function App() {
   const [bodyHeight, setBodyHeight] = useState(0);
-  console.log("rendgar");
 
   useEffect(() => {
     const { height: headerHeight } = document

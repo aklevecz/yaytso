@@ -23,7 +23,7 @@ export default function Header() {
           fontFamily: "Sen",
         }}
       >
-        (live on Rinkeby)
+        {context.user?.chainId === 4 ? "(connected to Rinkeby)" : "MAINNET"}
       </div>
       <div className="logo">
         <LOGO />

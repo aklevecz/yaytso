@@ -25,7 +25,7 @@ require("dotenv").config()
 const Web3 = require("web3");
 const web3 = new Web3();
 const HDWalletProvider = require("@truffle/hdwallet-provider");
-const mnemonic = process.env.MNEMONIC
+const mnemonic = process.env.MNEMONIC_MAIN
 const infuraKey = process.env.INFURA_KEY
 module.exports = {
     /**
@@ -83,7 +83,7 @@ module.exports = {
             network_id: "*",
             confirmations: 2, // # of confs to wait between deployments. (default: 0)
             gas: 4700000,
-            gasPrice: web3.utils.toWei("120", "gwei"),
+            gasPrice: web3.utils.toWei("35", "gwei"),
             timeoutBlocks: 200, // # of blocks before a deployment times out  (minimum/default: 50)
             skipDryRun: true, // Skip dry run before migrations? (default: false for public nets )
         },

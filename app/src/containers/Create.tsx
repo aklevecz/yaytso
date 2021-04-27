@@ -12,6 +12,7 @@ import Recipient from "../components/Recipient";
 import ReceiptModal from "./modals/Receipt";
 import { ethers } from "ethers";
 import { CanvasContext } from "../contexts/CanvasContext";
+import { useHistory } from "react-router";
 
 export const shipStates = {
   READY_TO_SHIP: "READY_TO_SHIP",
@@ -37,6 +38,7 @@ export type Receipt = {
 export default function Create() {
   const context = useContext(Context);
   const canvasContext = useContext(CanvasContext);
+  const history = useHistory();
 
   const [giftingState, setGiftingState] = useState("");
   const [shipState, setShipState] = useState("");
@@ -44,6 +46,14 @@ export default function Create() {
   const [receipt, setReceipt] = useState<Receipt | null>(null);
 
   const sceneRef = useRef<THREE.Scene>();
+
+  useEffect(() => {
+    const hashPath = window.location.hash;
+    if (hashPath) {
+      const newPath = hashPath.replace(/#\//g, "");
+      history.push(`/${newPath}`);
+    }
+  }, [history]);
 
   const clean = () => {
     setShipState("");
@@ -103,7 +113,6 @@ export default function Create() {
       }
     }
   };
-
   // NOTE: This can obviously be broken up
   const shipIt = async () => {
     if (!context.user) {
@@ -112,7 +121,11 @@ export default function Create() {
     if (!sceneRef.current) {
       return;
     }
-
+    console.log(context.user)
+    console.log(context.contract)
+    if (context.user.chainId !== 4) {
+      alert("you must be connected to rinkeby!");
+    }
     const exporter = new GLTFExporter();
     exporter.parse(
       sceneRef.current,

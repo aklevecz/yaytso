@@ -80,7 +80,8 @@ export const getEgg = async (
   id: number,
   contract: Contract
 ): Promise<YaytsoMetaData> => {
-  const uri = await contract.tokenURI(id);
+  console.log(id, contract.address)
+  const uri = await contract.tokenURI(id).catch(console.log);
   const owner = await contract.ownerOf(id);
   const metadata = await fetch(createPinataURL(uri))
     .then((r) => r.json())
