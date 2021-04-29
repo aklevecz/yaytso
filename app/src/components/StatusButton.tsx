@@ -34,7 +34,7 @@ export default function StatusButton({
             }`}
           >
             <button
-              disabled={isSending}
+              disabled={isSending || shipState === shipStates.COMPLETE}
               onClick={() => {
                 if (shipState === "") {
                   doneFabbing();

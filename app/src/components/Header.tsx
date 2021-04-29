@@ -1,11 +1,12 @@
 import { useContext } from "react";
-import { Context, WalletTypes } from "..";
+import { WalletContext } from "../contexts/WalletContext";
+import { WalletTypes } from "../types";
 import { LOGO } from "./graphical/LOGO";
 import { METAMASK_LOGO } from "./graphical/METAMASK_LOGO";
 import { WALLETCONNECT_ICON } from "./graphical/WALLETCONNECT_ICON";
 
 export default function Header() {
-  const context = useContext(Context);
+  const context = useContext(WalletContext);
 
   const disconnect = () => {
     context.disconnectWallet();

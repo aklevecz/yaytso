@@ -1,16 +1,14 @@
 import { Contract, ethers } from "ethers";
-import { ContextAttrs } from "..";
-import { createPinataURL } from "./services";
+import { WalletContextTypes } from "../types";
+import { createPinataURL } from "./utils";
 
 export const mintEgg = (
   contractSigner: ethers.Contract,
-  context: ContextAttrs,
+  context: WalletContextTypes,
   resp: any,
   patternHash: string,
   errorCallback: any
 ): ethers.Transaction => {
-  // const bytesArray = ethers.utils.base58.decode(resp.svgCID).slice(2);
-  // const hex = ethers.utils.hexlify(bytesArray);
   return contractSigner
     .layYaytso(context.recipient!.address, patternHash, resp.metaCID)
     .catch(errorCallback);
@@ -36,13 +34,11 @@ export const requestAccount = (): Promise<{
 export const getSignerAndAddress = async (
   provider: ethers.providers.Web3Provider
 ) => {
-  // const provider = new ethers.providers.Web3Provider(window.ethereum);
   const signer = provider.getSigner();
   const { chainId } = await provider.getNetwork();
   return signer.getAddress().then((address) => ({ address, signer, chainId }));
 };
 
-// MAY NEED TO CHECK ACTIVE WALLET ON EACH CALL
 export const getOwnersEggs = async (
   totalSupply: number,
   contract: Contract,
@@ -52,7 +48,6 @@ export const getOwnersEggs = async (
   let uriToTokenId: { [key: string]: number } = {};
   for (let i = 1; i < totalSupply + 1; i++) {
     const owner = await contract.ownerOf(i);
-    console.log(i, owner, address);
     if (owner === address) {
       const ipfsURI = await contract.tokenURI(i);
       uriToTokenId[ipfsURI] = i;
@@ -80,7 +75,7 @@ export const getEgg = async (
   id: number,
   contract: Contract
 ): Promise<YaytsoMetaData> => {
-  console.log(id, contract.address)
+  console.log(id, contract.address);
   const uri = await contract.tokenURI(id).catch(console.log);
   const owner = await contract.ownerOf(id);
   const metadata = await fetch(createPinataURL(uri))

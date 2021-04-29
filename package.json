@@ -17,10 +17,12 @@
     "@openzeppelin/test-helpers": "^0.5.10",
     "@truffle/hdwallet-provider": "^1.2.2",
     "chai": "^4.3.0",
-    "mocha": "^8.3.0"
+    "mocha": "^8.3.0",
+    "truffle-plugin-verify": "^0.5.7"
   },
   "dependencies": {
     "cids": "^1.1.6",
-    "dotenv": "^8.2.0"
+    "dotenv": "^8.2.0",
+    "ethers": "^5.1.4"
   }
 }

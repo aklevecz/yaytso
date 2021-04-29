@@ -1,10 +1,11 @@
 import { useCallback, useContext, useEffect, useState } from "react";
 import EggKolletiv from "./EggKolletiv";
-import { Context } from "..";
+import { WalletContext } from "../contexts/WalletContext";
 import { yaytsoOfOwner } from "../libs/contract";
-import { createPinataURL, fetchEggApplyId } from "../libs/services";
+import { fetchEggApplyId } from "../libs/services";
 import { EYE } from "../components/graphical/EYE";
 import { Link } from "react-router-dom";
+import { createPinataURL } from "../libs/utils";
 
 type EggMetaData = {
   animation_url: string;
@@ -13,13 +14,12 @@ type EggMetaData = {
 };
 
 export default function Collection() {
-  const context = useContext(Context);
+  const context = useContext(WalletContext);
   const [fetching, setFetching] = useState(true);
   const [eggSons, setEggSons] = useState<EggMetaData[]>([]);
 
   const getCollection = useCallback(async () => {
     if (context.contract && context.user && context.user.address) {
-      console.log(context.user.address);
       const owned = await yaytsoOfOwner(context.user.address, context.contract);
 
       if (owned.length === 0) {
@@ -27,7 +27,7 @@ export default function Collection() {
       }
 
       const eggmises = owned.map((uri) => {
-        return fetchEggApplyId(uri.uri, { deprecated: 420 }, uri.id);
+        return fetchEggApplyId(uri.uri, uri.id);
       });
 
       Promise.all(eggmises).then((eggson) => {

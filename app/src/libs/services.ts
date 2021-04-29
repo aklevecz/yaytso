@@ -1,18 +1,6 @@
 import { Dispatch, SetStateAction } from "react";
 import { RepeatWrapping, CanvasTexture } from "three";
-
-export const GATEWAY_URL =
-  process.env.NODE_ENV === "development"
-    ? "http://localhost:8080/ipfs"
-    : "https://gateway.pinata.cloud/ipfs";
-
-export const createPinataURL = (uri: string) =>
-  uri.replace("ipfs://", GATEWAY_URL + "/");
-
-const PIN_URL =
-  process.env.NODE_ENV === "development"
-    ? "http://localhost:8082"
-    : "https://nft-service-i3w4qwywla-uc.a.run.app";
+import { GATEWAY_URL, PIN_URL } from "../constants";
 
 export const pinBlobs = (data: FormData) =>
   fetch(PIN_URL, {
@@ -22,21 +10,13 @@ export const pinBlobs = (data: FormData) =>
     .then((r) => r.json())
     .then((d) => d);
 
-export const fetchEggApplyId = (
-  uri: string,
-  uriToTokenId: { [key: string]: number },
-  id?: string
-) => {
+export const fetchEggApplyId = (uri: string, id?: string) => {
   return fetch(`${GATEWAY_URL}/${uri.replace("ipfs://", "")}`)
     .then((r) => {
       return r.json();
     })
     .then((d) => {
-      if (id) {
-        d.tokenId = id;
-      } else {
-        d.tokenId = uriToTokenId[uri];
-      }
+      d.tokenId = id;
       return d;
     });
 };

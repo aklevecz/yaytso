@@ -2,13 +2,13 @@ import { useContext, useEffect, useRef } from "react";
 import * as THREE from "three";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
 import { PointerLockControls } from "three/examples/jsm/controls/PointerLockControls";
-import { Context } from "..";
+import { WalletContext } from "../contexts/WalletContext";
 import Skybox from "../assets/skybox.jpg";
-import { GATEWAY_URL } from "../libs/services";
+import { GATEWAY_URL } from "../constants";
 /* eslint-disable */
 // NOT MAINTAINED AT THE MOMENT
 export default function WorldScene({ eggLTs }: { eggLTs: Array<string> }) {
-  const context = useContext(Context);
+  const context = useContext(WalletContext);
   const wrapperRef = useRef<HTMLDivElement>(null);
   const eggsRef = useRef<string[]>([]);
   const sceneRef = useRef<THREE.Scene>();

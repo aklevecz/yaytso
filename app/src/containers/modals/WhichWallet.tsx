@@ -18,28 +18,14 @@ type Props = {
 };
 
 const WhichWallet = ({
-  modalProps: { open, setOpen, forceClearNonce },
-  visible,
+  modalProps: { open },
   setPickWallet,
   connectMetamask,
   connectWalletConnect,
 }: Props) => {
-  // Boilerplate jANK!!
   useEffect(() => {
-    if (visible) {
-      setOpen(true);
-    } else {
-      setOpen(false);
-    }
-    return () => {
-      setOpen(false);
-    };
-    // eslint-disable-next-line
-  }, [visible]);
-
-  useEffect(() => {
-    setPickWallet && setPickWallet(false);
-  }, [forceClearNonce, setPickWallet]);
+    if (!open) setPickWallet(false);
+  }, [open, setPickWallet]);
 
   return (
     <ModalInnerContent>

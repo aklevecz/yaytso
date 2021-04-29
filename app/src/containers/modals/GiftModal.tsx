@@ -13,7 +13,7 @@ import {
   withModal,
   ModalButtonWrapper,
 } from ".";
-import { Context } from "../..";
+import { WalletContext } from "../../contexts/WalletContext";
 import NoWeb3 from "./NoWeb3";
 
 const Red = ({ children }: { children: JSX.Element | string }) => (
@@ -197,7 +197,7 @@ function GiftModal({
   setGiftingState,
   transactionCompleted,
 }: Props) {
-  const context = useContext(Context);
+  const context = useContext(WalletContext);
   const [forWho, setForWho] = useState<string | null>(null);
   const [address, setAddress] = useState("");
   const [nameStep, setNameStep] = useState(false);
@@ -248,45 +248,27 @@ function GiftModal({
 
   useEffect(() => {
     if (forWho === forWhos.ME && context.user) {
-      // setCornfirmation(true);
       setNameStep(true);
       setAddress(context.user.address);
     }
   }, [forWho, context.user]);
 
-  // ANIT PATTERN LAND :D
-  /**** */
-  // Anti pattern, but whatever for now
-  // it allows the modal bg to close and clear the state
-  useEffect(() => {
-    reset();
-  }, [modalProps.forceClearNonce, reset]);
-
-  // Also pretty fucking janky
   useEffect(() => {
     if (transactionCompleted) {
       reset();
     }
   }, [transactionCompleted, reset]);
 
-  // modalProps is side effect heavy
   useEffect(() => {
-    if (visible) {
-      modalProps.setOpen(true);
-    } else {
-      modalProps.setOpen(false);
+    if (!modalProps.open) {
+      reset();
     }
-    return () => {
-      modalProps.setOpen(false);
-    };
-    // eslint-disable-next-line
-  }, [visible]);
-  // END OF LITTLE ANTI PATTERN LAND :D
-  // **********************************
+  }, [modalProps, reset]);
 
   if (!context.user || !context.user.address) {
     return <NoWeb3 reset={reset} />;
   }
+
   return (
     <ModalInnerContent>
       <div>
@@ -338,8 +320,6 @@ function GiftModal({
             onChangeDesc={onChangeDesc}
             name={name}
             goBack={() => {
-              // setForWho(null);
-              // setAddress("");
               setDescStep(false);
             }}
           />
@@ -358,8 +338,7 @@ function GiftModal({
             giftingSetup={giftingSetup}
             goBack={() => {
               setCornfirmation(false);
-              setForWho(null);
-              setAddress("");
+              setDescStep(true);
             }}
           />
         )}

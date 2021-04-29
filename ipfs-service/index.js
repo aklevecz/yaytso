@@ -7,12 +7,12 @@ const upload = multer();
 const app = express();
 app.use(express.json());
 app.use(cors({ origin: "*" }));
-const { NFTStorage, Blob, File, FormData } = require("nft.storage");
+const { NFTStorage, Blob } = require("nft.storage");
 const IPFS = require("ipfs-core");
 const apiKey = fs.readFileSync(".secret").toString().trim();
 const metadataFile = fs.readFileSync("metadataTemplate.json");
 
-const dev = false;
+const dev = process.env.NODE_ENV === "dev";
 
 (async () => {
   const client = dev ? await IPFS.create() : new NFTStorage({ token: apiKey });
@@ -28,7 +28,9 @@ const dev = false;
     }
     return id;
   };
-
+  app.get("/", (req, res) => {
+    res.send(process.env.NODE_ENV);
+  });
   app.post("/", upload.any(), async (req, res) => {
     const name = req.body.name;
     const desc = req.body.desc;
@@ -42,7 +44,7 @@ const dev = false;
       "__HASH__",
       gltfCID
     );
-    metadata.name = metadata.name + name;
+    metadata.name = name;
     metadata.description = desc;
 
     let meta_id;

@@ -1,4 +1,4 @@
-import { Recipient as RecipientType, Who } from "..";
+import { Recipient as RecipientType, Who } from "../types";
 import { SWIGGLE_ARROW } from "./graphical/SWIGGLE_ARROW";
 
 export default function Recipient({

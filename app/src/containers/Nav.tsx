@@ -1,7 +1,8 @@
 import { useContext, useEffect, useState } from "react";
 import { useHistory, withRouter } from "react-router-dom";
-import { Context } from "..";
+import { WalletContext } from "../contexts/WalletContext";
 import { NAV } from "../components/graphical/NAV";
+import { UIContext } from "../contexts/UIContext";
 import WhichWallet from "./modals/WhichWallet";
 
 const eggNav = (): HTMLElement => document.getElementById("EGG-NAV")!;
@@ -17,10 +18,10 @@ const clear = () => {
 function Nav() {
   const [openNav, setOpenNav] = useState(false);
   const [pickWallet, setPickWallet] = useState(false);
-  const context = useContext(Context);
+  const context = useContext(WalletContext);
   const history = useHistory();
 
-  const isDesk = window.innerWidth > 768;
+  const { isDesk } = useContext(UIContext);
 
   const connectMetamask = () => context.web3Connect();
   const connectWalletConnect = () => context.connectWalletConnect();
@@ -96,9 +97,8 @@ function Nav() {
           connect to web3
         </button>
       )}
-      {!context.user?.address && (
+      {!context.user?.address && pickWallet && (
         <WhichWallet
-          visible={pickWallet}
           setPickWallet={setPickWallet}
           connectMetamask={connectMetamask}
           connectWalletConnect={connectWalletConnect}

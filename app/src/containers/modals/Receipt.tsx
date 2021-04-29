@@ -1,6 +1,6 @@
-import { useEffect } from "react";
 import { ModalInnerContent, ModalParagraph, ModalProps, withModal } from ".";
-import { createPinataURL } from "../../libs/services";
+import { YAYTSO_MAIN_ADDRESS } from "../../constants";
+import { createPinataURL } from "../../libs/utils";
 import { Receipt } from "../Create";
 
 const EggGrid = ({
@@ -33,13 +33,15 @@ const EggGrid = ({
     </div>
     <div className="receipt-link">
       <a
-        href={`https://testnets.opensea.io/assets/${contractAddress}/${tokenId}`}
+        href={`https://${
+          contractAddress === YAYTSO_MAIN_ADDRESS ? "" : "testnets"
+        }.opensea.io/assets/${contractAddress}/${tokenId}`}
       >
         view on opensea
       </a>
     </div>
     <div className="receipt-link">
-      <a href={`http://yaytso.art/#/egg/${tokenId}`}>view on yaytso viewer</a>
+      <a href={`http://yaytso.art/egg/${tokenId}`}>view on yaytso viewer</a>
     </div>
   </div>
 );
@@ -48,26 +50,10 @@ type Props = {
   modalProps: ModalProps;
   visible: boolean;
   receipt: Receipt;
+  chainId: number;
 };
 
-const ReceiptModal = ({
-  modalProps: { open, setOpen },
-  visible,
-  receipt,
-}: Props) => {
-  // Boilerplate jANK!!
-  useEffect(() => {
-    if (visible) {
-      setOpen(true);
-    } else {
-      setOpen(false);
-    }
-    return () => {
-      setOpen(false);
-    };
-    // eslint-disable-next-line
-  }, [visible]);
-
+const ReceiptModal = ({ receipt }: Props) => {
   return (
     <ModalInnerContent>
       <ModalParagraph>

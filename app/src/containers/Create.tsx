@@ -3,7 +3,7 @@ import Egg from "./Egg";
 import Upload from "../components/Upload";
 import { GLTFExporter } from "three/examples/jsm/exporters/GLTFExporter";
 import Smiler from "../components/Smiler";
-import { connector, Context, WalletTypes } from "..";
+import { contractAdapter, WalletContext } from "../contexts/WalletContext";
 import GiftModal from "./modals/GiftModal";
 import { createBlobs } from "../libs/create";
 import { pinBlobs } from "../libs/services";
@@ -13,6 +13,7 @@ import ReceiptModal from "./modals/Receipt";
 import { ethers } from "ethers";
 import { CanvasContext } from "../contexts/CanvasContext";
 import { useHistory } from "react-router";
+import { WalletTypes } from "../types";
 
 export const shipStates = {
   READY_TO_SHIP: "READY_TO_SHIP",
@@ -36,7 +37,7 @@ export type Receipt = {
 };
 
 export default function Create() {
-  const context = useContext(Context);
+  const context = useContext(WalletContext);
   const canvasContext = useContext(CanvasContext);
   const history = useHistory();
 
@@ -90,11 +91,6 @@ export default function Create() {
       console.log(event);
       setShipState(shipStates.COMPLETE);
 
-      // setTimeout(() => {
-      //   setShipState("");
-      //   setGiftingState("");
-      // }, 3000);
-
       try {
         const tokenId = event.args._tokenId.toString();
         const txHash = event.transactionHash;
@@ -120,11 +116,6 @@ export default function Create() {
     }
     if (!sceneRef.current) {
       return;
-    }
-    console.log(context.user)
-    console.log(context.contract)
-    if (context.user.chainId !== 4) {
-      alert("you must be connected to rinkeby!");
     }
     const exporter = new GLTFExporter();
     exporter.parse(
@@ -163,6 +154,7 @@ export default function Create() {
         if (context.user.type === WalletTypes.WALLET_CONNECT) {
           // const bytesArray = ethers.utils.base58.decode(resp.svgCID).slice(2);
           // const hex = ethers.utils.hexlify(bytesArray);
+          console.log(context.contract.populateTransaction);
           const raw = await context.contract.populateTransaction.layYaytso(
             context.recipient!.address,
             patternHash,
@@ -176,6 +168,7 @@ export default function Create() {
           };
 
           // This event could be else where but it is contained here at least
+          const connector = contractAdapter.connector;
           connector
             .sendTransaction(tx)
             .then((txHash) => {
@@ -252,10 +245,10 @@ export default function Create() {
   };
 
   useEffect(() => {
-    if (context.pattern === null) {
+    if (canvasContext.pattern === null) {
       setShipState("");
     }
-  }, [context.pattern]);
+  }, [canvasContext.pattern]);
 
   // Shitty reducers
   const showRecipient =
@@ -307,7 +300,6 @@ export default function Create() {
   // context.recipient.type === user || friend && context.recipient === address
   // shipItState === "PINNING"
   // shipItState lifecycle through the blockchain...
-
   return (
     <div className="egg-tainer">
       <div className="upper-container">
@@ -328,16 +320,17 @@ export default function Create() {
         />
         <Smiler shipState={shipState} isPattern={!!canvasContext.pattern} />
       </div>
-      <GiftModal
-        visible={giftingState === giftingStates.RECIPIENT}
-        setGiftingState={setGiftingState}
-        readyToShip={() => setShipState(shipStates.READY_TO_SHIP)}
-        transactionCompleted={shipState === shipStates.COMPLETE}
-      />
-      <ReceiptModal
-        visible={shipState === shipStates.COMPLETE && receipt}
-        receipt={receipt}
-      />
+      {giftingState === giftingStates.RECIPIENT && (
+        <GiftModal
+          visible={giftingState === giftingStates.RECIPIENT}
+          setGiftingState={setGiftingState}
+          readyToShip={() => setShipState(shipStates.READY_TO_SHIP)}
+          transactionCompleted={shipState === shipStates.COMPLETE}
+        />
+      )}
+      {shipState === shipStates.COMPLETE && receipt && (
+        <ReceiptModal receipt={receipt} />
+      )}
     </div>
   );
 }

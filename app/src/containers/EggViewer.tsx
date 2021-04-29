@@ -1,15 +1,17 @@
 import { useContext, useEffect, useState } from "react";
 import { useParams } from "react-router";
-import { Context } from "..";
+import { WalletContext } from "../contexts/WalletContext";
 import EggKolletiv from "./EggKolletiv";
 import EggLoader from "../components/EggLoader";
 import { DETAILS } from "../components/graphical/DETAILS";
 import { getEgg, YaytsoMetaData } from "../libs/contract";
-import { createPinataURL } from "../libs/services";
+import { createPinataURL } from "../libs/utils";
+import { UIContext } from "../contexts/UIContext";
 
 export default function EggViewer() {
   const { id } = useParams<{ id: string }>();
-  const context = useContext(Context);
+  const context = useContext(WalletContext);
+  const { isDesk } = useContext(UIContext);
   const [eggaData, setEggaData] = useState<YaytsoMetaData>();
   const [showEggtails, setShowEggtails] = useState(false);
 
@@ -35,7 +37,7 @@ export default function EggViewer() {
     <div>
       <div
         className={`viewer-metadata ${
-          showEggtails || context.isDesk ? "open" : "closed"
+          showEggtails || isDesk ? "open" : "closed"
         }`}
       >
         <div className="viewer-metadata-id">
@@ -58,7 +60,7 @@ export default function EggViewer() {
             : eggaData.owner}
         </div>
       </div>
-      {!context.isDesk && (
+      {!isDesk && (
         <div
           onClick={toggleEggtails}
           className={`eggtail-toggle ${showEggtails ? "open" : "closed"}`}

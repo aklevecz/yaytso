@@ -39,13 +39,9 @@ export const SmallButton = ({
 );
 
 export default function Modal(props: any) {
-  const [open, setOpen] = useState(false);
-  const [forceClearNonce, setForceClearNonce] = useState(0);
+  const [open, setOpen] = useState(true);
 
-  const forceClear = () => {
-    setOpen(false);
-    setForceClearNonce(forceClearNonce + 1);
-  };
+  const close = () => setOpen(false);
 
   useEffect(() => {
     const bottomContainer = document.querySelector(
@@ -81,11 +77,9 @@ export default function Modal(props: any) {
 
   return ReactDOM.createPortal(
     <div className={`modal-container ${open && "open"}`}>
-      <div onClick={forceClear} className="modal-bg"></div>
+      <div onClick={close} className="modal-bg"></div>
       <div className="modal-wrapper">
-        <div className="modal-content">
-          {props.render({ open, setOpen, forceClearNonce })}
-        </div>
+        <div className="modal-content">{props.render({ open, setOpen })}</div>
       </div>
     </div>,
     document.querySelector("#modal-root") as HTMLDivElement

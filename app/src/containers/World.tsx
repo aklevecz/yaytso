@@ -1,12 +1,12 @@
 import { useContext, useEffect, useState } from "react";
 import { useHistory } from "react-router";
-import { Context } from "..";
+import { WalletContext } from "../contexts/WalletContext";
 import WorldScene from "../components/WorldScene";
 const PINATA_GATEWAY = "https://gateway.pinata.cloud/ipfs";
 /* eslint-disable */
 // NOT MAINTAINED AT THE MOMENT
 export default function World() {
-  const context = useContext(Context);
+  const context = useContext(WalletContext);
   const history = useHistory();
   const [fetching, setFetching] = useState(true);
   const [eggLTs, setEggLTFs] = useState([]);
