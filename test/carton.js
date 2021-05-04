@@ -43,10 +43,32 @@ contract("Testing carton", async (accounts) => {
     const uri = "first-token-uri";
     await this.yaytsoContractSigner.layYaytso(key, pattern, uri);
     // await yaytsoI.layYaytso(key, pattern, uri);
+    const lat = "30.1";
+    const lon = "31.0";
+    await cartonI.createBox(lat, lon);
     await cartonI.fillBox(1, key, 1);
     const boxId = await cartonI.boxIdToTokenId(1);
     const box = await cartonI.idToBox(1);
     assert.equal(boxId, 1);
+  });
+
+  it("Box is locked", async () => {
+    const key = this.zeroWallet.address;
+    const lat = "30.1";
+    const lon = "31.0";
+    await cartonI.createBox(lat, lon);
+    await cartonI.fillBox(1, key, 1);
+    const box = await cartonI.idToBox(1);
+    assert.equal(box.locked, true);
+  });
+
+  it("Box has a nonce of 1", async () => {
+    const key = this.zeroWallet.address;
+    await cartonI.createBox("lat", "lon");
+    await cartonI.fillBox(1, key, 1);
+    const box = await cartonI.idToBox(1);
+    const nonce = parseInt(box.nonce, 10);
+    assert.equal(nonce, 1);
   });
 
   it("Can't fill a filled box", async () => {
@@ -54,6 +76,9 @@ contract("Testing carton", async (accounts) => {
     const pattern = web3.utils.asciiToHex("two");
     const uri = "second-token-uri";
     await yaytsoI.layYaytso(key, pattern, uri);
+    const lat = "30.1";
+    const lon = "31.0";
+    await cartonI.createBox(lat, lon);
     await cartonI.fillBox(1, key, 2);
     const pattern2 = web3.utils.asciiToHex("three");
     const uri2 = "third-token-uri";
@@ -64,6 +89,9 @@ contract("Testing carton", async (accounts) => {
   });
 
   it("Key must own yaytso", async () => {
+    const lat = "30.1";
+    const lon = "31.0";
+    await cartonI.createBox(lat, lon);
     await cartonI.fillBox(1, accounts[1], 1).catch((e) => {
       assert.equal(e.reason, "KEY_MUST_BE_OWNER");
     });
@@ -87,7 +115,7 @@ contract("Testing carton", async (accounts) => {
     assert.equal(verified, true);
   });
 
-  it("Rejects a malformed signature", async () => {
+  it("Rejects a signature from the wrong address", async () => {
     const wrongAccount = accounts[1];
     const id = 1;
     const nonce = 1;
@@ -115,9 +143,12 @@ contract("Testing carton", async (accounts) => {
     const msgArray = ethers.utils.arrayify(hashedMessage);
     const signedMessage = await this.zeroWallet.signMessage(msgArray);
     const key = this.zeroWallet.address;
+    const lat = "30.1";
+    const lon = "31.0";
+    await cartonI.createBox(lat, lon);
     await cartonI.fillBox(1, key, 1);
     await this.yaytsoContractSigner.approve(cartonI.address, 1);
-    await cartonI.claimYaytso(1, accounts[0], 1, signedMessage);
+    await cartonI.claimYaytso(1, 1, signedMessage);
     const newOwner = await yaytsoI.ownerOf(1);
     assert.equal(newOwner, accounts[0]);
   });

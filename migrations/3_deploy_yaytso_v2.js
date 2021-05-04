@@ -5,5 +5,4 @@ module.exports = async function (deployer) {
   const yaytso = await YaytsoV2.deployed();
   await deployer.deploy(Carton, yaytso.address);
   const carton = await Carton.deployed();
-  console.log(carton.address);
 };

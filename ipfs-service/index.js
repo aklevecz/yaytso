@@ -13,7 +13,7 @@ const apiKey = fs.readFileSync(".secret").toString().trim();
 const metadataFile = fs.readFileSync("metadataTemplate.json");
 
 const dev = process.env.NODE_ENV === "dev";
-
+console.log(dev);
 (async () => {
   const client = dev ? await IPFS.create() : new NFTStorage({ token: apiKey });
 
@@ -57,7 +57,9 @@ const dev = process.env.NODE_ENV === "dev";
       meta_id = await store(metadataBlob);
     }
     const metaCID = meta_id;
-    const byteArray = new CID(svgCID).bytes.slice(4);
+
+    const sliceAmt = dev ? 2 : 4;
+    const byteArray = new CID(svgCID).bytes.slice(sliceAmt);
     return res.send({ metaCID, svgCID, byteArray });
   });
 

@@ -36,7 +36,7 @@ export class ContractAdapter {
   getProvider(chainId: number): ethers.providers.JsonRpcProvider {
     const network = chainId === 1 ? "mainnet" : "rinkeby";
     const rpcAddress =
-      process.env.NODE_ENV !== "development"
+      process.env.NODE_ENV === "development"
         ? LOCAL_HOST
         : createInfuraURL(network);
 

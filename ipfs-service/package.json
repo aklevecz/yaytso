@@ -4,7 +4,7 @@
   "description": "save those nft files",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js",
+    "start": "set NODE_ENV=dev&&node index.js",
     "build": "gcloud builds submit --tag gcr.io/eggs69/nft-service",
     "deploy": "gcloud run deploy nft-service --image gcr.io/eggs69/nft-service --platform managed --region us-central1",
     "build:deploy": "npm run build && npm run deploy"

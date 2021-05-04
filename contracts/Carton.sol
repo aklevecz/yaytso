@@ -14,6 +14,7 @@ contract Carton {
         string lat;
         string lon;
         bool locked;
+        bool created;
         uint256 nonce;
     }
 
@@ -28,7 +29,7 @@ contract Carton {
     function createBox(string memory _lat, string memory _lon) public {
         _boxIds.increment();
         uint256 _boxId = _boxIds.current();
-        Box memory _box = Box(_boxId, _lat, _lon, false, 0);
+        Box memory _box = Box(_boxId, _lat, _lon, false, true, 0);
         idToBox[_boxId] = _box;
     }
 
@@ -38,10 +39,12 @@ contract Carton {
         uint256 _tokenId
     ) public {
         Box memory _box = idToBox[_boxId];
+        require(_box.created == true, "BOX_NOT_EXIST");
         require(_box.locked == false, "BOX_IS_LOCKED");
         address _tokenOwner = YaytsoInterface.ownerOf(_tokenId);
         require(_tokenOwner == _key, "KEY_MUST_BE_OWNER");
         _box.locked = true;
+        _box.nonce += 1;
         idToKey[_boxId] = _key;
         idToBox[_boxId] = _box;
         boxIdToTokenId[_boxId] = _tokenId;
@@ -70,7 +73,6 @@ contract Carton {
 
     function claimYaytso(
         uint256 _boxId,
-        address _finder,
         uint256 _nonce,
         bytes memory signature
     ) public {
@@ -84,6 +86,6 @@ contract Carton {
         require(_yaytsoOwner == _key);
 
         require(verify(_key, _boxId, _nonce, signature), "WRONG_SIGNATURE");
-        YaytsoInterface.transferFrom(_key, _finder, _yaytsoId);
+        YaytsoInterface.transferFrom(_key, msg.sender, _yaytsoId);
     }
 }
