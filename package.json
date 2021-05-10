@@ -16,13 +16,11 @@
     "@openzeppelin/contracts": "^3.4.0",
     "@openzeppelin/test-helpers": "^0.5.10",
     "@truffle/hdwallet-provider": "^1.2.2",
-    "@types/google.maps": "^3.44.4",
     "chai": "^4.3.0",
     "mocha": "^8.3.0",
     "truffle-plugin-verify": "^0.5.7"
   },
   "dependencies": {
-    "@googlemaps/js-api-loader": "^1.11.4",
     "cids": "^1.1.6",
     "dotenv": "^8.2.0",
     "ethers": "^5.1.4"
