@@ -1,5 +1,5 @@
 import { createContext, useEffect, useState } from "react";
-import { ContractAdapter } from "../ContractManager";
+import { ContractAdapter, ContractTypes } from "../ContractManager";
 import { WalletContextTypes, Recipient, User, WalletTypes } from "../types";
 import { ethers } from "ethers";
 import { getSignerAndAddress, requestAccount } from "../libs/contract";
@@ -17,6 +17,7 @@ export const WalletContext = createContext<WalletContextTypes>({
 });
 
 export const contractAdapter = new ContractAdapter();
+
 const WalletContextProvider = ({
   children,
 }: {
@@ -28,9 +29,10 @@ const WalletContextProvider = ({
     type: null,
     chainId: null,
   });
-  const [provider, setProvider] = useState<
-    ethers.providers.Web3Provider | ethers.providers.BaseProvider | null
-  >(null);
+  const [provider, setProvider] =
+    useState<
+      ethers.providers.Web3Provider | ethers.providers.BaseProvider | null
+    >(null);
   const [recipient, setRecipient] = useState<Recipient | null>(null);
   const [contract, setContract] = useState<ethers.Contract | null>(null);
 
@@ -48,14 +50,22 @@ const WalletContextProvider = ({
     const { signer, address, chainId } = await requestAccount();
     setUser({ chainId, type: WalletTypes.METAMASK, signer, address });
     const provider = new ethers.providers.Web3Provider(window.ethereum);
-    const contract = contractAdapter.getContractI(chainId, provider);
+    const contract = contractAdapter.getContractI(
+      ContractTypes.YAYTSO,
+      chainId,
+      provider
+    );
     setContract(contract);
     setProvider(provider);
 
     window.ethereum.on("networkChanged", (networkId: any) => {
       const provider = new ethers.providers.Web3Provider(window.ethereum);
 
-      const contract = contractAdapter.getContractI(networkId, provider);
+      const contract = contractAdapter.getContractI(
+        ContractTypes.YAYTSO,
+        networkId,
+        provider
+      );
       setContract(contract);
       getSignerAndAddress(provider).then(({ address, signer, chainId }) =>
         setUser({
@@ -92,6 +102,7 @@ const WalletContextProvider = ({
         contractAdapter.connector.chainId
       );
       const contract = contractAdapter.getContractI(
+        ContractTypes.YAYTSO,
         contractAdapter.connector.chainId,
         provider
       );
@@ -112,7 +123,11 @@ const WalletContextProvider = ({
       }
       const { accounts, chainId } = payload.params[0];
       const provider = contractAdapter.getProvider(chainId);
-      const contract = contractAdapter.getContractI(chainId, provider);
+      const contract = contractAdapter.getContractI(
+        ContractTypes.YAYTSO,
+        chainId,
+        provider
+      );
       setProvider(provider);
       setContract(contract);
       setUser({
@@ -125,11 +140,17 @@ const WalletContextProvider = ({
   }, []);
 
   useEffect(() => {
+    // still causes weird side effects like thinking wallet connect is present but then falling back to metamask
+    // which isn't terrible, but also is not ideal
     if (contractAdapter.connector.connected) {
       if (contractAdapter.connector) {
         const chainId = contractAdapter.connector.chainId;
         const provider = contractAdapter.getProvider(chainId);
-        const contract = contractAdapter.getContractI(chainId, provider);
+        const contract = contractAdapter.getContractI(
+          ContractTypes.YAYTSO,
+          chainId,
+          provider
+        );
         setUser({
           address: contractAdapter.connector.accounts[0],
           signer: null,
@@ -146,7 +167,11 @@ const WalletContextProvider = ({
       if (!contractAdapter.connector.connected) {
         const chainId = 1;
         const provider = contractAdapter.getProvider(chainId);
-        const contract = contractAdapter.getContractI(chainId, provider);
+        const contract = contractAdapter.getContractI(
+          ContractTypes.YAYTSO,
+          chainId,
+          provider
+        );
         setProvider(provider);
         setContract(contract);
       }

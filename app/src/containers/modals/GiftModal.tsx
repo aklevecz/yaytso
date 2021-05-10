@@ -287,7 +287,7 @@ function GiftModal({
             {forWho === null && (
               <FriendOfYourself forMe={forMe} forFriend={forFriend} />
             )}
-            {forWho === forWhos.FRIEND && (
+            {forWho === forWhos.FRIEND && !nameStep && !descStep && (
               <SendToFriend
                 onAddressChange={onAddressChange}
                 validFriendAddress={validFriendAddress}

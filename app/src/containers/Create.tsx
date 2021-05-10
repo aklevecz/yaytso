@@ -154,7 +154,6 @@ export default function Create() {
         if (context.user.type === WalletTypes.WALLET_CONNECT) {
           // const bytesArray = ethers.utils.base58.decode(resp.svgCID).slice(2);
           // const hex = ethers.utils.hexlify(bytesArray);
-          console.log(context.contract.populateTransaction);
           const raw = await context.contract.populateTransaction.layYaytso(
             context.recipient!.address,
             patternHash,

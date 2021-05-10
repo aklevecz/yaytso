@@ -2,6 +2,7 @@ const fs = require("fs");
 const express = require("express");
 const cors = require("cors");
 const multer = require("multer");
+const QRCode = require("qrcode");
 const CID = require("cids");
 const upload = multer();
 const app = express();
@@ -11,9 +12,9 @@ const { NFTStorage, Blob } = require("nft.storage");
 const IPFS = require("ipfs-core");
 const apiKey = fs.readFileSync(".secret").toString().trim();
 const metadataFile = fs.readFileSync("metadataTemplate.json");
-
+const k =
+  "?m=0xe2b644e5dc5906e765dff54b57f64a6ad4e656116562dab977f52b625b918a64760c8da05d2897c0b8444f7ec8bedfe5ae388e6616cc099f7e9dd1970d725bc71c&i=1&n=1";
 const dev = process.env.NODE_ENV === "dev";
-console.log(dev);
 (async () => {
   const client = dev ? await IPFS.create() : new NFTStorage({ token: apiKey });
 
@@ -30,6 +31,12 @@ console.log(dev);
   };
   app.get("/", (req, res) => {
     res.send(process.env.NODE_ENV);
+  });
+  app.get("/qr", (req, res) => {
+    QRCode.toDataURL(k, (e, r) => {
+      console.log(e);
+      res.send(r);
+    });
   });
   app.post("/", upload.any(), async (req, res) => {
     const name = req.body.name;

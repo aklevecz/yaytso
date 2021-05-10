@@ -29,100 +29,13 @@ oneWallet = oneWallet.connect(provider);
 const patternHash = "aaameepo";
 
 (async () => {
-  let messageHash = ethers.utils.id("Hello World");
-
-  // Note: messageHash is a string, that is 66-bytes long, to sign the
-  //       binary value, we must convert it to the 32 byte Array that
-  //       the string represents
-  //
-  // i.e.
-  //   // 66-byte string
-  //   "0x592fa743889fc7f92ac2a37bb1f5ba1daf2a5c84741ca0e0061d243a2e6707ba"
-  //
-  //   ... vs ...
-  //
-  //  // 32 entry Uint8Array
-  //  [ 89, 47, 167, 67, 136, 159, 199, 249, 42, 194, 163,
-  //    123, 177, 245, 186, 29, 175, 42, 92, 132, 116, 28,
-  //    160, 224, 6, 29, 36, 58, 46, 103, 7, 186]
-
-  let messageHashBytes = ethers.utils.arrayify(messageHash);
-
-  // Sign the binary data
-  let rawSig = await oneWallet.signMessage(messageHashBytes);
-
-  //   // All properties on a domain are optional
-  //   const domain = {
-  //     name: "Ether Mail",
-  //     version: "1",
-  //     chainId: 1,
-  //     verifyingContract: "0xCcCCccccCCCCcCCCCCCcCcCccCcCCCcCcccccccC",
-  //   };
-
-  //   // The named list of all type definitions
-  //   const types = {
-  //     Person: [
-  //       { name: "name", type: "string" },
-  //       { name: "wallet", type: "address" },
-  //     ],
-  //     Mail: [
-  //       { name: "from", type: "Person" },
-  //       { name: "to", type: "Person" },
-  //       { name: "contents", type: "string" },
-  //     ],
-  //   };
-
-  //   // The data to sign
-  //   const value = {
-  //     from: {
-  //       name: "Cow",
-  //       wallet: "0xCD2a3d9F938E13CD947Ec05AbC7FE734Df8DD826",
-  //     },
-  //     to: {
-  //       name: "Bob",
-  //       wallet: "0xbBbBBBBbbBBBbbbBbbBbbbbBBbBbbbbBbBbbBBbB",
-  //     },
-  //     contents: "Hello, Bob!",
-  //   };
-
-  //   const signature = await oneWallet._signTypedData(domain, types, value);
-
-  // Call the verifyHash function
-  const sig = ethers.utils.splitSignature(rawSig);
-  //   return;
-  let recovered = await cartonContract
-    .verifyHash(messageHash, sig.v, sig.r, sig.s)
-    .catch(console.log);
-  console.log(oneWallet.address);
-  console.log(recovered);
+  const id = 1;
+  const nonce = 1;
+  const hashedMessage = ethers.utils.solidityKeccak256(
+    ["uint256", "uint256"],
+    [id, nonce]
+  );
+  const msgArray = ethers.utils.arrayify(hashedMessage);
+  const signedMessage = await zeroWallet.signMessage(msgArray);
+  console.log(signedMessage);
 })();
-
-// contract.connect(oneWallet);
-// contract.populateTransaction
-//   .mintEgg(oneWallet.address, patternHash, "test")
-//   .then(async (raw) => {
-//     const zeroBal = await zeroWallet.getBalance();
-//     const oneBal = await oneWallet.getBalance();
-//     // return;
-//     const t = await oneWallet.sendTransaction(raw);
-
-//     contract.populateTransaction.transferFrom(zeroWallet, oneWallet, 40)
-
-//     receipt = await t.wait();
-//     console.log(receipt);
-//     // provider.getBalance(one.address).then((t) => console.log(t.toString()));
-//   });
-
-// (async () => {
-//   const contractSigner = contract.connect(zeroWallet);
-//   const raw = await contractSigner.populateTransaction.transferFrom(
-//     zeroWallet.address,
-//     oneWallet.address,
-//     1
-//   );
-//   const signed = zeroWallet.signTransaction(raw);
-//   const tx = await provider.sendTransaction(signed);
-
-//   const receipt = await tx.wait();
-//   console.log(receipt);
-// })();
