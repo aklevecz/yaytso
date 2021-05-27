@@ -31,7 +31,7 @@ function Nav() {
       history.push("/");
     };
     collectionNav().onclick = () => history.push("/collection");
-    worldNav().onclick = () => history.push("/map");
+    worldNav().onclick = () => history.push("/map/creator");
 
     if (isDesk) {
       setOpenNav(true);
@@ -61,7 +61,7 @@ function Nav() {
       eggNav().classList.add("active");
     } else if (path === "/collection") {
       collectionNav().classList.add("active");
-    } else if (path === "/map") {
+    } else if (path.includes("/map")) {
       worldNav().classList.add("active");
     }
   });

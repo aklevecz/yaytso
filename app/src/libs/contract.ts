@@ -1,5 +1,6 @@
-import { Contract, ethers } from "ethers";
-import { WalletContextTypes } from "../types";
+import { Contract, ethers, Wallet } from "ethers";
+import { contractAdapter } from "../contexts/WalletContext";
+import { User, WalletContextTypes, WalletTypes } from "../types";
 import { createPinataURL } from "./utils";
 
 export const mintEgg = (
@@ -104,6 +105,42 @@ export const yaytsoOfOwner = async (
     console.log("no eggs");
   }
   return Promise.all(tokenUris);
+};
+
+export const claimYaytso = async (
+  boxId: string,
+  nonce: string,
+  signature: string,
+  contract: Contract,
+  user: User | null
+) => {
+  if (!user) {
+    alert("no user");
+    return console.log("user error");
+  }
+  let tx;
+  if (user.type === WalletTypes.METAMASK) {
+    if (!user.signer) {
+      return console.log("signer missing");
+    }
+    const contractSigner = contract.connect(user.signer);
+    tx = contractSigner.claimYaytso(boxId, nonce, signature);
+  } else if (user.type === WalletTypes.WALLET_CONNECT) {
+    const raw = await contract.populateTransaction.claimYaytso(
+      boxId,
+      nonce,
+      signature
+    );
+    const rawTx = {
+      from: user.address,
+      to: raw.to,
+      data: raw.data,
+    };
+    const connector = contractAdapter.connector;
+    tx = await connector.sendTransaction(rawTx);
+  }
+
+  return tx;
 };
 
 export const bytes32HexToIPFSHash = (hash: string) => {

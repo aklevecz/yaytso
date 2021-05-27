@@ -100,7 +100,7 @@ button {
   font-size: 18px;
   background: white;
   border: none;
-  padding: 20px;
+  padding: 10px 15px;
   cursor: pointer;
   /* letter-spacing: 2px; */
   transition: background 0.5s;

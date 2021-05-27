@@ -1,4 +1,5 @@
 import { useContext } from "react";
+import { UIContext } from "../contexts/UIContext";
 import { WalletContext } from "../contexts/WalletContext";
 import { WalletTypes } from "../types";
 import { LOGO } from "./graphical/LOGO";
@@ -7,6 +8,7 @@ import { WALLETCONNECT_ICON } from "./graphical/WALLETCONNECT_ICON";
 
 export default function Header() {
   const context = useContext(WalletContext);
+  const uIContext = useContext(UIContext);
 
   const disconnect = () => {
     context.disconnectWallet();
@@ -14,16 +16,7 @@ export default function Header() {
 
   return (
     <div className="header">
-      <div
-        style={{
-          position: "absolute",
-          top: 2,
-          left: 4,
-          marginLeft: 2,
-          fontSize: window.innerWidth > window.innerHeight ? "1rem" : "10px",
-          fontFamily: "Sen",
-        }}
-      >
+      <div className="header__network">
         {context.user?.chainId === 4 ? "(connected to Rinkeby)" : "MAINNET"}
       </div>
       <div className="logo">
@@ -55,9 +48,11 @@ export default function Header() {
               <METAMASK_LOGO />
             </div>
           )}
-          <div className="address-address">
-            {context.user && context.user.address}
-          </div>
+          {uIContext.isDesk && (
+            <div className="address-address">
+              {context.user && context.user.address}
+            </div>
+          )}
         </div>
       )}
     </div>

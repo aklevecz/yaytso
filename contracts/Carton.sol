@@ -11,26 +11,31 @@ contract Carton {
 
     struct Box {
         uint256 id;
-        string lat;
-        string lon;
+        bytes32 lat;
+        bytes32 lon;
         bool locked;
         bool created;
         uint256 nonce;
     }
 
-    mapping(uint256 => Box) public idToBox;
+    mapping(uint256 => Box) public Boxes;
     mapping(uint256 => address) public idToKey;
     mapping(uint256 => uint256) public boxIdToTokenId;
+
+    event BoxCreated(uint256 id);
+    event BoxFilled(uint256 id, uint256 tokenId, uint256 nonce);
+    event YaytsoClaimed(uint256 id, uint256 tokenId, address claimer);
 
     constructor(address _YaytsoAddress) public {
         YaytsoInterface = ERC721(_YaytsoAddress);
     }
 
-    function createBox(string memory _lat, string memory _lon) public {
+    function createBox(bytes32 _lat, bytes32 _lon) public {
         _boxIds.increment();
         uint256 _boxId = _boxIds.current();
         Box memory _box = Box(_boxId, _lat, _lon, false, true, 0);
-        idToBox[_boxId] = _box;
+        Boxes[_boxId] = _box;
+        emit BoxCreated(_boxId);
     }
 
     function fillBox(
@@ -38,16 +43,21 @@ contract Carton {
         address _key,
         uint256 _tokenId
     ) public {
-        Box memory _box = idToBox[_boxId];
+        Box memory _box = Boxes[_boxId];
         require(_box.created == true, "BOX_NOT_EXIST");
         require(_box.locked == false, "BOX_IS_LOCKED");
         address _tokenOwner = YaytsoInterface.ownerOf(_tokenId);
         require(_tokenOwner == _key, "KEY_MUST_BE_OWNER");
+        require(
+            YaytsoInterface.getApproved(_tokenId) == address(this),
+            "CARTON_MUST_BE_APPROVED"
+        );
         _box.locked = true;
         _box.nonce += 1;
         idToKey[_boxId] = _key;
-        idToBox[_boxId] = _box;
+        Boxes[_boxId] = _box;
         boxIdToTokenId[_boxId] = _tokenId;
+        emit BoxFilled(_boxId, _tokenId, _box.nonce);
     }
 
     function getMessageHash(uint256 _id, uint256 _nonce)
@@ -76,16 +86,18 @@ contract Carton {
         uint256 _nonce,
         bytes memory signature
     ) public {
-        Box memory _box = idToBox[_boxId];
+        Box memory _box = Boxes[_boxId];
+        require(_nonce == _box.nonce, "NONCE_MISMATCH");
         require(_box.locked == true, "BOX_NOT_LOCKED");
-        uint256 _yaytsoId = boxIdToTokenId[_boxId];
-
-        address _yaytsoOwner = YaytsoInterface.ownerOf(_yaytsoId);
         address _key = idToKey[_boxId];
-
-        require(_yaytsoOwner == _key);
-
-        require(verify(_key, _boxId, _nonce, signature), "WRONG_SIGNATURE");
+        require(verify(_key, _boxId, _nonce, signature), "INVALID_CLAIM");
+        uint256 _yaytsoId = boxIdToTokenId[_boxId];
+        address _yaytsoOwner = YaytsoInterface.ownerOf(_yaytsoId);
+        require(_yaytsoOwner == _key, "SIGNATURE_NOT_OWNER");
         YaytsoInterface.transferFrom(_key, msg.sender, _yaytsoId);
+        _box.locked = false;
+        boxIdToTokenId[_boxId] = 0;
+        Boxes[_boxId] = _box;
+        emit YaytsoClaimed(_boxId, _yaytsoId, msg.sender);
     }
 }

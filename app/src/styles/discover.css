@@ -1,0 +1,12 @@
+.discover__name {
+  font-size: 40px;
+  font-weight: bold;
+  word-break: break-all;
+}
+
+.discover__prompt {
+  font-size: 20px;
+  width: 80%;
+  margin: 0px auto 20px;
+  font-weight: bold;
+}

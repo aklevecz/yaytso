@@ -4,12 +4,22 @@
 
 .header {
   display: flex;
-  justify-content: center;
+  /* justify-content: center; */
   /* padding: 10px; */
 }
 
+.header__network {
+  font-size: 10px;
+  font-family: Sen;
+  text-align: left;
+  flex: 0 0 30%;
+  align-self: center;
+  padding-left: 10px;
+  box-sizing: border-box;
+  flex: 0 0 30%;
+}
+
 .header-address {
-  position: absolute;
   right: 10px;
   top: 7px;
   width: 250px;
@@ -19,7 +29,14 @@
   align-items: center;
   display: grid;
   grid-template-columns: 1fr 1fr;
-  grid-template-rows: 1fr 1fr;
+  /* grid-template-rows: 1fr 1fr; */
+}
+
+@media (min-width: 768px) {
+  .header-address {
+    position: absolute;
+    grid-template-rows: 1fr 1fr;
+  }
 }
 
 .address-address {
@@ -48,8 +65,13 @@
 }
 
 .header > .logo {
-  width: 100px;
+  width: 50px;
+  flex: 0 0 40%;
   /* padding: 10px; */
+}
+
+.header > .logo > svg {
+  width: 50px;
 }
 
 .container-of-containerz {
@@ -68,6 +90,10 @@
 
 .override-height {
   height: inherit !important;
+}
+
+.override-center {
+  justify-content: start;
 }
 
 .lds-heart {

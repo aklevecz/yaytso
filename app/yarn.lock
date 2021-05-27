@@ -1602,6 +1602,13 @@
     "@ethersproject/properties" "^5.0.7"
     "@ethersproject/strings" "^5.0.8"
 
+"@googlemaps/js-api-loader@^1.11.4":
+  version "1.11.4"
+  resolved "https://registry.yarnpkg.com/@googlemaps/js-api-loader/-/js-api-loader-1.11.4.tgz#f687a88e270234e3a29c64b42b76129e75467ca7"
+  integrity sha512-atFTSgEXXsE7mOsOIInUKG4JApu/NdyZR79Ed6jF92MjVQTcD6dz/Xo8djf4cIetnq4WYQmetem0d8/uS4o8oQ==
+  dependencies:
+    fast-deep-equal "^3.1.3"
+
 "@hapi/address@2.x.x":
   version "2.1.4"
   resolved "https://registry.yarnpkg.com/@hapi/address/-/address-2.1.4.tgz#5d67ed43f3fd41a69d4b9ff7b56e7c0d1d0a81e5"
@@ -2170,6 +2177,11 @@
   dependencies:
     "@types/minimatch" "*"
     "@types/node" "*"
+
+"@types/google.maps@^3.44.4":
+  version "3.44.4"
+  resolved "https://registry.yarnpkg.com/@types/google.maps/-/google.maps-3.44.4.tgz#ca69f9f220e3683d07efc8663da6b525aad603cf"
+  integrity sha512-gVk2MKVuCQUKLt7ncrLLxfF1ipGeRL5LysgNNRAZNpRs5jLt8gewmIAX1zTNW2x2p54Uc5w8Nft/dfsJiPuptA==
 
 "@types/graceful-fs@^4.1.2":
   version "4.1.5"
@@ -5978,7 +5990,7 @@ fake-merkle-patricia-tree@^1.0.1:
   dependencies:
     checkpoint-store "^1.1.0"
 
-fast-deep-equal@^3.1.1:
+fast-deep-equal@^3.1.1, fast-deep-equal@^3.1.3:
   version "3.1.3"
   resolved "https://registry.yarnpkg.com/fast-deep-equal/-/fast-deep-equal-3.1.3.tgz#3a7d56b559d6cbc3eb512325244e619a65c6c525"
   integrity sha512-f3qQ9oQy9j2AhBe/H9VC91wLmKBCCU/gDOnKNAYG5hswO7BLKj09Hc5HYNz9cGI++xlpDCIgDaitVs03ATR84Q==

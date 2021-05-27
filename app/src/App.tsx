@@ -8,6 +8,8 @@ import World from "./containers/World";
 import Header from "./components/Header";
 import EggViewer from "./containers/EggViewer";
 import Map from "./containers/Map";
+import Wallet from "./containers/Wallet";
+import Discover from "./containers/Discover";
 
 function App() {
   const [bodyHeight, setBodyHeight] = useState(0);
@@ -38,6 +40,8 @@ function App() {
             <Route path="/map" component={Map} />
             <Route path="/collection" component={Collection} />
             <Route path="/egg/:id" component={EggViewer} />
+            <Route path="/wallet" component={Wallet} />
+            <Route path="/discover/:sig/:bId/:nonce" component={Discover} />
             <Route path="/" component={Create} />
           </Switch>
           <Nav />
