@@ -10,6 +10,7 @@ import useMap from "./useMap";
 export default function CreatorMap() {
   const contracts = useContext(ContractContext);
   const wallet = useContext(WalletContext);
+  console.log(contracts);
   const [markerPos, setMarkerPos] = useState<{ lat: number; lng: number }>({
     lat: 0,
     lng: 0,

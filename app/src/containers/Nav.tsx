@@ -1,5 +1,5 @@
 import { useContext, useEffect, useState } from "react";
-import { useHistory, withRouter } from "react-router-dom";
+import { useHistory, useLocation, withRouter } from "react-router-dom";
 import { WalletContext } from "../contexts/WalletContext";
 import { NAV } from "../components/graphical/NAV";
 import { UIContext } from "../contexts/UIContext";
@@ -20,6 +20,7 @@ function Nav() {
   const [pickWallet, setPickWallet] = useState(false);
   const context = useContext(WalletContext);
   const history = useHistory();
+  const location = useLocation();
 
   const { isDesk } = useContext(UIContext);
 
@@ -65,32 +66,38 @@ function Nav() {
       worldNav().classList.add("active");
     }
   });
-
   const openHeight = window.innerWidth > 768 ? "130px" : "100px";
+  const isDiscover = location.pathname.includes("discover");
   return (
     <div
-      style={{ height: openNav ? openHeight : "0%" }}
+      style={{
+        // height: openNav ? openHeight : "0%",
+        height: 0,
+      }}
       className="nav-container"
     >
-      <NAV />
-      {!isDesk && (
-        <div
-          onClick={() => setOpenNav(!openNav)}
-          style={{
-            bottom: openNav ? 100 : 5,
-            left: openNav ? 0 : 5,
-            background: openNav
-              ? "linear-gradient(#e488ff, lightgrey)"
-              : "black",
-            borderRadius: openNav ? "0px 10px 0px 0" : 40,
-          }}
-          className="nav-button"
-        ></div>
-      )}
+      <div style={{ display: isDiscover ? "none" : "none" }}>
+        <NAV />
+        {!isDesk && (
+          <div
+            onClick={() => setOpenNav(!openNav)}
+            style={{
+              bottom: openNav ? 100 : 5,
+              left: openNav ? 0 : 5,
+              background: openNav
+                ? "linear-gradient(#e488ff, lightgrey)"
+                : "black",
+              borderRadius: openNav ? "0px 10px 0px 0" : 40,
+            }}
+            className="nav-button"
+          ></div>
+        )}
+      </div>
       {!context.user?.address && (
         <button
           className="web3-connect"
-          style={{ bottom: openNav ? 100 : 5 }}
+          // style={{ bottom: openNav ? 100 : 5 }}
+          style={{ bottom: 0 }}
           // onClick={() => context.web3Connect()}
           onClick={() => setPickWallet(true)}
         >

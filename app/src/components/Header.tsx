@@ -17,7 +17,7 @@ export default function Header() {
   return (
     <div className="header">
       <div className="header__network">
-        {context.user?.chainId === 4 ? "(connected to Rinkeby)" : "MAINNET"}
+        {/* {context.user?.chainId === 4 ? "(connected to Rinkeby)" : "MAINNET"} */}
       </div>
       <div className="logo">
         <LOGO />

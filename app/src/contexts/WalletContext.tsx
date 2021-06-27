@@ -14,6 +14,7 @@ export const WalletContext = createContext<WalletContextTypes>({
   recipient: null,
   setRecipient: () => {},
   disconnectWallet: () => {},
+  init: false,
 });
 
 export const contractAdapter = new ContractAdapter();
@@ -29,12 +30,12 @@ const WalletContextProvider = ({
     type: null,
     chainId: null,
   });
-  const [provider, setProvider] =
-    useState<
-      ethers.providers.Web3Provider | ethers.providers.BaseProvider | null
-    >(null);
+  const [provider, setProvider] = useState<
+    ethers.providers.Web3Provider | ethers.providers.BaseProvider | null
+  >(null);
   const [recipient, setRecipient] = useState<Recipient | null>(null);
   const [contract, setContract] = useState<ethers.Contract | null>(null);
+  const [init, setInit] = useState(false);
 
   const disconnectWallet = () => {
     setUser({ address: "", signer: null, type: null, chainId: null });
@@ -86,6 +87,7 @@ const WalletContextProvider = ({
         })
       );
     });
+    setInit(true);
   };
 
   const connectWalletConnect = async () => {
@@ -159,6 +161,7 @@ const WalletContextProvider = ({
         });
         setProvider(provider);
         setContract(contract);
+        setInit(true);
       }
     }
     if (window.ethereum) {
@@ -174,6 +177,7 @@ const WalletContextProvider = ({
         );
         setProvider(provider);
         setContract(contract);
+        setInit(true);
       }
     }
     if (
@@ -194,6 +198,7 @@ const WalletContextProvider = ({
         recipient,
         setRecipient,
         disconnectWallet,
+        init,
       }}
     >
       {children}

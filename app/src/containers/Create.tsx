@@ -132,15 +132,12 @@ export default function Create() {
         if (!context.contract) {
           return alert("no contract");
         }
-
         const data = createBlobs(
           result,
           context.recipient.desc,
           context.recipient.eggName
         );
-
         setShipState(shipStates.PINNING);
-
         const resp = await pinBlobs(data);
         var arr: any = [];
         for (var p in Object.getOwnPropertyNames(resp.byteArray)) {

@@ -7,7 +7,9 @@ export const pinBlobs = (data: FormData) =>
     method: "POST",
     body: data,
   })
-    .then((r) => r.json())
+    .then((r) => {
+      return r.json();
+    })
     .then((d) => d);
 
 export const fetchEggApplyId = (uri: string, id?: string) => {

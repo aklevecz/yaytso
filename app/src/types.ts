@@ -38,4 +38,5 @@ export type WalletContextTypes = {
   recipient: Recipient | null;
   setRecipient: Function;
   disconnectWallet: () => void;
+  init: boolean;
 };

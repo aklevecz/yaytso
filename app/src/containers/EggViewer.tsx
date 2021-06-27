@@ -14,7 +14,6 @@ export default function EggViewer() {
   const { isDesk } = useContext(UIContext);
   const [eggaData, setEggaData] = useState<YaytsoMetaData>();
   const [showEggtails, setShowEggtails] = useState(false);
-
   const toggleEggtails = () => setShowEggtails(!showEggtails);
 
   useEffect(() => {

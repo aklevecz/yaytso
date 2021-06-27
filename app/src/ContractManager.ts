@@ -58,18 +58,19 @@ export class ContractAdapter {
     }
   };
 
+  // THis is just for creating an infura provider when there is not web3 present
+  // It has a rerender issue because the app should wait until it is certain that
+  // there is no web3 present
   getProvider(chainId: number): ethers.providers.JsonRpcProvider {
     const network = chainId === 1 ? "mainnet" : "rinkeby";
     // const rpcAddress =
     //   process.env.NODE_ENV === "development"
     //     ? LOCAL_HOST
     //     : createInfuraURL(network);
-
     const rpcAddress =
       process.env.NODE_ENV === "development" && chainId !== 1 && chainId !== 4
         ? LOCAL_HOST
         : createInfuraURL(network);
-    console.log(rpcAddress);
 
     const provider = new ethers.providers.JsonRpcProvider(rpcAddress);
     return provider;

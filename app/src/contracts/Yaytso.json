@@ -525,21 +525,14 @@
   "ast": {
     "absolutePath": "/C/Users/ariel/yaytso/contracts/Yaytso.sol",
     "exportedSymbols": {
-      "Yaytso": [
-        549
-      ]
+      "Yaytso": [549]
     },
     "id": 550,
     "nodeType": "SourceUnit",
     "nodes": [
       {
         "id": 396,
-        "literals": [
-          "solidity",
-          "^",
-          "0.6",
-          ".0"
-        ],
+        "literals": ["solidity", "^", "0.6", ".0"],
         "nodeType": "PragmaDirective",
         "src": "0:23:2"
       },
@@ -587,28 +580,13 @@
             "src": "161:6:2"
           }
         ],
-        "contractDependencies": [
-          921,
-          931,
-          2185,
-          2288,
-          2315,
-          2338,
-          2662
-        ],
+        "contractDependencies": [921, 931, 2185, 2288, 2315, 2338, 2662],
         "contractKind": "contract",
         "documentation": null,
         "fullyImplemented": true,
         "id": 549,
         "linearizedBaseContracts": [
-          549,
-          2185,
-          2315,
-          2338,
-          2288,
-          921,
-          931,
-          2662
+          549, 2185, 2315, 2338, 2288, 921, 931, 2662
         ],
         "name": "Yaytso",
         "nodeType": "ContractDefinition",
@@ -1134,9 +1112,7 @@
               "src": "693:386:2",
               "statements": [
                 {
-                  "assignments": [
-                    451
-                  ],
+                  "assignments": [451],
                   "declarations": [
                     {
                       "constant": false,
@@ -1195,9 +1171,7 @@
                     "src": "785:263:2",
                     "statements": [
                       {
-                        "assignments": [
-                          467
-                        ],
+                        "assignments": [467],
                         "declarations": [
                           {
                             "constant": false,
@@ -1677,9 +1651,7 @@
                   },
                   "id": 494,
                   "initializationExpression": {
-                    "assignments": [
-                      455
-                    ],
+                    "assignments": [455],
                     "declarations": [
                       {
                         "constant": false,
@@ -1981,10 +1953,7 @@
                       "id": 507,
                       "name": "require",
                       "nodeType": "Identifier",
-                      "overloadedDeclarations": [
-                        -18,
-                        -18
-                      ],
+                      "overloadedDeclarations": [-18, -18],
                       "referencedDeclaration": -18,
                       "src": "1237:7:2",
                       "typeDescriptions": {
@@ -2064,9 +2033,7 @@
                   "src": "1293:21:2"
                 },
                 {
-                  "assignments": [
-                    521
-                  ],
+                  "assignments": [521],
                   "declarations": [
                     {
                       "constant": false,
@@ -2558,21 +2525,14 @@
   "legacyAST": {
     "absolutePath": "/C/Users/ariel/yaytso/contracts/Yaytso.sol",
     "exportedSymbols": {
-      "Yaytso": [
-        549
-      ]
+      "Yaytso": [549]
     },
     "id": 550,
     "nodeType": "SourceUnit",
     "nodes": [
       {
         "id": 396,
-        "literals": [
-          "solidity",
-          "^",
-          "0.6",
-          ".0"
-        ],
+        "literals": ["solidity", "^", "0.6", ".0"],
         "nodeType": "PragmaDirective",
         "src": "0:23:2"
       },
@@ -2620,28 +2580,13 @@
             "src": "161:6:2"
           }
         ],
-        "contractDependencies": [
-          921,
-          931,
-          2185,
-          2288,
-          2315,
-          2338,
-          2662
-        ],
+        "contractDependencies": [921, 931, 2185, 2288, 2315, 2338, 2662],
         "contractKind": "contract",
         "documentation": null,
         "fullyImplemented": true,
         "id": 549,
         "linearizedBaseContracts": [
-          549,
-          2185,
-          2315,
-          2338,
-          2288,
-          921,
-          931,
-          2662
+          549, 2185, 2315, 2338, 2288, 921, 931, 2662
         ],
         "name": "Yaytso",
         "nodeType": "ContractDefinition",
@@ -3167,9 +3112,7 @@
               "src": "693:386:2",
               "statements": [
                 {
-                  "assignments": [
-                    451
-                  ],
+                  "assignments": [451],
                   "declarations": [
                     {
                       "constant": false,
@@ -3228,9 +3171,7 @@
                     "src": "785:263:2",
                     "statements": [
                       {
-                        "assignments": [
-                          467
-                        ],
+                        "assignments": [467],
                         "declarations": [
                           {
                             "constant": false,
@@ -3710,9 +3651,7 @@
                   },
                   "id": 494,
                   "initializationExpression": {
-                    "assignments": [
-                      455
-                    ],
+                    "assignments": [455],
                     "declarations": [
                       {
                         "constant": false,
@@ -4014,10 +3953,7 @@
                       "id": 507,
                       "name": "require",
                       "nodeType": "Identifier",
-                      "overloadedDeclarations": [
-                        -18,
-                        -18
-                      ],
+                      "overloadedDeclarations": [-18, -18],
                       "referencedDeclaration": -18,
                       "src": "1237:7:2",
                       "typeDescriptions": {
@@ -4097,9 +4033,7 @@
                   "src": "1293:21:2"
                 },
                 {
-                  "assignments": [
-                    521
-                  ],
+                  "assignments": [521],
                   "declarations": [
                     {
                       "constant": false,
@@ -4691,8 +4625,8 @@
         }
       },
       "links": {},
-      "address": "0x38291605aEbFB9c3275e20e84427699111749F56",
-      "transactionHash": "0x63767c2f97b25b6d6f2cfcf4bf908371e743aebfe90163caf1ab2171ff3975cd"
+      "address": "0x7bD4f15DD11bE8c0B736699d6139403D1959E76E",
+      "transactionHash": "0x172d827611c0ab0b7ccae8bcca7bc9c15be9a710d22d868ed758a217740638c3"
     },
     "1618275435541": {
       "events": {
@@ -6009,7 +5943,7 @@
     }
   },
   "schemaVersion": "3.2.0",
-  "updatedAt": "2021-05-27T05:37:18.650Z",
+  "updatedAt": "2021-06-25T22:10:07.972Z",
   "networkType": "ethereum",
   "devdoc": {
     "methods": {

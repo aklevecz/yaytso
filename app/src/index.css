@@ -98,9 +98,11 @@ input[type="text"] {
 button {
   border-radius: 40px;
   font-size: 18px;
+  font-size: 38px;
   background: white;
   border: none;
   padding: 10px 15px;
+  padding: 10px 35px;
   cursor: pointer;
   /* letter-spacing: 2px; */
   transition: background 0.5s;
@@ -121,7 +123,7 @@ button.sm {
 
 button.round {
   border-radius: 50px;
-  /* font-size: 1rem; */
+  font-size: 18px;
   background: white;
   border: none;
   cursor: pointer;

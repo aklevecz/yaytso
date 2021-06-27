@@ -9,17 +9,16 @@ import ReceiptModal from "../../containers/modals/Receipt";
 import { Receipt } from "../Create";
 
 enum Status {
-  DEFAULT = "would you like to claim this beautiful egg?",
+  DEFAULT = "Wow... Look at the egg you found!",
   CLAIMING = "claiming yaytso...",
   CLAIMED = "you have claimed the yaytso!",
 }
 export default function Discover() {
-  const params =
-    useParams<{
-      sig: string | undefined;
-      bId: string | undefined;
-      nonce: string | undefined;
-    }>();
+  const params = useParams<{
+    sig: string | undefined;
+    bId: string | undefined;
+    nonce: string | undefined;
+  }>();
   const contracts = useContext(ContractContext);
   const wallet = useContext(WalletContext);
   const cartonContract = contracts.getCartonContract();
@@ -78,12 +77,29 @@ export default function Discover() {
       console.log("no carton");
       return null;
     }
-    const egg = parseInt(await cartonContract.boxIdToTokenId(params.bId));
+    console.log(params);
+    console.log(cartonContract.address);
+    const egg = parseInt(
+      await cartonContract.boxIdToTokenId(params.bId).catch(console.log)
+    );
+    console.log(egg);
     if (!egg) {
       setFetching(false);
       return console.log("no egg in this box?");
     }
-    const uri = wallet.contract && (await wallet.contract.tokenURI(egg));
+    if (!wallet.contract) {
+      setFetching(false);
+      return console.log("no contract");
+    }
+
+    console.log(egg, wallet.contract.address);
+    const uri =
+      wallet.contract &&
+      (await wallet.contract.tokenURI(egg).catch(console.log));
+    if (!uri) {
+      return console.log("no");
+    }
+    console.log(uri);
     fetch(createPinataURL(uri))
       .then((r) => r.json())
       .then((d) => {
@@ -97,6 +113,7 @@ export default function Discover() {
   }, [cartonContract, wallet.contract, params.bId]);
 
   useEffect(() => {
+    console.log("fetch egg data");
     fetchEggData();
   }, [fetchEggData]);
 

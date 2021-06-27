@@ -15,6 +15,8 @@ export const GATEWAY_URL =
     ? "http://localhost:8080/ipfs"
     : "https://gateway.pinata.cloud/ipfs";
 
+// export const GATEWAY_URL = "https://gateway.pinata.cloud/ipfs";
+
 export const PIN_URL =
   process.env.NODE_ENV === "development"
     ? "http://localhost:8082"

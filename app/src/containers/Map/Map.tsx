@@ -3,6 +3,7 @@ import { EggBox } from ".";
 import { creators } from "./creators";
 import useMap from "./useMap";
 
+// SO many rerenders
 export default function Map({ egg }: { egg: EggBox }) {
   const { mapContainer, map, setCenter } = useMap();
 
@@ -38,6 +39,8 @@ export default function Map({ egg }: { egg: EggBox }) {
     const marker = creators.layYaytsoMarker(egg, map, {});
     marker.addListener("click", onMarkerClick);
   }, [egg, map, mapContainer, setCenter]);
+
+  console.log(egg);
 
   return (
     <div style={{ width: "100%", height: "100%" }}>

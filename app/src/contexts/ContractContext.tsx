@@ -38,6 +38,9 @@ const ContractProvider = ({ children }: { children: any }) => {
     contracts && contracts[ContractTypes.CARTON].interface;
 
   useEffect(() => {
+    if (!wallet.init) {
+      return console.log("stil init");
+    }
     if (wallet.provider && wallet.user && wallet.user.chainId) {
       const cartonContract = contractAdapter.getContractI(
         ContractTypes.CARTON,
@@ -66,7 +69,7 @@ const ContractProvider = ({ children }: { children: any }) => {
         },
       }));
     }
-  }, [wallet.provider, wallet.user]);
+  }, [wallet.provider, wallet.user, wallet.init]);
   return (
     <ContractContext.Provider value={{ contracts, getCartonContract }}>
       {children}
