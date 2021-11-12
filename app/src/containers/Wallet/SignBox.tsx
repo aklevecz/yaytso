@@ -75,7 +75,6 @@ export default function SignBox() {
       walletContext.user!.address,
       state.tokenId
     );
-    console.log(tx);
   };
 
   const approve = () => {
@@ -85,7 +84,6 @@ export default function SignBox() {
     const yaytsoSigner = walletContext.contract?.connect(signer!);
 
     const tx = yaytsoSigner!.approve(cartonI!.address, state.tokenId);
-    console.log(tx);
   };
 
   useEffect(() => {
